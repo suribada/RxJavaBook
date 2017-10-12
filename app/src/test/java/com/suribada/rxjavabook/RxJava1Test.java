@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by lia on 2017-10-12.
@@ -38,5 +39,27 @@ public class RxJava1Test {
 
     private void showText(String input) {
         System.out.println("input=" + input);
+    }
+
+    public void testDisposableObserver() {
+        Observable.fromIterable(list)
+                .filter(value -> value.length() > 3)
+                .map(os -> "OS:" + os)
+                .subscribe(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(String s) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }
     }
 }
