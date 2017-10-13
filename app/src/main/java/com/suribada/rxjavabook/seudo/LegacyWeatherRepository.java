@@ -1,4 +1,4 @@
-package com.suribada.rxjavabook.weather;
+package com.suribada.rxjavabook.seudo;
 
 import android.location.Location;
 

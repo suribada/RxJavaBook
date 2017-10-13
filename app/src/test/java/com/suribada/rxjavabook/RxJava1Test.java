@@ -7,6 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.internal.operators.observable.ObservableFilter;
+import io.reactivex.internal.operators.observable.ObservableFromIterable;
+import io.reactivex.internal.operators.observable.ObservableMap;
 import io.reactivex.observers.DisposableObserver;
 
 /**
@@ -41,14 +46,15 @@ public class RxJava1Test {
         System.out.println("input=" + input);
     }
 
+    @Test
     public void testDisposableObserver() {
-        Observable.fromIterable(list)
+        DisposableObserver observer = Observable.fromIterable(list)
                 .filter(value -> value.length() > 3)
                 .map(os -> "OS:" + os)
-                .subscribe(new DisposableObserver<String>() {
+                .subscribeWith(new DisposableObserver<String>() {
                     @Override
                     public void onNext(String s) {
-
+                        showText(s);
                     }
 
                     @Override
@@ -60,6 +66,21 @@ public class RxJava1Test {
                     public void onComplete() {
 
                     }
-                }
+                });
+        observer.dispose();
+    }
+
+    @Test
+    public void testGugudan() {
+        Observable.range(2, 8)
+                .flatMap(row -> Observable.range(1, 9)
+                        .map(col -> String.format("%d x %d = %d", row, col, row * col)))
+                .subscribe(System.out::println);
+
+    }
+
+    @Test
+    public void testSingle() {
+        Single.create(e -> {}).subscribe(System.out::println, e -> e.printStackTrace());
     }
 }
