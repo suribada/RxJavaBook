@@ -5,28 +5,51 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import java.util.ArrayList;
+
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * Created by Naver on 2017. 10. 13..
  */
-public class LoginManager {
+public class LegacyLoginManager {
 
     private static final Object lock = new Object();
 
-    private static LoginManager instance;
+    private static LegacyLoginManager instance;
 
-    public static LoginManager getInstance(Context context) {
+    public static LegacyLoginManager getInstance(Context context) {
         synchronized (lock) {
             if (instance == null) {
-                instance =  new LoginManager(context.getApplicationContext());
+                instance =  new LegacyLoginManager(context.getApplicationContext());
             }
             return instance;
         }
     }
 
-    private LoginManager(Context context) {
+    public interface LoginListener {
+
+        void loginStatusChanged(boolean login);
+    }
+
+    private ArrayList<LoginListener> loginListeners = new ArrayList<>();
+
+    public void addLoginListener(LoginListener loginListener) {
+        loginListeners.add(loginListener);
+    }
+
+    public void removeLoginListener(LoginListener loginListener) {
+        loginListeners.remove(loginListener);
+    }
+
+    private void notifyLoginStatus(boolean login) {
+        for (LoginListener each : loginListeners) {
+            each.loginStatusChanged(login);
+        }
+    }
+
+    private LegacyLoginManager(Context context) {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LoginMessage.LOGIN_FINISH);
         intentFilter.addAction(LoginMessage.LOGOUT_FINISH);
@@ -35,23 +58,17 @@ public class LoginManager {
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
                 if (action.equals(LoginMessage.LOGIN_FINISH)) {
-                    subject.onNext(true);
+                    notifyLoginStatus(true);
                 } else if (action.equals(LoginMessage.LOGOUT_FINISH)) {
-                    subject.onNext(false);
+                    notifyLoginStatus(false);
                 }
             }
         }, intentFilter);
     }
 
-    private BehaviorSubject<Boolean> subject = BehaviorSubject.create();
-
-    public Observable<Boolean> getObservable() {
-        return subject.distinctUntilChanged();
-    }
-
     public void ssoLogin() {
         // 콜백 등에서 호출
-        subject.onNext(true);
+        notifyLoginStatus(true);
     }
 
     public void startLoginActivity() {
@@ -60,7 +77,7 @@ public class LoginManager {
 
     public void logout() {
         // 콜백 등에서 호출
-        subject.onNext(false);
+        notifyLoginStatus(false);
     }
 
 }
