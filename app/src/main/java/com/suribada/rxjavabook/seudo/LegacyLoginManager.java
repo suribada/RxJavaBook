@@ -33,13 +33,14 @@ public class LegacyLoginManager {
         void loginStatusChanged(boolean login);
     }
 
+    // java.util.Observables 처럼 동기화 고려 필요
     private ArrayList<LoginListener> loginListeners = new ArrayList<>();
 
-    public void addLoginListener(LoginListener loginListener) {
+    public  void  addLoginListener(LoginListener loginListener) {
         loginListeners.add(loginListener);
     }
 
-    public void removeLoginListener(LoginListener loginListener) {
+    public  void removeLoginListener(LoginListener loginListener) {
         loginListeners.remove(loginListener);
     }
 

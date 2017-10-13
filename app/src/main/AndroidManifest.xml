@@ -17,6 +17,13 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".subject.TerminatedStateSubjectActivity" android:label="subject/TerminatedStateSubject">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".another.LearningRxJavaActivity" android:label="learning/LearningRxJavaTest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
