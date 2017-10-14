@@ -11,26 +11,41 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".subject.TerminatedStateSubjectActivity"
+            android:label="subject/TerminatedStateSubject">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <activity android:name=".subject.TerminatedStateSubjectActivity" android:label="subject/TerminatedStateSubject">
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".another.LearningRxJavaActivity"
+            android:label="learning/LearningRxJavaTest">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".replay.ColdObservableActivity" android:label="replay/ColdObservable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".another.LearningRxJavaActivity" android:label="learning/LearningRxJavaTest">
+        <activity android:name=".replay.ReplaySubjectActivity" android:label="replay/ReplaySubject">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity>
-
-    </application>
+        </activity>    </application>
 
 </manifest>

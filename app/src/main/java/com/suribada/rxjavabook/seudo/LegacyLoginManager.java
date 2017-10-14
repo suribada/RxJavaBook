@@ -67,6 +67,11 @@ public class LegacyLoginManager {
         }, intentFilter);
     }
 
+    // 현재 로그인 상태로 최종 상태 저장 필요
+    public boolean isLogin() {
+        return true;
+    }
+
     public void ssoLogin() {
         // 콜백 등에서 호출
         notifyLoginStatus(true);
