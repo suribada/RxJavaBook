@@ -17,7 +17,7 @@ import io.reactivex.subjects.Subject;
 /**
  * Created by Jaechun.Noh on 2017-10-14.
  */
-public class TerminatedStateSubjectActivity extends Activity {
+public class AutoDisposeActivity extends Activity {
 
     private TextView title;
 
@@ -28,12 +28,11 @@ public class TerminatedStateSubjectActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_two_buttons);
         title = (TextView) findViewById(R.id.title);
-        subject.subscribe(divider -> {
-            int divided = 100 / divider;
+        subject.map(divider -> 100 / divider).subscribe(divided -> {
             title.setText("divided result=" + divided);
-        }, e -> Toast.makeText(TerminatedStateSubjectActivity.this, "exception="
+        }, e -> Toast.makeText(AutoDisposeActivity.this, "exception="
                 + e.toString(), Toast.LENGTH_LONG).show()
-        , () -> Toast.makeText(TerminatedStateSubjectActivity.this, "onComplete",
+        , () -> Toast.makeText(AutoDisposeActivity.this, "onComplete",
                         Toast.LENGTH_LONG).show());
     }
 

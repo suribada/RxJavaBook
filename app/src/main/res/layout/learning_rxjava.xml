@@ -10,11 +10,26 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test1"
+        android:text="Test2"
         android:onClick="onClickButton2"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test1"
+        android:text="Test3"
         android:onClick="onClickButton3"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test4"
+        android:onClick="onClickButton4"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test5"
+        android:onClick="onClickButton5"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test6"
+        android:onClick="onClickButton6"/>
 </LinearLayout>

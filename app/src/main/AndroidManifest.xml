@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".subject.TerminatedStateSubjectActivity"
+            android:name=".subject.AutoDisposeActivity"
             android:label="subject/TerminatedStateSubject">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
