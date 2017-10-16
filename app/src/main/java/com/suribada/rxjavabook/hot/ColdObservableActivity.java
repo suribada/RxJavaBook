@@ -1,4 +1,4 @@
-package com.suribada.rxjavabook.replay;
+package com.suribada.rxjavabook.hot;
 
 import android.app.Activity;
 import android.os.Bundle;

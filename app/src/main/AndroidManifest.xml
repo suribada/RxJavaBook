@@ -35,13 +35,19 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".replay.ColdObservableActivity" android:label="replay/ColdObservable">
+        <activity android:name=".hot.ColdObservableActivity" android:label="replay/ColdObservable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".replay.ReplaySubjectActivity" android:label="replay/ReplaySubject">
+        <activity android:name=".hot.ReplaySubjectActivity" android:label="replay/ReplaySubject">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".hot.ConnectableActivity" android:label="replay/ConnectableTest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />

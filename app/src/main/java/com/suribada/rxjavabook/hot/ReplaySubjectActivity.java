@@ -1,4 +1,4 @@
-package com.suribada.rxjavabook.replay;
+package com.suribada.rxjavabook.hot;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.ReplaySubject;
 import io.reactivex.subjects.Subject;
 
