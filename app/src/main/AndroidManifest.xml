@@ -46,6 +46,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity>    </application>
+        </activity>
+        <activity android:name=".scheduler.SchedulerActivity" android:label="scheduler/SchedulerTest">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>
