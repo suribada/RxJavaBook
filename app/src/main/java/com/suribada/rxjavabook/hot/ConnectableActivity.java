@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.observables.ConnectableObservable;
+import io.reactivex.plugins.RxJavaPlugins;
 
 /**
  * Created by lia on 2017-10-17.
@@ -25,8 +26,9 @@ public class ConnectableActivity extends Activity {
         setContentView(R.layout.text_and_two_buttons);
     }
 
-    ConnectableObservable<Integer> threeRandoms =
-            Observable.interval(1, TimeUnit.SECONDS)
+    private ConnectableObservable<Integer> threeRandoms =
+            //Observable.interval(1, TimeUnit.SECONDS)
+            Observable.range(1, 3)
                     .map(i -> randomInt()).publish();
 
     public void onClickButton1(View view) {
@@ -38,11 +40,12 @@ public class ConnectableActivity extends Activity {
         threeRandoms.connect();
     }
 
+    public void onClickButton2(View view) {
+        threeRandoms.subscribe(i -> System.out.println("Observer3: " + i));
+    }
+
     public static int randomInt() {
         return ThreadLocalRandom.current().nextInt(100000);
     }
 
-    public void onClickButton2(View view) {
-        threeRandoms.subscribe(i -> System.out.println("Observer3: " + i));
-    }
 }

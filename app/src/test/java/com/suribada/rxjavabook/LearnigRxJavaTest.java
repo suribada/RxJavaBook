@@ -7,6 +7,8 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.observables.ConnectableObservable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.TestScheduler;
 
 import static org.junit.Assert.assertTrue;
 
@@ -70,10 +72,8 @@ public class LearnigRxJavaTest {
                 Observable.range(1, 3)
                         .map(i -> randomInt()).publish();
 
-//Observer 1 - print each random integer
         threeRandoms.subscribe(i -> System.out.println("Observer 1: " + i));
 
-//Observer 2 - sum the random integers, then print
         threeRandoms.reduce(0, (total, next) -> total + next)
                 .subscribe(i -> System.out.println("Observer 2: " + i));
 
@@ -86,4 +86,40 @@ public class LearnigRxJavaTest {
     public static int randomInt() {
         return ThreadLocalRandom.current().nextInt(100000);
     }
+
+    @Test
+    public void schedulerTest() {
+        //Declare TestScheduler
+        TestScheduler testScheduler = new TestScheduler();
+
+        //Declare TestObserver
+        TestObserver<Long> testObserver = new TestObserver<>();
+
+        //Declare Observable emitting every 1 minute
+        Observable<Long> minuteTicker =
+                Observable.interval(1, TimeUnit.MINUTES,
+                        testScheduler);
+
+        //Subscribe to TestObserver
+        minuteTicker.subscribe(testObserver);
+
+        //Fast forward by 30 seconds
+        testScheduler.advanceTimeBy(30, TimeUnit.SECONDS);
+
+        //Assert no emissions have occurred yet
+        testObserver.assertValueCount(1);
+
+        //Fast forward to 70 seconds after subscription
+        testScheduler.advanceTimeTo(70, TimeUnit.SECONDS);
+
+        //Assert the first emission has occurred
+        testObserver.assertValueCount(1);
+
+        //Fast Forward to 90 minutes after subscription
+        testScheduler.advanceTimeTo(90, TimeUnit.MINUTES);
+
+        //Assert 90 emissions have occurred
+        testObserver.assertValueCount(90);
+    }
+
 }

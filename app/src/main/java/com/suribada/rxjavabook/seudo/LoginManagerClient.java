@@ -13,6 +13,7 @@ import io.reactivex.disposables.Disposable;
 public class LoginManagerClient extends Activity {
 
     private Disposable disposable;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

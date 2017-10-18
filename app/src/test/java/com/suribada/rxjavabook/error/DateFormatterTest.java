@@ -12,14 +12,12 @@ public class DateFormatterTest {
 
     @Test
     public void testFormatter() {
+        String input = "2017-xx-30 02:20:20";
         DateFormatter formatter = new DateFormatter();
-        formatter.getTimeInMillis("2017-02-02 02:20:20").subscribe(System.out::println);
-//        formatter.getTimeInMillis("2017-xx-30 02:20:20")
-//                .subscribe(System.out::println);
-        formatter.getTimeInMillis("2017-xx-30 02:20:20")
+        formatter.getTimeInMillis(input)
                 .onErrorReturnItem(0L)
                 .subscribe(System.out::println);
-        formatter.getTimeInMillis("2017-xx-30 02:20:20")
+        formatter.getTimeInMillis(input)
                 .onErrorReturnItem(new Date().getTime())
                 .subscribe(System.out::println);
     }
