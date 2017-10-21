@@ -20,7 +20,7 @@ public class SchedulerActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_two_buttons);
+        setContentView(R.layout.text_and_three_buttons);
     }
 
     public void onClickButton1(View view) {
@@ -49,4 +49,16 @@ public class SchedulerActivity extends Activity {
         SystemClock.sleep(2000);
         System.out.println(input + "Thread " + Thread.currentThread().getName());
     }
+
+    public void onClickButton3(View view) {
+        Scheduler scheduler = Schedulers.trampoline();
+        Scheduler.Worker worker = scheduler.createWorker();
+        worker.schedule(() -> {
+            printInThread("trampoline first");
+        });
+        worker.schedule(() -> {
+            printInThread("trampoline second");
+        });
+    }
+
 }
