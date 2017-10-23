@@ -26,10 +26,10 @@ public class SchedulerActivity extends Activity {
     public void onClickButton1(View view) {
         Scheduler scheduler = Schedulers.io();
         scheduler.scheduleDirect(() -> {
-            printInThread("first");
+            printThread("first");
         });
         scheduler.scheduleDirect(() -> {
-            printInThread("second");
+            printThread("second");
         });
     }
 
@@ -37,16 +37,16 @@ public class SchedulerActivity extends Activity {
         Scheduler scheduler = Schedulers.io();
         Scheduler.Worker worker = scheduler.createWorker();
         worker.schedule(() -> {
-            printInThread("third");
+            printThread("third");
         });
         worker.schedule(() -> {
-            printInThread("fourth");
+            printThread("fourth");
         });
     }
 
 
-    private void printInThread(String input) {
+    private void printThread(String input) {
         SystemClock.sleep(2000);
-        System.out.println(input + "Thread " + Thread.currentThread().getName());
+        System.out.println(input + " Thread " + Thread.currentThread().getName());
     }
 }
