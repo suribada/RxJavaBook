@@ -36,7 +36,7 @@ public class RxTest {
 
 	@Test
 	public void testObserver() {
-		List<Integer> list = Arrays.asList(1, 2, 3, 4);
+	List<Integer> list = Arrays.asList(1, 2, 3, 4);
 		Observer<Integer> observer = new Observer<Integer>() {
 
 			@Override
@@ -58,10 +58,46 @@ public class RxTest {
 			public void onComplete() {
 				System.out.println("onComplete");
 			}
+
 		};
-		Observable.fromIterable(list).subscribe(observer);
-		Observable.fromIterable(list).filter(x -> x > 2).map(x -> x + 5).subscribe(observer);
-		observer.onNext(77);
+		//Observable.fromIterable(list).subscribe(observer);
+		Observable.fromIterable(list)
+				.filter(x -> x > 2)
+				.map(x -> x + 5)
+				.subscribe(observer);
+	observer.onNext(77);
+	}
+
+	@Test
+	public void testWindow() {
+		Observable
+				.merge(
+						Observable.range(0, 5)
+								.window(3,1))
+				.subscribe(System.out::println);
+	}
+
+	@Test
+	public void testJoin() {
+		Observable<String> left =
+				Observable.interval(100, TimeUnit.MILLISECONDS)
+						.map(i -> "L" + i);
+		Observable<String> right =
+				Observable.interval(200, TimeUnit.MILLISECONDS)
+						.map(i -> "R" + i);
+
+		left
+				.join(
+						right,
+						i -> Observable.never(),
+						i -> Observable.timer(0, TimeUnit.MILLISECONDS),
+						(l,r) -> l + " - " + r
+				)
+				.take(10)
+				.timeInterval()
+				.blockingSubscribe(timed -> {
+					System.out.println(timed.time(TimeUnit.MILLISECONDS) + ":" + timed.value());
+				});
 	}
 
 	@Test

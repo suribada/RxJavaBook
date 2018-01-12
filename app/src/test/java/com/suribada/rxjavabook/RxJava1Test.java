@@ -80,6 +80,26 @@ public class RxJava1Test {
     }
 
     @Test
+    public void testGugudan2() {
+    Observable.range(1, 9)
+            .join(Observable.range(2, 8),
+                    i -> Observable.never(),
+                    i -> Observable.never(),
+                    (row, col) -> String.format("%d x %d = %d", col, row, col * row))
+            .subscribe(System.out::println);
+    }
+
+    @Test
+    public void testGugudan3() {
+        Observable.range(1, 9)
+                .groupJoin(Observable.range(2, 8),
+                        i -> Observable.never(),
+                        i -> Observable.never(),
+                        (row, ObservableCol) -> ObservableCol)
+                .subscribe(System.out::println);
+    }
+
+    @Test
     public void testSingle() {
         Single.create(e -> {}).subscribe(System.out::println, e -> e.printStackTrace());
     }

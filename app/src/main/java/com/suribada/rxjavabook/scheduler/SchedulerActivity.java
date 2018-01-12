@@ -25,6 +25,7 @@ public class SchedulerActivity extends Activity {
 
     public void onClickButton1(View view) {
         Scheduler scheduler = Schedulers.io();
+        scheduler.shutdown();
         scheduler.scheduleDirect(() -> {
             printInThread("first");
         });

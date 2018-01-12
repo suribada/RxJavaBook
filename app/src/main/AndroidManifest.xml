@@ -35,6 +35,15 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".another.OreillyActivity"
+            android:label="learning/OreillyTest">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
         <activity android:name=".hot.ColdObservableActivity" android:label="replay/ColdObservable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,6 +69,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".scheduler.TrampolineActivity" android:label="scheduler/Trampoline">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".another.SwitchMapActivity" android:label="switch/SwitchMap">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".chap7.StopWatchActivity" android:label="chap7/StopWatch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
