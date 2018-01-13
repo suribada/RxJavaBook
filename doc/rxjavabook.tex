@@ -1,0 +1,1367 @@
+\documentclass{book}
+\usepackage[utf8]{inputenc}
+ 
+\title{안드로이드에 적용하는 RxJava2}
+\author{노재춘}
+\date{\today}
+ 
+\begin{document}
+ 
+\maketitle
+예외 처리를 선언적으로는 하는 부분을 살펴보자.
+\chapter*{머리말}
+시중에 볼 수 있는 RxJava 책들이 많다. 국내에도 번역서가 2개가 나와있다. 
+여러 책들에서 안드로이드를 지원하는 내용도 나오는데, 안드로이드 앱 개발에서 고려해야 할 사항이 충분히 나오지 않은 듯 하다. 게다가 샘플 가운데서는 안드로이드에서는 동작하지 않는 것도 있었다.
+
+오라일리 Reactive Programming With RxJava(번역서 RxJava를 활용한 리액티브 프로그래밍)와 Learning RxJava(Packt)를 많이 참조했다.
+
+이 책은 RxJava를 활용하는 내용 뿐 아니라 분석한 내용도 포함하고 있다.
+코틀린 내용은 제외하였다.
+
+
+\tableofcontents
+
+
+
+% https://app.genmymodel.com/edit/_WNTkQIz2EeewrIfYd5mf8Q#
+\chapter{RxJava 도입}
+% 뒤에 어디를 참고하라는 내용을 말하도록 하자.
+RxJava를 모든 경우에 사용하는 게 정답은 아니다.
+오히려 복잡해지는 경우도 있다.
+
+RxAndroid에 대해서 개념이 부족한 경우가 있다. 일반적으로 아래 패키지를 지칭한다.
+
+https://github.com/ReactiveX/RxAndroid
+
+본래는 라이프 사이클 등까지 있었다.
+
+
+compile 'io.reactivex:rxandroid:1.2.1' 
+
+
+
+https://github.com/trello/RxLifecycle
+https://github.com/JakeWharton/RxBinding
+
+https://github.com/ReactiveX/RxAndroid/wiki 이 페이지를 참고하자.
+\section{AsyncTask의 문제}
+\subsection{예외 처리 메서드 없음}
+
+
+\subsection{동시에 결과 적용}
+CountDownLatch를 사용해왔다.
+
+\section{콜백 중첩 문제}
+% 날씨 구하기
+
+\section{API 호출 순서 중요한 경우}
+음성 TTS
+여러 개 약관
+
+\section{상호 참조 제거}
+ListView 의 ListAdapter 에 ListView 를 전달하는 것을 보기도 했다.
+Activity를 전달한 적이 있다.
+
+할리우드 원칙..
+
+\section{예외 처리}
+%DataFormatter 예제
+Base64 encode, decode 예제도?
+https://www.slipp.net/questions/350
+
+\chapter{RxJava 기본}
+http://reactivex.io/documentation/contract.html
+
+Observer 패턴을 적용한 것이다.
+https://en.wikipedia.org/wiki/Observer_pattern
+
+정형화된 콜백이다.
+Pull 방식이 아닌 Push 방식 구독
+
+Observable은 아이템 또는 아이템 시퀀스를 내보낸다.
+emit, emission
+
+이벤트는 onNext, onError, onComplete를 주로 얘기한다.
+\section{쌍대}
+
+Observable, 연산자, 구독자가 세 축이다.
+Observable은 이벤트 개수
+
+
+
+android.widget.Checkable, java.io.Serializable
+android.graphics.drawable.Animatable
+java.lang.AutoCloseable, java.lang.Appendable, 
+java.util.concurrent.Callable,
+
+java.lang.Comparable
+
+java.io.Externalizable, 
+android.graphics.drawable
+
+java.lang.Iterable
+	android.database.Observable
+		java.util.Observable
+		
+java.lang.Runnable
+android.os.Parcelable
+
+java.lang.Readable
+
+android.text.Spannable
+	java.lang.Throwable
+
+\section{함수형 인터페이스}
+Fure Function, High order function
+
+
+제네릭에 대한 이해도 필요하다.
+PECS(producer extends consumer super)
+파라미터에 T가 전달되는 경우는 consumer
+예) List.add(..)
+
+% 프리젠테이션에 표로 있음
+
+https://github.com/akarnokd/RxJava2Extensions
+RxJava1에 있던 Action3~Action9를 대체하는 Consumer3~Consumer9  제공한다.
+
+메서드가 하나 밖에 없는 인터페이스이다.
+이는 람다 표현식으로 쓸 수 있다.
+Runnable, Callable, Comparable이 그 예이다.
+자바 8에 추가된 것들이 많은데 rxjava에도 들어가 있다
+모두 throws Exception을 하고 있다. 그래서 대체가 되지 않는다.
+
+람다를 쓰는 덕분에 Observable, Single 을 쓰는 차이가 별로 느껴지지 않는다.
+
+% http://multifrontgarden.tistory.com/125
+
+안드로이드 스튜디오 3에서는 build.gradle에 아래 옵션만 추가하면 된다.
+\begin{verbatim}
+android {
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+\end{verbatim}
+
+\begin{comment}
+% retrolamdba는 굳이 필요하지 않은 것 같다.
+Java8을 지원하면 내용이 제거되니 지금은 대강만 쓰자.
+자바 8부터 지원하는 람다식을 쓸 수 있다.
+안드로이드 스튜디오에서 사용방법은 https://github.com/evant/gradle-retrolambda를 참고하자.
+\end{comment}
+
+\section{클래스 구성}
+Observable과 배압을 고려한 Flowable이 있다.
+
+\subsubsection{스트림}
+
+\subsubsection{구독}
+
+\subsubsection{Subject}
+
+\section{스트림 소스}
+\subsection{Observable}
+% 기본 원칙 http://reactivex.io/documentation/contract.html
+% 여기서 Rx Design Guidelines 문서도 다운받을 수 있다.
+
+% https://github.com/ReactiveX/RxJava/wiki/Creating-Observables
+
+Observable.fromArray(1, 2, 3, null).subscribe(System.out::println);
+\begin{verbatim}
+Exception in thread "main" io.reactivex.exceptions.OnErrorNotImplementedException: The 3th element is null
+	at io.reactivex.internal.functions.Functions$OnErrorMissingConsumer.accept(Functions.java:704)
+	at io.reactivex.internal.functions.Functions$OnErrorMissingConsumer.accept(Functions.java:701)
+	at io.reactivex.internal.observers.LambdaObserver.onError(LambdaObserver.java:74)
+	at io.reactivex.internal.operators.observable.ObservableFromArray$FromArrayDisposable.run(ObservableFromArray.java:104)
+	at io.reactivex.internal.operators.observable.ObservableFromArray.subscribeActual(ObservableFromArray.java:36)
+	...
+\end{verbatim}
+
+
+
+
+Observervable은 subscribe() 메서드에 Observer를 받는다.
+
+\begin{verbatim}
+public interface Observer<T> {
+
+    void onSubscribe(@NonNull Disposable d);
+
+    void onNext(@NonNull T t);
+
+    void onError(@NonNull Throwable e);
+
+    void onComplete();
+
+}
+\end{verbatim}
+
+LambdaObserver가 주로 사용된다.
+onNext에서 에러가 발생하면 onError를 호출한다.
+onError나 onComplete
+LambdaObserver는 DisposableObserver를 상속한 것은 아니다
+% 소스 넣기
+
+onSubscribe() 메서드는 실제 사용할 일이 없다.
+퓨전 모드, Disposable
+
+toFlowable 메서드는 있다.
+toMaybe나 toSingle, toCompletable 같은 메서드는 없다.
+
+RxJavaPlugins에 errorHandler를 지정할 필요도 있다. onError에서도 Throwable을 보낼 때도 있다.
+
+\subsection{Flowable}
+Observable과 구독자 사이는 배압 고려
+
+\begin{verbatim}
+public interface Subscriber<T> {
+
+    public void onSubscribe(Subscription s);
+
+    public void onNext(T t);
+
+    public void onError(Throwable t);
+
+    public void onComplete();
+} 
+\end{verbatim}
+
+\subsection{Maybe}
+
+\subsection{Single}
+
+\subsection{Completable}
+
+\subsection{타입 간 변환}
+명시적으로 변환하는 메서드가 있고, 묵시적으로 변환하기도 한다.
+% 표를 만들어야 한다. 워드로 작성하자.
+
+\section{연산자}
+세가지 분류를 가진다. Observable에 연결할 수 있는 메서드를 모두 가리킨다.
+https://academy.realm.io/posts/gotocph-jake-wharton-exploring-rxjava2-android/
+
+Manipulate or combine data in some way.
+Maniuplate threading in some way.
+Maniuplate emissions in some way.
+
+문서에 따라 Observable을 생성하는 메서드라 구독 메서드도 연산자에 포함시키기도 한다.
+http://reactivex.io/documentation/operators.html
+여기서는 구분을 하도록 하겠다.
+
+Observable 생성
+구독
+
+\subsection{체인}
+Observable 체인, Observer 체인, operator 체인
+
+
+\section{구독}
+subscribe에는 Observer가 전달된다. 그런데 Observer를 그냥 쓰면 문제가 발생할 수 있다.
+아래 코드를 보자.
+\begin{verbatim}
+	List<Integer> list = Arrays.asList(1, 2, 3, 4);
+	Observer<Integer> observer = new Observer<Integer>() {
+
+		@Override
+		public void onSubscribe(Disposable d) {
+		}
+
+		@Override
+		public void onNext(Integer value) {
+			System.out.println("value=" + value);
+		}
+
+		@Override
+		public void onError(Throwable e) {
+			e.printStackTrace();
+		}
+
+		@Override
+		public void onComplete() {
+			System.out.println("onComplete");
+		}
+
+	};
+	Observable.fromIterable(list)
+			.filter(x -> x > 2)  // (1)
+			.map(x -> x + 5) // (2)
+			.subscribe(observer);  // (3)
+	observer.onNext(77); // (4)		
+\end{verbatim}
+(1)에서 3, 4가 다운스트림에 전달되고 (2)에서 5가 더해져서 observer에 전달돼서 5, 9가 출력된다.
+그런데 (4)는 어떤 동작을 할까? 
+직접 호출을 하기 때문에 당연히 출력이 된다.
+종료 상태에서는 호출이 안 되어야 하기 때문에 규칙 위반이다.
+
+
+\subsection{구독 제거}
+dispose는 event가 계속 오는 도중에 끝내려는 의도가 있다. onComplete나 onError가 정상적으로 불려서 다 끝난 것은 dipose가 필요하지 않다.
+interval 같은 건 반드시 dispose  해야 하는 거고 just 같은 건 필요 없다.
+
+% rage().observeOn은 구독 제거해야 하는가?
+
+\begin{verbatim}
+public interface Disposable {
+
+    void dispose();
+
+    boolean isDisposed();
+}
+\end{verbatim}
+
+위 코드를 보자.
+subscribe 가 되면 
+ObservableFromIterable.subscribeActual
+->ObservableFilter$FilterObserver의 onSubscribe
+->ObservableMap$MapObserver의 onSubscribe가 호출된다.
+
+ObservableFilter$FilterObserver의 onSubscribe(Disposable d)에는 
+ObservableFromIterable$FromIterableDisposable이 전달된다.
+ObservableMap$MapObserver의 onSubscribe()에는 ObservableFilter$FilterObserver가 전달된다.
+마지막 Observer에는 ObservableMap$MapObserver가 전달된다.
+dispose의 기본 매커니즘은 전달된 Disposable의 dispose를 호출하는 것이다.
+따라서 쭉 따라가면 ObservableFromIterable$FromIterableDisposable가  호출된다.
+중간의 모든 Observer는 onSubscribe 메서드가 사용되고 Disposable 인터페이스 구현체이다.
+
+ 
+
+
+상속을 해야 하는 문제가 있다? 확인 필요.
+https://github.com/trello/RxLifecycle
+
+LamdaObserver를 보면 onError가 불리면 dispose 해버린다.
+
+DisposableObserver, ResourceObserver
+
+% 키노트에 구독 메서드 모음
+forEach(Consumer<? super T> onNext)
+forEachWhile(Predicate<? super T> onNext)
+forEachWhile(Predicate<? super T> onNext, Consumer<? super Throwable> onError)
+forEachWhile(final Predicate<? super T> onNext, Consumer<? super Throwable> onError,
+            final Action onComplete)
+
+\section{퓨전 모드}
+fusion은 사전적으로 '융합, 결합'의 의미를 가진다.
+2개 이상의 연속되는 연산자가 time, memory 오버헤드를 줄이는 방식으로 결합되는 것이다.
+
+큐 구조를 공유할 수 있다.
+% https://github.com/ReactiveX/RxJava/wiki/Writing-operators-for-2.0#operator-fusion
+%http://akarnokd.blogspot.kr/2016/03/operator-fusion-part-1.html
+%http://akarnokd.blogspot.kr/2016/04/operator-fusion-part-2-final.html
+여러 개의 연산자가 하나의 연산자로 합쳐지는 매크로 퓨전과 여러 연산자의 데이터 구조가 공유되는 마이크로 퓨전으로 나뒨다.
+
+매크로 퓨전은 어셈블리 시점에...
+ObservableRange에도 있다.
+just(T t)와 같은 것..
+ScalarCallable가 업스트림이라면 flatMap, concatMap, switchMap 은 간단하게 할 수 있다.
+
+마이크로 퓨전은 주로 구독 시점에..
+
+ConditionalSubscriber 선택적으로 하는 것..
+filter, distinct
+Flowable에 퓨전 모드가 적용이 많다.
+ObservableRange VS FlowableRange
+request(1)을 줄이기 위한 것이다.
+
+\begin{verbatim}
+public interface QueueFuseable<T> extends SimpleQueue<T> {
+
+    int NONE = 0;
+
+    int SYNC = 1;
+
+    int ASYNC = 2;
+
+    int ANY = SYNC | ASYNC;
+
+    int BOUNDARY = 4;
+
+    int requestFusion(int mode);
+    
+}    
+\end{verbatim}
+
+requestFusion의 파라미터에는 QueueFuseable의 상수값이 들어간다.
+SYNC, ASYNC, ANY, SYNC | BOUNDARY, ASYNC | BOUNDARY, ANY | BOUNDARY 값이 들어간다.
+리턴값도 마찬가지로 QueueFuseable의 상수이다. 이때는 SYNC, ASYNC만 나온다.
+BOUNDARY는 poll이 다른 스레드에서 일어난다는 의미이다. 
+호출하는 쪽:
+flatMap과 observeOn만 BOUNDARY로 요청한다.
+% instanceof QueueDisposable 쓰이는 곳 찾을 것
+ObservableConcatMap, ObservableConcatMapCompletable, ObservableConcatMapEager,
+flatMap, observeOn, doFinally
+
+% .requestFusion( find
+Flowable은 더 많다.
+CompletableConcat
+
+transitive(BasicFusableObserver 상속) : transitiveBoundaryFusion
+distinct, distinctUntilChanged,doAfterNext, filter, map
+BOUNDARY가 있는 경우에는 transitive하지 않는다.
+
+
+
+SYNC - fromArray, fromIterable, range, rangeLong, ObservableScalarXMap
+소스가 SYNC를 지원하지 않으면?
+
+ASYNC - observeOn, flatMapCompletable, UnicastProcessor, UnicastSubject
+
+wip : work in progress 의미
+
+
+\chapter{Observable}
+% https://github.com/mgp/effective-rxjava/blob/master/items/understand-observable-and-observer-chains.md
+데이터 소스를 이벤트 스트림으로 변경한 것이다.
+이벤트 스트림은 아이템 시퀀스로 부르기도 한다.
+
+\section{Observable 생성}
+정적 메스드에서 생성한다.
+from, defer, fromCallable, just 비교
+
+List는 전체가 하나의 이벤트 스트림일 수도 있고 각각이 이벤트 일 수도 있다.
+
+\subsection{just}
+Observable.just
+왜 있을까 궁금했다. 주로 연산자를 연결할 때 사용된다.
+flatMap(user -> user.isLoggined? bookmarkRepostiory.getBookmarkList() : Observable.just(new BookmarkList())
+
+
+\subsection{from 시리즈}
+fromArray(T... items)
+fromIterable(Iterable<? extends T> source)
+
+fromFuture, fromPublisher, 
+
+\subsubsection{fromCallable}
+하나만 리턴한다. 예외에 대한 처리와 dispose 체크가 있다.
+
+Single.fromCallable을 쓰는 게 더 낫겠다.
+
+\subsection{never/empty/error}
+Observable.never()는 onComplete를 호출하지 않는다. Observable.empty()와 달리..
+
+\subsection{range}
+rangeLong
+
+\subsection{timer}
+timer postDelayed()와 비슷
+
+\subsection{interval}
+
+\subsection{intervalRange}
+
+
+
+\subsection{create}
+create(ObservableOnSubscribe<T> source)
+
+Observable.create
+onComplete() 메서드는 넣는 게 낫다. 
+하위 스트림에서 onComplete가 불리지 않는다.
+onError에 로그만 남기면 안 된다. 스택만 남으면 위치가 파악이 안 된다. 
+% isDisposed() 체크가 rxjava2에서는 필요하지 않다.(확인 필요)
+
+\begin{verbatim}
+public interface ObservableOnSubscribe<T> {
+
+    void subscribe(@NonNull ObservableEmitter<T> e) throws Exception;
+    
+}
+\end{verbatim}
+
+\begin{verbatim}
+public interface Emitter<T> {
+
+    void onNext(@NonNull T value);
+
+    void onError(@NonNull Throwable error);
+
+    void onComplete();
+}
+\end{verbatim}
+
+\begin{verbatim}
+public interface ObservableEmitter<T> extends Emitter<T> {
+
+    void setDisposable(@Nullable Disposable d);
+
+    void setCancellable(@Nullable Cancellable c);
+
+    boolean isDisposed();
+
+    ObservableEmitter<T> serialize();
+
+    @Experimental
+    boolean tryOnError(@NonNull Throwable t);
+}
+\end{verbatim}
+
+
+\subsection{generate}
+generate(Callable<S> initialState, final BiConsumer<S, Emitter<T>> generator)
+
+generate(final Callable<S> initialState,
+            final BiConsumer<S, Emitter<T>> generator,
+            Consumer<? super S> disposeState)
+
+Observable<T> generate(Callable<S> initialState, BiFunction<S, Emitter<T>, S> generator)
+
+generate(Callable<S> initialState, BiFunction<S, Emitter<T>, S> generator,
+            Consumer<? super S> disposeState) {
+
+초기값에 따라 Emitter에서 이벤트를 내보낸다.            
+disposeState는 최종 상태를 나타낸다.
+무한 루프에서 계속 값을 만들어내고 dispose하거나 터미널 상태가 되어야만 루프문이 끝이 난다.
+Emitter에서 상태에 따라 onComplete를 호출할 수도 있다.
+
+
+\subsection{using}
+http://reactivex.io/documentation/operators/using.html
+
+create a disposable resource that has the same lifespan as the Observable
+
+The Using operator is a way you can instruct an Observable to create a resource that exists only during the lifespan of the Observable and is disposed of when the Observable terminates.
+
+using(Callable<? extends D> resourceSupplier, Function<? super D, ? extends ObservableSource<? extends T>> sourceSupplier, Consumer<? super D> disposer)
+eager 디폴트는 true
+
+using(Callable<? extends D> resourceSupplier, Function<? super D, ? extends ObservableSource<? extends T>> sourceSupplier, Consumer<? super D> disposer, boolean eager)
+
+리소스 기반으로 Observable을 만들고, Observable이 종료될 때 작업...
+
+subscribe 하는 순간에 리소스를 생성하고 종료될 때 disposer에서 리소스를 전달받아서 정리 작업을 한다.
+
+
+
+
+\subsection{defer}
+Observable.defer
+기존 코드를 결합할 때 사용한다.
+Observable의 장점은 선언만 하고 subscribe를 하는 시점에 Observable의 내용이 실행되는 것이다.
+
+
+
+\subsection{wrap}
+wrap(ObservableSource<T> source)
+
+source가 이미 Observable이라면 그대로 리턴하고 아니라면 Observable로 감싸서 리턴한다.
+그래봐야 subscribeActual 메서드를 구현한 것 뿐이다.
+ObservableSource가 전달되었는데, Observable의 메서드를 호출해야 할 때 필요
+내부에서 가끔 쓰이는 연산자이다.
+ambArray, compose, concatArray, concatArrayDelayError, concatEager
+
+
+% unsafeCreate 굳이 필요 없음
+
+\section{Cold/Hot} 
+% https://medium.com/@benlesh/hot-vs-cold-observables-f8094ed53339
+% https://stackoverflow.com/questions/32190445/hot-and-cold-observables-are-there-hot-and-cold-operators
+% http://tomstechnicalblog.blogspot.kr/2016/03/rxjava-problem-with-subjects.html
+% http://www.introtorx.com/content/v1.0.10621.0/14_HotAndColdObservables.html
+적극적인(active), 소극적인(passive)
+디폴트 모드가 Cold Obseravble이다.
+Cold Observable은 subscribe에서 이벤트를 새로 트리거한다.
+
+% replay 양상에 대해서도 얘기 필요
+Hot Observable의 예
+마우스 클릭
+버튼 클릭
+주가
+모바일 단말 센서
+
+엄밀하게 얘기해서 Broadcast는 Hot Observable에 해당한다. 
+
+멀티캐스트: 데이터를 여러 사용자에게 동시에 보낸다는 의미
+- 이벤트 소스 자체가 Hot한 경우
+- Observable을 Hot하게 만드는 게 publish
+- Subject
+
+% RxBinding도 얘기해보자. RxLocation도?
+
+\subsection{Subject}
+% http://reactivex.io/documentation/subject.html
+구독자 목록을 유지한다. LocalBroadcastManager와 비슷
+\subsubsection{PublishSubject}
+
+\subsubsection{BehaviorSubject}
+
+\subsubsection{AsyncSubject}
+
+\subsubsection{AsyncSubject}
+
+\subsubsection{UnicastSubject}
+subscribe가 2개 이상 되면 안된다.
+
+\subsection{ConnectableObservable}
+% 클래스 다이어그램
+
+\section{replay}
+다시 보기, 재현의 의미이다. 양상이 다르다.
+
+\chapter{스케줄러}
+% http://www.baeldung.com/rxjava-schedulers
+기본적으로 Observable과 Observer는 하나의 동일한 스레드에서 동작한다.
+
+한번에 하나의 이벤트만 내보내는 RxJava 규약에 맞게 동작하도록 되어 있다.
+% 오라일리 163p
+
+% Scheduler 클래스 다이어그램
+
+RxJava에서는 선언적으로 스레드를 지정하는 것이 권장된다.
+
+Schedulers에 정적 메서드로 사용 가능한 스케줄러는 아래 4개이다.
+Schedulers.newThread()
+Schedulers.computation()
+Schedulers.io()
+Schedulers.single()
+Schedulers.trampoline()
+
+그리고 사용자가 만든 Executor로 Scheduler를 만들 수도 있다.
+Schedulers.from(@NonNull Executor executor)
+
+TestScheduler
+
+Scheduler와 내부 클래스인 Scheduler.Worker의 주요 메서드를 보자.
+\begin{verbatim}
+abstract class Scheduler {
+
+    abstract Worker createWorker();
+
+    long now(@NonNull TimeUnit unit);
+
+    Disposable scheduleDirect(@NonNull Runnable run);
+    
+    Disposable scheduleDirect(@NonNull Runnable run, long delay, @NonNull TimeUnit unit);
+
+    Disposable schedulePeriodicallyDirect(@NonNull Runnable run, long initialDelay, long period, @NonNull TimeUnit unit);
+    
+    abstract static class Worker implements Disposable {
+        
+        Disposable schedule(@NonNull Runnable run);
+
+       
+        abstract Disposable schedule(@NonNull Runnable run, long delay, @NonNull TimeUnit unit);
+
+        Disposable schedulePeriodically(@NonNull Runnable run, final long initialDelay, final long period, @NonNull final TimeUnit unit);
+
+        long now(@NonNull TimeUnit unit);
+
+}
+\end{verbatim}
+% Scheduler에는 start()와 shutdown() 메서드도 있는데 각 Schduler에서 내부적으로 사용하는 메서드이다. 퍼블릭 메서드지만 호출하면 안 될 것 같다.
+
+Scheduler와 Worker에 schedulerDirect()와 schedulePeriodicallyDirect()가 동일하게 있는 게 보인다.
+now() 메서드는 Scheduler와 Scheduler.Worker에서 내용이 중복되는 코드이다. 
+Scheduler의 now() 메서드는 여러 연산자에서 시간을 체크할 때 사용한다.
+Scheduler.Worker의 now() 메서드는 Scheduler.Worker내의 schedule(), schedulePeriodically 메서드에서 시간을 체크할 때 사용하다.
+이 메서드가 오버라이드 가능한 이유도 있다. 바로 가상화된 시간을 제공하는 것이다.
+시간에 의존성이 있는 작업이 있다고 하자. 이를테면 1분 후에 API를 호출해서 ~하는 것이다.
+% 사용시간 체크?
+TestScheduler에서 advanceTimeBy(long delayTime, TimeUnit unit), advanceTimeTo(long delayTime, TimeUnit unit) 메서드로 가상 시간을 변경할 수 있다.
+
+좀 더 자세한 내용은 TestScheduler 절을 참고하자.
+
+ObservableSubscribeOn의 subscribeActual() 메서드는 아래와 같다.
+\begin{verbatim}
+    @Override
+    public void subscribeActual(final Observer<? super T> s) {
+        final SubscribeOnObserver<T> parent = new SubscribeOnObserver<T>(s);
+
+        s.onSubscribe(parent);
+
+        parent.setDisposable(scheduler.scheduleDirect(new SubscribeTask(parent)));
+    }
+\end{verbatim}
+
+observeOn(Scheduler scheduler)
+observeOn(Scheduler scheduler, boolean delayError)
+observeOn(Scheduler scheduler, boolean delayError, int bufferSize)
+
+업스트림에서 onNext에 전달된 값은 큐에 저장하고 스레드에서 무한반복문에서 큐에서 꺼내서 순차적으로 이벤트를 만들어 낸다.
+무한반복문이 끝나려면 dispose가 되어야 한다.
+ObservableObserveOn의 subscribeActual() 메서드는 아래와 같다.
+\begin{verbatim}
+
+
+    @Override
+    protected void subscribeActual(Observer<? super T> observer) {
+        if (scheduler instanceof TrampolineScheduler) {
+            source.subscribe(observer);
+        } else {
+            Scheduler.Worker w = scheduler.createWorker();
+
+            source.subscribe(new ObserveOnObserver<T>(observer, w, delayError, bufferSize));
+        }
+    }
+\end{verbatim}
+
+unsubscribeOn
+
+schduledThreadPool 최대 개수는 core와 동일하다.
+
+선언적 스케줄링
+computation은 이벤트 루프 방식
+
+자동 완성 테스트 샘플
+Scheduler를 변경해야 한다.
+sample에서 Scheduler.io() 필요하다.
+
+trampoline을 제외하고 모두다 ScheduledThreadPoolExecutor를 사용한다.
+
+Schedulers.from(Executor executor) 메서드를 사용할 때도 만일 전달된 파라미터가 ScheduledExecutorService일 때는
+그대로 사용하고 아니면 Schedulers.single()을 이용해서 schedule을 실행한다.
+
+trampoline은 schedule 시에 직접 sleep을 사용한다.
+
+\section{computation Scheduler}
+최대 스레드 개수가 Runtime.getRuntime().availableProcessors()로 되어 있다.
+rx2.computation-threads 시스템 프로퍼티로 더 적게 세팅할 수는 있다.
+% 권한 문제 체크 필요
+
+
+io.reactivex.internal.schedulers.ComputationScheduler 클래스에 지정
+
+디폴트로 computation 스케줄러로 되어 있는 것들은 아래와 같다.  오버로딩된 
+메서드가 있어서 다른 스케줄러를 사용할 수도 있다.
+buffer(), debounce(), delay(), delaySubscription(),
+interval(), intervalRange(), 
+replay(), sample(), throttleFirst(), timeInterval(), timeout(), timestamp(), window(), 
+timer()
+
+
+\section{io Scheduler}
+keepAlive시간 60초
+ConcurrentLinkedQueue에 각각 ScheduledThreadPool을 유지한다.
+
+\section{트램펄린 스케줄러}
+Trampoline Scheduler는 실행되는 스레드에서 큐 구조를 만든 것 뿐이다.
+
+trampoline 스케줄러를 사용하는 메서드는 아래와 같다.
+skipLast(), takeLast()
+
+\begin{verbatim}
+Observable.interval(1, TimeUnit.SECONDS).observeOn(Schedulers.trampoline())
+	.subscribe(value -> title.setText("val=" + value + ", Thread=" + 		Thread.currentThread().getName()));
+\end{verbatim}
+
+이것은 크래시를 발생시킨다.
+
+\begin{verbatim}
+public void onClickButton2(View view) {
+	Observable.interval(1, TimeUnit.SECONDS).observeOn(Schedulers.trampoline())
+	.map(value -> String.valueOf(value))
+	.subscribe(this::printInThread);
+}
+
+private void printInThread(String input) {
+SystemClock.sleep(2000);
+System.out.println(input + "Thread " + Thread.currentThread().getName());
+}
+\end{verbatim}
+
+\section{subscribeOn/observeOn}
+
+
+\chapter{주요 연산자}
+
+fusable 한 연산자는 5개가 있다.
+내부 Observer가 BasicFuseableObserver 상속
+filter(), map(), distinct(), distinctUntilChanged(), doAfterNext()이다.
+
+\section{필터링}
+아이템 시퀀스의 일부만 하위 스트림에 전달할 때 사용한다.
+% ?? 절의 스로틀도 여기에 포함될 수 있다.
+\subsection{filter}
+filter(Predicate<? super T> predicate)
+
+ofType 연산자도 있다.
+
+\subsection{distinct/distinctUntilChanged}
+\subsubsection{distinct}
+버퍼에 저장한다.
+distinct()
+distinct(Function<? super T, K> keySelector)
+distinct(Function<? super T, K> keySelector, Callable<? extends Collection<? super K>> collectionSupplier)
+
+\subsubsection{distinctUntilChanged}
+distinctUntilChanged()
+distinctUntilChanged(Function<? super T, K> keySelector)
+distinctUntilChanged(BiPredicate<? super T, ? super T> comparer)
+
+\subsection{take 시리즈}
+
+시작부터 이벤트 개수나 시간을 제한하는 방법을 제공한다.
+% 표로 하는 게 나을 듯
+take(long count)
+개수를 제한한다.
+take(long time, TimeUnit unit)
+take(long time, TimeUnit unit, Scheduler scheduler)
+디폴트 스케줄러는 computation 스케줄러이다.
+
+
+
+takeLast(int count)
+takeLast(long count, long time, TimeUnit unit)
+takeLast(long count, long time, TimeUnit unit, Scheduler scheduler)
+takeLast(long count, long time, TimeUnit unit, Scheduler scheduler, boolean delayError, int bufferSize)
+takeLast(long time, TimeUnit unit)
+takeLast(long time, TimeUnit unit, boolean delayError)
+takeLast(long time, TimeUnit unit, Scheduler scheduler)
+
+takeUntil(ObservableSource<U> other)
+takeUntil(Predicate<? super T> stopPredicate)
+takeWhile(Predicate<? super T> predicate)
+
+\subsection{skip 시리즈}
+skip(long count)
+skip(long time, TimeUnit unit)
+skip(long time, TimeUnit unit, Scheduler scheduler)
+skipLast(int count)
+skipLast(long time, TimeUnit unit)
+skipLast(long time, TimeUnit unit, boolean delayError)
+skipWhile(Predicate<? super T> predicate)
+
+\subsection{timeout}
+emission간에 타임아웃을 줄 수 있다.
+다른 Observable에서 유효한 시간을 정할 수도 있다. 
+첫번째 것은 timeout 되지 않는다.
+
+timeout(long timeout, TimeUnit timeUnit)
+timeout(long timeout, TimeUnit timeUnit, Scheduler scheduler)
+timeout(long timeout, TimeUnit timeUnit, ObservableSource<? extends T> other)
+timeout(long timeout, TimeUnit timeUnit, Scheduler scheduler, ObservableSource<? extends T> other)
+timeout(Function<? super T, ? extends ObservableSource<V>> itemTimeoutIndicator)
+timeout(Function<? super T, ? extends ObservableSource<V>> itemTimeoutIndicator,
+            ObservableSource<? extends T> other)
+
+timeout(ObservableSource<U> firstTimeoutIndicator,
+            Function<? super T, ? extends ObservableSource<V>> itemTimeoutIndicator)
+timeout(ObservableSource<U> firstTimeoutIndicator,
+            Function<? super T, ? extends ObservableSource<V>> itemTimeoutIndicator,
+                    ObservableSource<? extends T> other)                        
+
+\subsection{element 시리즈}
+\subsubsection{elementAt}
+Maybe<T> elementAt(long index)
+Single<T> elementAt(long index, T defaultItem)
+Single<T> elementAtOrError(long index)
+
+\subsubsection{firstElement}
+내부적으로 elementAt(0)을 호출한다. 
+
+\subsubsection{lastElement}
+Maybe<T> lastElement()
+업스트림에서 onComplete가 불리는 시점에 onNext가 불린다. 
+
+\subsubsection{singleElement}
+Maybe<T> singleElement()
+Observable이 2개 이상을 내보내면 IllegalArgumentException을 onError에 전달한다.
+
+\subsubsection{ignoreElements}
+Completable ignoreElements()
+
+\subsection{first/last}
+Single<T> first(T defaultItem) 
+elementAt(0L, defaultItem) 호출한다.
+
+Single<T> firstOrError()
+elementAtOrError(0L) 호출한다.
+
+Single<T> last(T defaultItem)
+
+Single<T> lastOrError()
+
+\subsection{single}
+Single<T> single(T defaultItem)
+아니템을 2개 이상 내보낸다면 IllegalArgumentException을 onError에 전달한다.
+
+Single<T> singleOrError()
+
+\section{아이템 변환}
+\subsection{map}
+타입이 변경될 수 있다.
+
+
+
+\subsection{cast}
+
+\subsection{materialize/dematerialize}
+
+\subsection{timestamp/timeInterval}
+Observable<Timed<T>>를 리턴한다.
+
+timeInterval은 이벤트 사이의 간격이 전달된다.
+
+\subsection{scan}
+훓어보다, 유심히 살피다는 의미이다.
+
+scan(BiFunction<T, T, T> accumulator)
+scan(final R initialValue, BiFunction<R, ? super T, R> accumulator)
+
+scanWith(Callable<R> seedSupplier, BiFunction<R, ? super T, R> accumulator)
+zipWith 등 다른 것과 달리 첫번째에 Observable이 들어가지 않고 Callable이 들어간다.
+
+\section{아이템 순서 변경}
+\subsection{sorted}
+
+
+
+
+
+\subsection{repeat}
+repeatUntil
+repeatWhen
+
+
+\section{단일 아이템으로 변경}
+리턴은 Single 또는  Mayb e이다.
+
+\subsection{Boolean 타입}       
+Single<Boolean>을 리턴한다.           
+\subsubsection{all}
+all(Predicate<? super T> predicate)
+
+\subsubsection{any}
+
+\subsubsection{contains}
+contains
+
+\subsubsection{isEmpty}
+all(Functions.alwaysFalse());
+
+\subsubsection{sequenceEqual}
+
+sequenceEqual(ObservableSource<? extends T> source1, ObservableSource<? extends T> source2)
+sequenceEqual(ObservableSource<? extends T> source1, ObservableSource<? extends T> source2,
+            BiPredicate<? super T, ? super T> isEqual)
+            sequenceEqual(ObservableSource<? extends T> source1, ObservableSource<? extends T> source2,
+            int bufferSize)
+sequenceEqual(ObservableSource<? extends T> source1, ObservableSource<? extends T> source2,
+            BiPredicate<? super T, ? super T> isEqual, int bufferSize)
+
+\subsection{컬렉션 타입}
+collect
+collectInto
+toList()
+toMap
+toMultimap
+toSortedList
+
+\subsection{기타 타입}
+\subsubsection{count}
+업스트림이 onComplete 이벤트를 보낼 때에 onNext를 보낸다.
+
+\subsubsection{reduce/reduceWith}
+
+\section{지연}
+\subsection{delay}
+timer와 비슷하다.
+기본으로 computation Scheduler 사용한다.
+
+delay(long delay, TimeUnit unit)
+
+delay(long delay, TimeUnit unit, boolean delayError)
+
+delay(long delay, TimeUnit unit, Scheduler scheduler)
+
+delay(long delay, TimeUnit unit, Scheduler scheduler, boolean delayError)
+
+delay(final Function<? super T, ? extends ObservableSource<U>> itemDelay)
+
+delay(ObservableSource<U> subscriptionDelay,
+            Function<? super T, ? extends ObservableSource<V>> itemDelay)
+
+\subsection{delaySubscription}
+
+delaySubscription(long delay, TimeUnit unit)
+
+
+           
+\section{일괄처리/샘플링}
+다음 장의 배압을 요구하기 전에 사용할 수 있는 옵션을 얘기해보자.
+
+\subsection{buffer}
+window 연산자와 함께 얘기되는 경우가 많다.
+Observable.buffer(2, 1)
+앞의 것과 비교하고자 할 때 사용해도  된다.
+
+\subsection{스로틀}
+\subsubsection{throttleLast/sample}
+
+\subsubsection{throttleFirst}
+
+\subsubsection{throttleWithTimeout/debounce}
+
+\section{Observable 결합}
+기존 Observable 여러 개를 가지고서 하나의 Observale로 만들어 내는 연산자를 얘기하자.
+위의 변환의 범주에 넣을 수도 있다.
+
+\subsection{머지}
+타입이 동일해야만 한다.
+\subsubsection{startWith 시리즈}
+시퀀스 개수가 달라진다. 아래와 같이 4개의 메서드가 있다. 
+startWith(Iterable<? extends T> items)
+startWith(ObservableSource<? extends T> other)
+startWith(T item)
+startWithArray(T... items) 
+
+컬렉션과 다른 Observable, 아이템 1개, 배열을 시퀀스 앞에 추가한다.
+타입이 동일해야 한다.
+
+\subsubsection{flatMap}
+타입이 바뀐다.
+
+flatten화 한다. 
+flatMap(obs -> obs) 로 항등함수를 사용할 수 있다.
+화살표 왼쪽에서 observable이 들어가는 희한한 방식인데 목적은 화살표 오른쪽의 observable을 flatten하게 한다.
+
+flatMap(Function<? super T, ? extends ObservableSource<? extends R>> mapper)
+
+flatMap(Function<? super T, ? extends ObservableSource<? extends R>> mapper, boolean delayErrors)
+
+flatMap(Function<? super T, ? extends ObservableSource<? extends R>> mapper, boolean delayErrors, int maxConcurrency)
+
+flatMap(Function<? super T, ? extends ObservableSource<? extends R>> mapper,
+            boolean delayErrors, int maxConcurrency, int bufferSize)
+
+flatMap(Function<? super T, ? extends ObservableSource<? extends R>> onNextMapper,
+            Function<? super Throwable, ? extends ObservableSource<? extends R>> onErrorMapper,
+            Callable<? extends ObservableSource<? extends R>> onCompleteSupplier)
+
+flatMap(Function<? super T, ? extends ObservableSource<? extends R>> onNextMapper,
+            Function<Throwable, ? extends ObservableSource<? extends R>> onErrorMapper,
+            Callable<? extends ObservableSource<? extends R>> onCompleteSupplier,
+            int maxConcurrency)
+            
+flatMap(Function<? super T, ? extends ObservableSource<? extends R>> mapper, int maxConcurrency)
+
+
+flatMap(Function<? super T, ? extends ObservableSource<? extends U>> mapper,
+            BiFunction<? super T, ? super U, ? extends R> resultSelector)
+
+flatMap(Function<? super T, ? extends ObservableSource<? extends U>> mapper,
+            BiFunction<? super T, ? super U, ? extends R> combiner, boolean delayErrors)
+
+flatMap(Function<? super T, ? extends ObservableSource<? extends U>> mapper,
+            BiFunction<? super T, ? super U, ? extends R> combiner, boolean delayErrors, int maxConcurrency)
+
+
+flatMap(final Function<? super T, ? extends ObservableSource<? extends U>> mapper,
+            final BiFunction<? super T, ? super U, ? extends R> combiner, boolean delayErrors, int maxConcurrency, int bufferSize)
+
+
+flatMap(Function<? super T, ? extends ObservableSource<? extends U>> mapper,
+            BiFunction<? super T, ? super U, ? extends R> combiner, int maxConcurrency)
+
+flatMapIterable(final Function<? super T, ? extends Iterable<? extends U>> mapper)
+flatMapIterable(final Function<? super T, ? extends Iterable<? extends U>> mapper,
+            BiFunction<? super T, ? super U, ? extends V> resultSelector)
+
+flatMapCompletable(Function<? super T, ? extends CompletableSource> mapper)
+flatMapCompletable(Function<? super T, ? extends CompletableSource> mapper, boolean delayErrors)
+
+
+flatMapMaybe(Function<? super T, ? extends MaybeSource<? extends R>> mapper)
+flatMapMaybe(Function<? super T, ? extends MaybeSource<? extends R>> mapper, boolean delayErrors)
+
+flatMapSingle(Function<? super T, ? extends SingleSource<? extends R>> mapper)
+flatMapSingle(Function<? super T, ? extends SingleSource<? extends R>> mapper, boolean delayErrors)
+                                                                        
+\subsubsection{merge/mergeWith}
+정적 메서드 merge와 인스턴스 메서드 mergeWith가 있다.
+내부적으로 flatMap을 사용한다.
+flatMap(obs -> obs)
+mergeArray
+
+
+
+\subsubsection{mergeDelayError}
+mergeArrayDelayError
+
+\subsection{연결}
+\subsubsection{concatMap}
+concatMapDelayError, concatMapEager, concatMapEagerDelayError
+concatMapIterable
+
+\subsubsection{concat/concatWith}
+flatMap과 merge 관계처럼 concat도 concatMap을 사용한다.
+concatArrayDelayError
+concatEager, concatArrayEager
+concatDelayError
+
+\subsection{전환}
+\subsubsection{switchMap}
+switchMapSingleDelayError
+switchMapDelayError
+
+\subsubsection{switchOnNext}
+switch나 switchWith 메서드는 없다.
+정적 메서드이다. 
+내부적으로 switchMap 사용한다.
+switchOnNextDelayError
+
+
+\begin{verbatim}
+public static <T> Observable<T> switchOnNext(ObservableSource<? extends ObservableSource<? extends T>> sources, int bufferSize) {
+	ObjectHelper.requireNonNull(sources, "sources is null");
+	ObjectHelper.verifyPositive(bufferSize, "bufferSize");
+	return RxJavaPlugins.onAssembly(new ObservableSwitchMap(sources, Functions.identity(), bufferSize, false));
+}
+\end{verbatim}
+
+\subsubsection{switchOnNextDelayError}
+
+switchIfEmpty
+
+
+\subsection{페어링}
+앞의 머지, 연결, 전환에서는 동일한 이벤트 타입이 필요했다.
+
+\subsubsection{zip/zipWith}
+일대일일 때 많이 사용한다.
+한 Observable이 1초마다 이벤트를 방출하고 다른 Observable이 1.1초라고 한다면 이 2개를 결합하면 10시간 후에는 한 시간 차이가 생겨버린다.
+2개의 시퀀스가 인덱스로 결합한다.
+
+zipWith는 zip을 다시 호출한다.
+\begin{verbatim}
+    public final <U, R> Observable<R> zipWith(ObservableSource<? extends U> other,
+BiFunction<? super T, ? super U, ? extends R> zipper) {
+	ObjectHelper.requireNonNull(other, "other is null");
+	return zip(this, other, zipper);
+}
+\end{verbatim}
+
+zipArray
+zipIterable
+
+\subsubsection{combineLatest}
+zip보다 실제 많이 사용된다.
+
+combineLatestDelayError
+
+\subsubsection{withLatestFrom}
+
+\subsubsection{join}
+% http://www.introtorx.com/uat/content/v1.0.10621.0/17_SequencesOfCoincidence.html#Join
+% The Join operator allows you to logicaly join two sequences. Where the Zip operator would join two seqences together by index, the Join operator allows you join sequences by intersecting windows.
+Observable에서 제일 복잡한 시그너쳐 가운데 하나다. 
+\begin{verbatim}
+    public final <TRight, TLeftEnd, TRightEnd, R> Observable<R> join(
+            ObservableSource<? extends TRight> other,
+            Function<? super T, ? extends ObservableSource<TLeftEnd>> leftEnd,
+            Function<? super TRight, ? extends ObservableSource<TRightEnd>> rightEnd,
+            BiFunction<? super T, ? super TRight, ? extends R> resultSelector)
+\end{verbatim}
+앞의 zip, combineLatest, withLatestFrom은 일대일로 결합이 되었는데 여기서는 다대다로 결합이 가능하다.
+leftEnd 파라미터가 업스트림 각 이벤트의 만료 시점을 나타내고 rightEnd 파라미터가 other Observable의 각 이벤트의 만료 시점을 나타낸다.
+% ObservableJoinTest 참고할 것
+
+구구단을 만들어보았다. flatMap을 사용한 버전과 비교해보자.
+\begin{verbatim}
+    Observable.range(1, 9)
+        .join(Observable.range(2, 8),
+            i -> Observable.never(),
+            i -> Observable.never(),
+            (row, col) -> String.format("%d x %d = %d", col, row, col * row))
+        .subscribe(System.out::println);
+\end{verbatim}
+만료 조건이 never로 되어 있어서 업스트림의 이벤트나 other Observable의 이벤트는 만료되지 않고 모든 이벤트가 교차된다.
+
+\subsubsection{groupJoin}
+
+\begin{verbatim}
+    public final <TRight, TLeftEnd, TRightEnd, R> Observable<R> groupJoin(
+            ObservableSource<? extends TRight> other,
+            Function<? super T, ? extends ObservableSource<TLeftEnd>> leftEnd,
+            Function<? super TRight, ? extends ObservableSource<TRightEnd>> rightEnd,
+            BiFunction<? super T, ? super Observable<TRight>, ? extends R> resultSelector) 
+\end{verbatim}
+\subsection{amb}
+ambiguous
+모호한, 분명하지 않은 의미를 가진다.
+
+amb와 ambArray 메서드가 있다.
+
+flatMap, switchMap에 전달되는 Observable이 Observable.empty라고 해서 그 다음에 onComplete를 보내는 것이 아니다. 헷갈릴 수 있다.
+
+\section{Observable 분기}
+앞 절의 결합 연산자에 대응하는 장이다. 
+분기 연산자는 하나의 Observable을 여러 개의 Observable로 만든다.
+따라서 분기하는 기준이 필요해진다.
+분기에서 끝나지는 않고 다시 머지하는 과정이 필요하다.
+
+\subsection{window}
+buffer 연산자와 함께 얘기되는 경우가 많다.
+법인카드 사용 내역을 Observable로 만들었다고 해보자.
+이것을 하루씩 끊어서 살펴보려고 할 수 있다. 
+% 사용 내역에서 특이사항을 체크해볼 수도 있다.
+Observable<Observable<T>>을 리턴한다.
+window(long count)
+window(long count, long skip)
+window(long count, long skip, int bufferSize)
+window(long timespan, long timeskip, TimeUnit unit)
+window(long timespan, long timeskip, TimeUnit unit, Scheduler scheduler)
+window(long timespan, long timeskip, TimeUnit unit, Scheduler scheduler, int bufferSize)
+window(long timespan, TimeUnit unit)
+window(long timespan, TimeUnit unit, Scheduler scheduler)
+window(long timespan, TimeUnit unit, long count)
+한 윈도우 내에서 최대 개수
+window(long timespan, TimeUnit unit, long count, boolean restart)
+개수에 다다르면 다시 시작한다.
+window(long timespan, TimeUnit unit,
+            Scheduler scheduler, long count)
+window(long timespan, TimeUnit unit,
+            Scheduler scheduler, long count, boolean restart)
+window(long timespan, TimeUnit unit, Scheduler scheduler,
+            long count, boolean restart, int bufferSize)
+window(ObservableSource<B> boundary)
+window(ObservableSource<B> boundary, int bufferSize)
+            
+\subsection{groupBy}
+법인카드 사용 내역을 사용자별로 구분해서 보려고 할 수도 있다.
+
+\section{에러 처리}
+onErrorReturn
+onErrorReturnItem
+onExceptionResumeNext
+retry, retryUntil, retryWhen
+
+\section{기타}
+\subsection{cache/cacheWithInitialCapacity}
+\subsection{toFuture}
+fromFuture와 반대이다.
+
+\subsection{defaultIfEmpty}
+defaultIfEmpty(T defaultItem)
+
+switchIfEmpty(just(defaultItem))을 호출한다.
+
+\subsection{serialize}
+쓸 일이 없다. 만일 ObservableSource에서 여러 스레드를 사용한다면 모든 아이템을 출력하기 위해서 필요하다.
+
+onTerminateDetach
+
+to
+소스 타입 간 변환에 많이 사용된다.
+
+\chapter{배압과 Flowable}
+https://en.wikipedia.org/wiki/Back_pressure
+Backpressure in information technology에 나온다.
+The term is also used analogously in the field of information technology to describe the build-up of data behind an I/O switch if the buffers are full and incapable of receiving any more data; the transmitting device halts the sending of data packets until the buffers have been emptied and are once more capable of storing information. It also refers to an algorithm for routing data according to congestion gradients
+
+튜브에 바람을 넣을 때 아직 많이 넣을 수 있는데도 바람을 넣을 때 반작용이 있다.
+
+Observale이 Observer가 요청하는 것보다 많이 만들어낸다.
+이때 초과되는 것을 버리거나 버퍼에 쌓거나 오래된 것은 제거하는 방법을 쓸 수 있다.
+
+Flowable에서 filter, distinct, distinctUntilChanged, skipLast, skipWhile, skipUntil 에서는 request(1)한다.
+
+\chapter{Transformer와 커스텀 연산자}
+가능하면 만들지 말자.
+compose
+lift
+
+https://github.com/akarnokd/RxJava2Extensions
+
+https://github.com/davidmoten/rxjava2-extras
+여기에 cache 연산자가 있다.
+
+\chapter{디버깅과 테스트}	
+\section{doOnXxx 연산자}
+doAfterNext
+doAfterTerminate
+doFinally
+doOnDispose
+doOnEach
+doOnError
+doOnLifecycle
+doOnNext
+doOnSubscribe
+doOnTerminate
+
+\section{blocking 연산자}
+blockingFirst,
+blockingForEach,
+blockingIterable,
+blockingLast,
+blockingLatest,
+blockingMostRecent,
+blockingNext,
+blockingSingle,
+blockingSubscribe
+
+\section{TestObserver}
+
+\section{TestScheduler}
+
+\chapter{RxJava와 함께 하는 라이브러리}
+https://github.com/ReactiveX/RxAndroid/wiki
+
+RxJava와 함께 하는 도구들을 준비하자. 
+
+
+\section{Retrofit}
+With Adapter
+다이나믹 프록시
+
+% POST, PUT, GET, DELETE 적용
+%  커스텀도 가능하다.
+GET에는 Body가 전달되지 않는다. 
+
+\subsection{컨버터}
+XML 파싱에는 SimpleXmlConverter가 있고 JSON 파싱에는 JacksonConverter, GsonConverter가 있다.
+jackson은 성능이 좋은 편이다. 하지만 신뢰도가 높지는 않다.
+
+\subsubsection{커스텀 컨버터}
+데이터 구조가 복잡한 경우 직접 파싱하고 싶을 때가 있다. 
+예) 좌표 to 주소
+
+\subsection{어댑터}
+https://github.com/square/retrofit/tree/master/retrofit-adapters
+이 가운데서 rxjava2 어댑터를 사용해야 한다.
+
+compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+
+create(), createAsync(), createWithScheduler(Scheduler scheduler) 3개의 메서드가 있다.
+
+스케줄러 전달 가능하다.
+
+프라이빗 메서드인 RxJava2CallAdapterFactory(Scheduler scheduler, boolean isAsync)를 사용한다.
+
+
+
+\section{RxAndroid}
+안드로이드에서는 필수적인 유틸리티이다. 메인 스레드에서만 UI 업데이트를 허용한다.
+
+https://github.com/ReactiveX/RxAndroid
+
+Observable에서 observeOn(AndroidSchedulers.mainThread()) 이 메서드만 주로 사용한다.
+onNext의 내용은 Handler의 post 메서드에 전달된다.
+
+\section{RxBinding}
+https://github.com/JakeWharton/RxBinding
+
+compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+
+RxView에서는 Observable을 리턴하는 것과 Consumer를 리턴하는 것을 구분해야 한다.
+clickable
+enabled
+pressed
+selected
+visibility
+는 Consumer를 리턴하는 것이다.
+
+\section{RxRelay}
+Subject는 터미널 이벤트를 받으면 더 이벤트를 받을 수 없다.
+onNext()가 아닌 accept() 메서드를 사용한다.
+
+
+\chapter{RxJava 응용}
+\section{RxBus}
+onNext 호출 위치가 스레드인가 아닌가에 따라서 Observer도 영향을 받는다.
+
+
+% 순수함수
+% https://www.slideshare.net/yfain/reactive-thinking-in-java-with-rxjava2

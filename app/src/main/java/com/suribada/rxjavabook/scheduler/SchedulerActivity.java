@@ -55,10 +55,10 @@ public class SchedulerActivity extends Activity {
         Scheduler scheduler = Schedulers.trampoline();
         Scheduler.Worker worker = scheduler.createWorker();
         worker.schedule(() -> {
-            printInThread("trampoline first");
+            printThread("trampoline first");
         });
         worker.schedule(() -> {
-            printInThread("trampoline second");
+            printThread("trampoline second");
         });
     }
 

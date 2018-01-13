@@ -73,24 +73,32 @@ public class RxJava1Test {
     @Test
     public void testGugudan() {
         Observable.range(2, 8)
-                .flatMap(row -> Observable.range(1, 9)
-                        .map(col -> String.format("%d x %d = %d", row, col, row * col)))
-                .subscribe(System.out::println);
+            .flatMap(row -> Observable.range(1, 9)
+                    .map(col -> String.format("%d x %d = %d", row, col, row * col)))
+            .subscribe(System.out::println);
 
     }
 
     @Test
     public void testGugudan2() {
-    Observable.range(1, 9)
-            .join(Observable.range(2, 8),
-                    i -> Observable.never(),
-                    i -> Observable.never(),
+        Observable.range(1, 9)
+            .flatMap(row -> Observable.range(2, 8),
                     (row, col) -> String.format("%d x %d = %d", col, row, col * row))
             .subscribe(System.out::println);
     }
 
     @Test
-    public void testGugudan3() {
+    public void testGuguDan3() {
+        Observable.range(1, 9)
+                .join(Observable.range(2, 8),
+                        i -> Observable.never(),
+                        i -> Observable.never(),
+                        (row, col) -> String.format("%d x %d = %d", col, row, col * row))
+                .subscribe(System.out::println);
+    }
+
+    @Test
+    public void testGugudan4() {
         Observable.range(1, 9)
                 .groupJoin(Observable.range(2, 8),
                         i -> Observable.never(),
