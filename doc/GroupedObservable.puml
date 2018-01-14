@@ -1,0 +1,9 @@
+@startuml
+abstract class Observable
+abstract class GroupedObservable
+class GroupedUnicast
+class ObservableGroupBy
+ObservableGroupBy +-- GroupedUnicast
+Observable <|-- GroupedObservable
+GroupedObservable <|-- GroupedUnicast
+@enduml

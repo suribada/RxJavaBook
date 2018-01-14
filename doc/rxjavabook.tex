@@ -62,6 +62,8 @@ CountDownLatch를 사용해왔다.
 ListView 의 ListAdapter 에 ListView 를 전달하는 것을 보기도 했다.
 Activity를 전달한 적이 있다.
 
+% +/- 버튼
+
 할리우드 원칙..
 
 \section{예외 처리}
@@ -74,6 +76,9 @@ http://reactivex.io/documentation/contract.html
 
 Observer 패턴을 적용한 것이다.
 https://en.wikipedia.org/wiki/Observer_pattern
+
+http://reactivex.io/intro.html
+https://msdn.microsoft.com/en-us/library/hh242985(v=vs.103).aspx
 
 정형화된 콜백이다.
 Pull 방식이 아닌 Push 방식 구독
@@ -1221,6 +1226,7 @@ window(ObservableSource<B> boundary, int bufferSize)
             
 \subsection{groupBy}
 법인카드 사용 내역을 사용자별로 구분해서 보려고 할 수도 있다.
+GroupedObservable은 Key가 있는 것 뿐이다.
 
 \section{에러 처리}
 onErrorReturn
