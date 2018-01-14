@@ -1,0 +1,10 @@
+@startuml
+abstract class Observable
+abstract class ConnectableObservable
+class ObservablePublish
+class ObservableReplay
+
+Observable <|-- ConnectableObservable
+ConnectableObservable <|-- ObservablePublish
+ConnectableObservable <|-- ObservableReplay
+@enduml
