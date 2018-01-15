@@ -1,0 +1,22 @@
+@startuml
+
+abstract class Observable
+interface Observer
+abstract class Subject
+class PublishSubject
+class BehaviorSubject
+class AsyncSubject
+class ReplaySubject
+class UnicastSubject
+class SerializedSubject
+
+Observable <|-- Subject
+Observer <|.. Subject
+Subject <|-- PublishSubject
+Subject <|-- BehaviorSubject
+Subject <|-- AsyncSubject
+Subject <|-- ReplaySubject
+Subject <|-- UnicastSubject
+Subject <|-- SerializedSubject
+
+@enduml
