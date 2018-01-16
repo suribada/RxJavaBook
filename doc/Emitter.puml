@@ -1,0 +1,22 @@
+@startuml
+
+interface Emitter<T> {
+    {abstract} onNext(T value)
+    {abstract} onError(Throwable error)
+    {abstract} onComplete()
+}
+interface ObservableEmitter<T>
+interface FlowableEmitter<T>
+class CreateEmitter<T>
+class ObservableCreate<T>
+class FlowableCreate<T>
+abstract class BaseEmitter
+
+Emitter <|-- ObservableEmitter
+Emitter <|-- FlowableEmitter
+ObservableEmitter <|.. CreateEmitter
+ObservableCreate +-- CreateEmitter
+FlowableEmitter <|.. BaseEmitter
+FlowableCreate +-- BaseEmitter
+
+@enduml

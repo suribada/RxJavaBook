@@ -436,12 +436,15 @@ Observable.just
 왜 있을까 궁금했다. 주로 연산자를 연결할 때 사용된다.
 flatMap(user -> user.isLoggined? bookmarkRepostiory.getBookmarkList() : Observable.just(new BookmarkList())
 
+https://stackoverflow.com/questions/29169194/why-does-subscribe-not-executed-in-a-new-thread
+
+just는 그 순간에 평가된다.
 
 \subsection{from 시리즈}
 fromArray(T... items)
 fromIterable(Iterable<? extends T> source)
 
-fromFuture, fromPublisher, 
+fromFuture, fromPublisher
 
 \subsubsection{fromCallable}
 하나만 리턴한다. 예외에 대한 처리와 dispose 체크가 있다.
@@ -471,6 +474,8 @@ onComplete() 메서드는 넣는 게 낫다.
 하위 스트림에서 onComplete가 불리지 않는다.
 onError에 로그만 남기면 안 된다. 스택만 남으면 위치가 파악이 안 된다. 
 % isDisposed() 체크가 rxjava2에서는 필요하지 않다.(확인 필요)
+
+ObservableEmitter
 
 \begin{verbatim}
 public interface ObservableOnSubscribe<T> {
@@ -507,25 +512,6 @@ public interface ObservableEmitter<T> extends Emitter<T> {
 }
 \end{verbatim}
 
-
-\subsection{generate}
-generate(Callable<S> initialState, final BiConsumer<S, Emitter<T>> generator)
-
-generate(final Callable<S> initialState,
-            final BiConsumer<S, Emitter<T>> generator,
-            Consumer<? super S> disposeState)
-
-Observable<T> generate(Callable<S> initialState, BiFunction<S, Emitter<T>, S> generator)
-
-generate(Callable<S> initialState, BiFunction<S, Emitter<T>, S> generator,
-            Consumer<? super S> disposeState) {
-
-초기값에 따라 Emitter에서 이벤트를 내보낸다.            
-disposeState는 최종 상태를 나타낸다.
-무한 루프에서 계속 값을 만들어내고 dispose하거나 터미널 상태가 되어야만 루프문이 끝이 난다.
-Emitter에서 상태에 따라 onComplete를 호출할 수도 있다.
-
-
 \subsection{using}
 http://reactivex.io/documentation/operators/using.html
 
@@ -561,10 +547,27 @@ ObservableSource가 전달되었는데, Observable의 메서드를 호출해야 
 내부에서 가끔 쓰이는 연산자이다.
 ambArray, compose, concatArray, concatArrayDelayError, concatEager
 
+\subsection{generate}
+generate(Callable<S> initialState, final BiConsumer<S, Emitter<T>> generator)
+
+generate(final Callable<S> initialState,
+            final BiConsumer<S, Emitter<T>> generator,
+            Consumer<? super S> disposeState)
+
+Observable<T> generate(Callable<S> initialState, BiFunction<S, Emitter<T>, S> generator)
+
+generate(Callable<S> initialState, BiFunction<S, Emitter<T>, S> generator,
+            Consumer<? super S> disposeState) {
+
+초기값에 따라 Emitter에서 이벤트를 내보낸다.            
+disposeState는 최종 상태를 나타낸다.
+무한 루프에서 계속 값을 만들어내고 dispose하거나 터미널 상태가 되어야만 루프문이 끝이 난다.
+Emitter에서 상태에 따라 onComplete를 호출할 수도 있다.
+scan 연산자를 대신 할 수도 있다.
 
 % unsafeCreate 굳이 필요 없음
 
-\section{Cold/Hot} 
+\section{Cold/Hot Observable} 
 % https://medium.com/@benlesh/hot-vs-cold-observables-f8094ed53339
 % https://stackoverflow.com/questions/32190445/hot-and-cold-observables-are-there-hot-and-cold-operators
 % http://tomstechnicalblog.blogspot.kr/2016/03/rxjava-problem-with-subjects.html
@@ -773,7 +776,7 @@ System.out.println(input + "Thread " + Thread.currentThread().getName());
 \section{subscribeOn/observeOn}
 
 
-\chapter{주요 연산자}
+\chapter{Observable 주요 연산자}
 
 fusable 한 연산자는 5개가 있다.
 내부 Observer가 BasicFuseableObserver 상속
@@ -1253,8 +1256,6 @@ switchIfEmpty(just(defaultItem))을 호출한다.
 
 onTerminateDetach
 
-to
-소스 타입 간 변환에 많이 사용된다.
 
 \chapter{배압과 Flowable}
 https://en.wikipedia.org/wiki/Back_pressure
@@ -1268,15 +1269,36 @@ Observale이 Observer가 요청하는 것보다 많이 만들어낸다.
 
 Flowable에서 filter, distinct, distinctUntilChanged, skipLast, skipWhile, skipUntil 에서는 request(1)한다.
 
+FlowableOnSubscribe
+FlowableEmitter
+
+\chapter{Maybe/Single/Completable}
+
+\section{Maybe}
+MaybeOnSubscribe
+MaybeEmitter
+\section{Single}
+SingleOnSubscribe
+SingleEmitter
+
+\section{Completable}
+CompletableOnSubscribe
+CompletableEmitter
+
 \chapter{Transformer와 커스텀 연산자}
 가능하면 만들지 말자.
-compose
-lift
+\section{compose}
+\section{to}
+소스 타입 간 변환에 많이 사용된다.
+
+\section{lift}
 
 https://github.com/akarnokd/RxJava2Extensions
 
 https://github.com/davidmoten/rxjava2-extras
 여기에 cache 연산자가 있다.
+
+
 
 \chapter{디버깅과 테스트}	
 \section{doOnXxx 연산자}

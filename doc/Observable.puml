@@ -1,19 +1,23 @@
 @startuml
-interface ObservableSource
-abstract class Observable
+interface ObservableSource<T> {
+{abstract} void subscribe(Observer<? super T> observer)
+}
+abstract class Observable<T> {
+{abstract} void subscribeActual(Observer<? super T> observer)
+}
 
 ObservableSource <|.. Observable
 
-abstract class Subject
-abstract class ConnectableObservable
-class ObservableFilter
-class ObservableMap
-class ObservableLift
+abstract class Subject<T>
+abstract class ConnectableObservable<T>
+class ObservableFilter<T>
+class ObservableMap<T>
+class ObservableXxx
 
 Observable <|-- Subject
 Observable <|-- ConnectableObservable
 Observable <|-- ObservableFilter
 Observable <|-- ObservableMap
-Observable <|-- ObservableLift
+Observable <|-- ObservableXxx
 
 @enduml
