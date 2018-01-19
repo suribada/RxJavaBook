@@ -1,0 +1,16 @@
+@startuml
+
+interface CompletableSource {
+{abstract} void subscribe(CompletableObserver cs)
+}
+abstract class Completable
+CompletableSource <|.. Completable
+
+class CompletableCreate
+class CompletableMerge
+class CompletableXxx
+
+Completable <|-- CompletableCreate
+Completable <|-- CompletableMerge
+Completable <|-- CompletableXxx
+@enduml

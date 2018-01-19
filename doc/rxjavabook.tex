@@ -258,6 +258,8 @@ Maniuplate emissions in some way.
 문서에 따라 Observable을 생성하는 메서드라 구독 메서드도 연산자에 포함시키기도 한다.
 http://reactivex.io/documentation/operators.html
 여기서는 구분을 하도록 하겠다.
+io.reactivex.internal.operators에는 생성과 변환을 모두 포함한다.
+어차피 만드는 것이다!!
 
 Observable 생성
 구독
@@ -1284,6 +1286,12 @@ SingleEmitter
 \section{Completable}
 CompletableOnSubscribe
 CompletableEmitter
+
+쓸만한 게 많다.
+Observable<T> andThen(ObservableSource<T> next)
+Flowable<T> andThen(Publisher<T> next)
+Single<T> andThen(SingleSource<T> next)
+ 
 
 \chapter{Transformer와 커스텀 연산자}
 가능하면 만들지 말자.

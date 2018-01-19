@@ -1,0 +1,6 @@
+@startuml
+interface Subscription {
+{abstract} void request(long n)
+{abstract} void void cancel()
+}
+@enduml

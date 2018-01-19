@@ -1,0 +1,16 @@
+@startuml
+
+interface SingleSource<T> {
+{abstract} void subscribe(SingleObserver<? super T> observer)
+}
+abstract class Single<T>
+SingleSource <|.. Single
+
+class SingleCreate<T>
+class SingleMap<T>
+class SingleXxx
+
+Single <|-- SingleCreate
+Single <|-- SingleMap
+Single <|-- SingleXxx
+@enduml

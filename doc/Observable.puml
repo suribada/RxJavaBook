@@ -10,12 +10,14 @@ ObservableSource <|.. Observable
 
 abstract class Subject<T>
 abstract class ConnectableObservable<T>
+class ObservableCreate<T>
 class ObservableFilter<T>
 class ObservableMap<T>
 class ObservableXxx
 
 Observable <|-- Subject
 Observable <|-- ConnectableObservable
+Observable <|-- ObservableCreate
 Observable <|-- ObservableFilter
 Observable <|-- ObservableMap
 Observable <|-- ObservableXxx

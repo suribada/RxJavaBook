@@ -1,0 +1,18 @@
+@startuml
+
+interface MaybeSource<T> {
+{abstract} void subscribe(MaybeObserver<? super T> observer)
+}
+abstract class Maybe<T>
+MaybeSource <|.. Maybe
+
+class MaybeCreate<T>
+class MaybeFilter<T>
+class MaybeMap<T>
+class MaybeXxx
+
+Maybe <|-- MaybeCreate
+Maybe <|-- MaybeFilter
+Maybe <|-- MaybeMap
+Maybe <|-- MaybeXxx
+@enduml

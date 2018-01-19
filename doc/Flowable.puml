@@ -1,0 +1,35 @@
+@startuml
+
+package org.reactivestreams {
+  interface Publisher<T> {
+  {abstract} void subscribe(Subscriber<? super T> s)
+  }
+
+    interface Subscriber<T> {
+    {abstract} void onSubscribe(Subscription s)
+    {abstract} void onNext(T t)
+    {abstract} void onError(Throwable t)
+    {abstract} void onComplete()
+    }
+
+    interface Processor<T, R>
+}
+
+abstract class Flowable<T>
+
+Publisher <|.. Flowable
+Publisher <|-- Processor
+Subscriber <|-- Processor
+
+class ConnectableFlowable<T>
+class FlowableCreate<T>
+class FlowableFilter<T>
+class FlowableMap<T>
+class FlowableXxx
+
+Flowable <|-- ConnectableFlowable
+Flowable <|-- FlowableCreate
+Flowable <|-- FlowableFilter
+Flowable <|-- FlowableMap
+Flowable <|-- FlowableXxx
+@enduml
