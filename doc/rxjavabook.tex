@@ -427,7 +427,7 @@ wip : work in progress 의미
 데이터 소스를 이벤트 스트림으로 변경한 것이다.
 이벤트 스트림은 아이템 시퀀스로 부르기도 한다.
 
-\section{Observable 생성}
+\section{Observable 생성 연산자}
 정적 메스드에서 생성한다.
 from, defer, fromCallable, just 비교
 
@@ -597,6 +597,9 @@ Hot Observable의 예
 \subsection{Subject}
 % http://reactivex.io/documentation/subject.html
 구독자 목록을 유지한다. LocalBroadcastManager와 비슷
+onError나 onComplete 이후에는 onNext가 불리지 않는다.
+이는 http://reactivex.io/documentation/contract.html 규약에 의한 것이다.
+
 \subsubsection{PublishSubject}
 
 \subsubsection{BehaviorSubject}

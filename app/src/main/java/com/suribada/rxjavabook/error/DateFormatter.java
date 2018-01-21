@@ -34,7 +34,8 @@ public class DateFormatter {
         try {
             return sdf.parse(input).getTime();
         } catch (ParseException e) {
-            return -1; // -1을 상수로 해도 큰 차이가 없음
+            e.printStackTrace();
+            return -1L; // -1을 상수로 해도 큰 차이가 없음
         }
     }
 

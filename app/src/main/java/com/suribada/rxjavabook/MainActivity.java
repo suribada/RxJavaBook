@@ -25,6 +25,7 @@ import java.util.Map;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ public class MainActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		SharedPreferences preferences = getBaseContext().getSharedPreferences("suribada", 0);
 
 		Intent intent = getIntent();
 		String path = intent.getStringExtra("com.example.android.apis.Path");
