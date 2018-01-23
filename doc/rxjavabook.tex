@@ -18,13 +18,38 @@
 이 책은 RxJava를 활용하는 내용 뿐 아니라 분석한 내용도 포함하고 있다.
 코틀린 내용은 제외하였다.
 
-
+원리를 알면 각 내용을 외울 필요가 없다. 
 \tableofcontents
 
 
 
 % https://app.genmymodel.com/edit/_WNTkQIz2EeewrIfYd5mf8Q#
 \chapter{RxJava 도입}
+\section{왜 반응형인가?}
+실세계와 닮았다.
+전화를 받고, 알림이 오고
+
+빌드가 오래 걸린다고 할 때, 중간 중간 확인할 것인가? 빌드가 끝나면 노티가 오도록 할 것인가?
+
+\section{ReactiveX는}
+\section{옵서버 패턴}
+http://reactivex.io/documentation/contract.html
+
+Observer 패턴을 적용한 것이다.
+https://en.wikipedia.org/wiki/Observer_pattern
+
+http://reactivex.io/intro.html
+https://msdn.microsoft.com/en-us/library/hh242985(v=vs.103).aspx
+
+정형화된 콜백이다.
+Pull 방식이 아닌 Push 방식 구독
+
+Observable은 아이템 또는 아이템 시퀀스를 내보낸다.
+emit, emission
+
+이벤트는 onNext, onError, onComplete를 주로 얘기한다.
+
+\section{RxJava}
 % 뒤에 어디를 참고하라는 내용을 말하도록 하자.
 RxJava를 모든 경우에 사용하는 게 정답은 아니다.
 오히려 복잡해지는 경우도 있다.
@@ -44,53 +69,7 @@ https://github.com/trello/RxLifecycle
 https://github.com/JakeWharton/RxBinding
 
 https://github.com/ReactiveX/RxAndroid/wiki 이 페이지를 참고하자.
-\section{AsyncTask의 문제}
-\subsection{예외를 처리하는 메서드 없음}
 
-
-\subsection{동시에 결과 적용}
-CountDownLatch를 사용해왔다.
-
-\section{콜백 중첩 문제}
-https://teamtreehouse.com/community/callbacks-vs-event-handlers
-https://ko.wikipedia.org/wiki/%EC%BD%9C%EB%B0%B1
-% 날씨 구하기
-
-\section{UI 반복 변경}
-
-\section{API 호출 순서 중요한 경우}
-음성 TTS
-여러 개 약관
-
-\section{상호 참조 제거}
-ListView 의 ListAdapter 에 ListView 를 전달하는 것을 보기도 했다.
-Activity를 전달한 적이 있다.
-
-% +/- 버튼
-
-할리우드 원칙..
-
-\section{예외 처리}
-%DataFormatter 예제
-Base64 encode, decode 예제도?
-https://www.slipp.net/questions/350
-
-\chapter{RxJava 기본}
-http://reactivex.io/documentation/contract.html
-
-Observer 패턴을 적용한 것이다.
-https://en.wikipedia.org/wiki/Observer_pattern
-
-http://reactivex.io/intro.html
-https://msdn.microsoft.com/en-us/library/hh242985(v=vs.103).aspx
-
-정형화된 콜백이다.
-Pull 방식이 아닌 Push 방식 구독
-
-Observable은 아이템 또는 아이템 시퀀스를 내보낸다.
-emit, emission
-
-이벤트는 onNext, onError, onComplete를 주로 얘기한다.
 \section{쌍대}
 
 Observable, 연산자, 구독자가 세 축이다.
@@ -160,6 +139,41 @@ Java8을 지원하면 내용이 제거되니 지금은 대강만 쓰자.
 자바 8부터 지원하는 람다식을 쓸 수 있다.
 안드로이드 스튜디오에서 사용방법은 https://github.com/evant/gradle-retrolambda를 참고하자.
 \end{comment}
+
+\chapter{안드로이드 적용}
+\section{AsyncTask의 문제}
+\subsection{예외를 처리하는 메서드 없음}
+
+
+\subsection{동시에 결과 적용}
+CountDownLatch를 사용해왔다.
+
+\section{콜백 중첩 문제}
+https://teamtreehouse.com/community/callbacks-vs-event-handlers
+https://ko.wikipedia.org/wiki/%EC%BD%9C%EB%B0%B1
+% 날씨 구하기
+
+\section{UI 반복 변경}
+
+\section{API 호출 순서 중요한 경우}
+음성 TTS
+여러 개 약관
+
+\section{상호 참조 제거}
+ListView 의 ListAdapter 에 ListView 를 전달하는 것을 보기도 했다.
+Activity를 전달한 적이 있다.
+
+% +/- 버튼
+
+할리우드 원칙..
+
+\section{예외 처리}
+%DataFormatter 예제
+Base64 encode, decode 예제도?
+https://www.slipp.net/questions/350
+
+\chapter{RxJava 기본}
+
 
 \section{클래스 구성}
 Observable과 배압을 고려한 Flowable이 있다.
