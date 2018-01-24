@@ -21,18 +21,21 @@
 원리를 알면 각 내용을 외울 필요가 없다. 
 \tableofcontents
 
-
+https://www.reactivemanifesto.org/ko
+http://junsikshim.github.io/2017/04/13/Why-Reactive.html
 
 % https://app.genmymodel.com/edit/_WNTkQIz2EeewrIfYd5mf8Q#
 \chapter{RxJava 도입}
-\section{왜 반응형인가?}
+\section{왜 리액티브인가?}
+[주석] Jake Wharton의 프리젠테이션(https://academy.realm.io/posts/gotocph-jake-wharton-exploring-rxjava2-android/)의 시작 부분과 https://www.oreilly.com/learning/why-reactive도 읽어보기 바란다.
+
 실세계와 닮았다.
 전화를 받고, 알림이 오고
 
 빌드가 오래 걸린다고 할 때, 중간 중간 확인할 것인가? 빌드가 끝나면 노티가 오도록 할 것인가?
 
-\section{ReactiveX는}
-\section{옵서버 패턴}
+\section{Reactive Extension}
+\subsection{옵서버 패턴}
 http://reactivex.io/documentation/contract.html
 
 Observer 패턴을 적용한 것이다.
@@ -49,28 +52,7 @@ emit, emission
 
 이벤트는 onNext, onError, onComplete를 주로 얘기한다.
 
-\section{RxJava}
-% 뒤에 어디를 참고하라는 내용을 말하도록 하자.
-RxJava를 모든 경우에 사용하는 게 정답은 아니다.
-오히려 복잡해지는 경우도 있다.
-
-RxAndroid에 대해서 개념이 부족한 경우가 있다. 일반적으로 아래 패키지를 지칭한다.
-
-https://github.com/ReactiveX/RxAndroid
-
-본래는 라이프 사이클 등까지 있었다.
-
-
-compile 'io.reactivex:rxandroid:1.2.1' 
-
-
-
-https://github.com/trello/RxLifecycle
-https://github.com/JakeWharton/RxBinding
-
-https://github.com/ReactiveX/RxAndroid/wiki 이 페이지를 참고하자.
-
-\section{쌍대}
+\subsection{쌍대}
 
 Observable, 연산자, 구독자가 세 축이다.
 Observable은 이벤트 개수
@@ -99,7 +81,7 @@ java.lang.Readable
 android.text.Spannable
 	java.lang.Throwable
 
-\section{함수형 인터페이스}
+\subsection{함수형 인터페이스}
 Fure Function, High order function
 
 
@@ -140,8 +122,29 @@ Java8을 지원하면 내용이 제거되니 지금은 대강만 쓰자.
 안드로이드 스튜디오에서 사용방법은 https://github.com/evant/gradle-retrolambda를 참고하자.
 \end{comment}
 
+\section{RxJava}
+% 뒤에 어디를 참고하라는 내용을 말하도록 하자.
+RxJava를 모든 경우에 사용하는 게 정답은 아니다.
+오히려 복잡해지는 경우도 있다.
+
+RxAndroid에 대해서 개념이 부족한 경우가 있다. 일반적으로 아래 패키지를 지칭한다.
+
+https://github.com/ReactiveX/RxAndroid
+
+본래는 라이프 사이클 등까지 있었다.
+
+
+compile 'io.reactivex:rxandroid:1.2.1' 
+
+
+
+https://github.com/trello/RxLifecycle
+https://github.com/JakeWharton/RxBinding
+
+https://github.com/ReactiveX/RxAndroid/wiki 이 페이지를 참고하자.
+
 \chapter{안드로이드 적용}
-\section{AsyncTask의 문제}
+\section{AsyncTask 대안}
 \subsection{예외를 처리하는 메서드 없음}
 
 
@@ -155,7 +158,7 @@ https://ko.wikipedia.org/wiki/%EC%BD%9C%EB%B0%B1
 
 \section{UI 반복 변경}
 
-\section{API 호출 순서 중요한 경우}
+\section{순차 API 호출}
 음성 TTS
 여러 개 약관
 
@@ -167,7 +170,7 @@ Activity를 전달한 적이 있다.
 
 할리우드 원칙..
 
-\section{예외 처리}
+\section{선언적 예외 처리}
 %DataFormatter 예제
 Base64 encode, decode 예제도?
 https://www.slipp.net/questions/350
@@ -1312,9 +1315,12 @@ Single<T> andThen(SingleSource<T> next)
 
 \chapter{Transformer와 커스텀 연산자}
 가능하면 만들지 말자.
-\section{compose}
+
 \section{to}
 소스 타입 간 변환에 많이 사용된다.
+
+\section{compose}
+
 
 \section{lift}
 
