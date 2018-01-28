@@ -32,14 +32,14 @@ public class CarInformationRevised {
         if (velocity <= 10 && fuelPercent <= 5.0f) {
             // 주유 메시지
         }
-        ...
+        //...
     }
 
     public void checkGarage() {
         if (velocity <= 5 && nearDestination(location)) {
             // 주차장 메시지
         }
-        ...
+        //...
     }
 
     boolean nearDestination(Location location) {

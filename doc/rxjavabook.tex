@@ -21,20 +21,45 @@
 원리를 알면 각 내용을 외울 필요가 없다. 
 \tableofcontents
 
+https://ahea.wordpress.com/2017/02/13/reactive-streams/
 https://www.reactivemanifesto.org/ko
 http://junsikshim.github.io/2017/04/13/Why-Reactive.html
+https://www.oreilly.com/learning/why-reactive
 
 % https://app.genmymodel.com/edit/_WNTkQIz2EeewrIfYd5mf8Q#
-\chapter{RxJava 도입}
-\section{왜 리액티브인가?}
-[주석] Jake Wharton의 프리젠테이션(https://academy.realm.io/posts/gotocph-jake-wharton-exploring-rxjava2-android/)의 시작 부분과 https://www.oreilly.com/learning/why-reactive도 읽어보기 바란다.
+\chapter{리액티브 익스텐션}
+IO 에서 스트림이라는 용어가 쓰인다.
+이벤트는 지나가면 끝이다. 단명한다. 이벤트를 저장해서 리플레이할 수도 있다.
+
+스트림 용어
+http://www.ktword.co.kr/abbr_view.php?m_temp1=1311
+http://sculove.github.io/blog/2016/06/22/Reactive-Programming/
+
+이벤트 스트림 프로세싱
+이벤트를 listen, 상태 업데이트 또는 db 저장, 다른 이벤트 생성
+
+Event streams capture a sequence of input events such as mouse click, touch movement, or signal updates.
+
+\section{리액티브 프로그래밍}
+https://en.wikipedia.org/wiki/Reactive_programming
+
+그런데 넘어서기 힘든 높은 벽이 되어서 복잡성이 버티고 서는 시점이 생긴다.
 
 실세계와 닮았다.
 전화를 받고, 알림이 오고
 
+https://www.sas.com/en_us/insights/articles/big-data/3-things-about-event-stream-processing.html
+
+https://www.infoq.com/news/2017/09/events-streaming-kafka
+
 빌드가 오래 걸린다고 할 때, 중간 중간 확인할 것인가? 빌드가 끝나면 노티가 오도록 할 것인가?
 
+이벤트로 본다. 
+Collection은 하나의 이벤트일 수도 있고 각각이 처리해야 할 이벤트일 수도 있다.
+
 \section{Reactive Extension}
+
+
 \subsection{옵서버 패턴}
 http://reactivex.io/documentation/contract.html
 
@@ -122,6 +147,9 @@ Java8을 지원하면 내용이 제거되니 지금은 대강만 쓰자.
 안드로이드 스튜디오에서 사용방법은 https://github.com/evant/gradle-retrolambda를 참고하자.
 \end{comment}
 
+\section{Reactive Extension Contract}
+규칙을 이해해야 한다. 이후에 얘기하는 것도 관련
+
 \section{RxJava}
 % 뒤에 어디를 참고하라는 내용을 말하도록 하자.
 RxJava를 모든 경우에 사용하는 게 정답은 아니다.
@@ -143,7 +171,7 @@ https://github.com/JakeWharton/RxBinding
 
 https://github.com/ReactiveX/RxAndroid/wiki 이 페이지를 참고하자.
 
-\chapter{안드로이드 적용}
+\chapter{안드로이드에 적용}
 \section{AsyncTask 대안}
 \subsection{예외를 처리하는 메서드 없음}
 
@@ -187,7 +215,7 @@ Observable과 배압을 고려한 Flowable이 있다.
 
 \subsubsection{Subject}
 
-\section{스트림 소스}
+\section{리액티브 타입}
 \subsection{Observable}
 % 기본 원칙 http://reactivex.io/documentation/contract.html
 % 여기서 Rx Design Guidelines 문서도 다운받을 수 있다.
@@ -285,7 +313,7 @@ Observable 생성
 Observable 체인, Observer 체인, operator 체인
 
 
-\section{구독}
+\section{구독/구독 제거}
 subscribe에는 Observer가 전달된다. 그런데 Observer를 그냥 쓰면 문제가 발생할 수 있다.
 아래 코드를 보자.
 \begin{verbatim}
@@ -798,7 +826,7 @@ System.out.println(input + "Thread " + Thread.currentThread().getName());
 \section{subscribeOn/observeOn}
 
 
-\chapter{Observable 주요 연산자}
+\chapter{주요 연산자}
 
 fusable 한 연산자는 5개가 있다.
 내부 Observer가 BasicFuseableObserver 상속
@@ -1313,7 +1341,8 @@ Flowable<T> andThen(Publisher<T> next)
 Single<T> andThen(SingleSource<T> next)
  
 
-\chapter{Transformer와 커스텀 연산자}
+\chapter{사용자 정의 연산자}
+Transformer/to/커스텀 연산자
 가능하면 만들지 말자.
 
 \section{to}
