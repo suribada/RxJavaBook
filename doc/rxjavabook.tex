@@ -35,6 +35,8 @@ http://spiral-architect.pl/2016/03/21/is-reactive-similar-to-event-driven-archit
 
 https://stackoverflow.com/questions/34495117/how-is-reactive-programming-different-than-event-driven-programming
 
+http://www.introtorx.com/content/v1.0.10621.0/01_WhyRx.html
+
 IO 에서 스트림이라는 용어가 쓰인다.
 이벤트는 지나가면 끝이다. 단명한다. 이벤트를 저장해서 리플레이할 수도 있다.
 
@@ -48,7 +50,16 @@ http://sculove.github.io/blog/2016/06/22/Reactive-Programming/
 Event streams capture a sequence of input events such as mouse click, touch movement, or signal updates.
 
 \section{리액티브 프로그래밍}
+리액티브 라이브러리
+https://github.com/schlangster/cpp.react
+
 https://en.wikipedia.org/wiki/Reactive_programming
+https://codewords.recurse.com/issues/two/an-introduction-to-reactive-programming
+http://www.uwanttolearn.com/android/functional-interfaces-functional-programming-and-lambda-expressions-reactive-programming-android-rxjava2-what-the-hell-is-this-part3/
+
+스트림에 대한  얘기도 있음..
+https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
+이벤트 간의 상호 의존
 
 그런데 넘어서기 힘든 높은 벽이 되어서 복잡성이 버티고 서는 시점이 생긴다.
 
@@ -66,8 +77,25 @@ Collection은 하나의 이벤트일 수도 있고 각각이 처리해야 할 �
 
 멀티 코어 CPU가 당연해지면서 CPU를 최대한 활용하기 위해서 비동기로 동작하는 게  많아졌고, 안드로이드에서는 특히 메인 스레드를 블로킹 하지 않도록 UI를 변경하는 코드가 아니라면 비동기로 동작하는 것이 권장된다.
 
-\section{Reactive Extension}
+스트림?
+https://brunch.co.kr/@oemilk/79
 
+\section{Reactive Extension}
+역사
+http://huns.me/development/2051
+
+개념
+https://archive.codeplex.com/?p=rx
+
+LINQ
+https://academy.realm.io/kr/posts/rxandroid/
+
+Rx = Observables + LINQ + Schedulers
+
+LINQ
+https://docs.microsoft.com/ko-kr/dotnet/csharp/programming-guide/concepts/linq/query-syntax-and-method-syntax-in-linq
+
+https://en.wikipedia.org/wiki/Reactive_extensions
 
 \subsection{옵서버 패턴}
 http://reactivex.io/documentation/contract.html
