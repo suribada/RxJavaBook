@@ -26,7 +26,6 @@ https://www.reactivemanifesto.org/ko
 http://junsikshim.github.io/2017/04/13/Why-Reactive.html
 https://www.oreilly.com/learning/why-reactive
 
-% https://app.genmymodel.com/edit/_WNTkQIz2EeewrIfYd5mf8Q#
 \chapter{리액티브 익스텐션}
 
 https://tylermcginnis.com/imperative-vs-declarative-programming/
@@ -83,6 +82,12 @@ https://brunch.co.kr/@oemilk/79
 \subsection{왜 리액티브인가}
 
 \subsection{이벤트/이벤트 스트림}
+https://www.tibco.com/blog/2010/03/12/events-versus-data/
+% 내용 정정 필요
+데이터가 변화하고 이를 전달하는 의미로 데이터라는 용어를 사용하는데, 실제에서는 데이터가 변화하지 않아도 이에 대해 반응해야 하는 경우가 많다. 
+
+컴퓨터가 하는 일은 항상 데이터를 변화시킨다. 여러 변수를 변화시키고 영속적인 값을 위해 DB나 파일에 저장하기도 한다. 화면에서 버튼을 클릭하는 경우도 내부적으로 터치 위치 등 일시적인 데이터가 있다. 데이터 변화와 전혀 상관 없을 거 같은 Thread.sleep()도 내부에서 시간을 체크하기 위한 데이터 변화가 있다. 그런데 이런 데이터 변화를 항상 전달 받을 필요가 있는가는 다른 문제이다. 작업을 하긴 하는데 내부적으로만 사용하는 데이터가 있다면 이 데이터가 다른 작업의 기초 데이터로 전달될 수 없다. 즉 이때는 작업이 끝났다고 알려주는 것만으로 충분하다. 바로 이벤트라는 용어가 더 많이 사용되는 이유이다. 데이터가 전달된다면 데이터도 이벤트이고 데이터가 전달되지 않아도 알림이 필요한 것은 이벤트로 간주한다. 
+
 
 \subsection{리액티브 라이브러리}
 
