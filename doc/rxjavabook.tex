@@ -195,8 +195,12 @@ Java8을 지원하면 내용이 제거되니 지금은 대강만 쓰자.
 안드로이드 스튜디오에서 사용방법은 https://github.com/evant/gradle-retrolambda를 참고하자.
 \end{comment}
 
-\section{Reactive Extension Contract}
+\section{ReactiveX 규약}
 규칙을 이해해야 한다. 이후에 얘기하는 것도 관련
+http://reactivex.io/documentation/contract.html에 Rx Design 가이드라인
+% 여기서 Rx Design Guidelines 문서도 다운받을 수 있다.
+
+\subsection{이벤트 통지}
 
 \section{RxJava}
 % 뒤에 어디를 참고하라는 내용을 말하도록 하자.
@@ -260,13 +264,28 @@ Observable과 배압을 고려한 Flowable이 있다.
 \subsubsection{스트림}
 
 \subsubsection{구독}
+왜 observer가 아닌가?
+
+점대점, 발행구독
+https://community.boomi.com/docs/DOC-1666
+
+발행자는 구독자를 모른다. 구독자가 없을 수도 있다.
+
+Observer 패턴은 점대점이다. 
+
+https://hackernoon.com/observer-vs-pub-sub-pattern-50d3b27f838c
+
+https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern
+
+Lambda Observer onNext에서 onError 호출
+
+onError 이벤트는 Observable에서 에러가 발생할 때 보내는 이벤트이다. 그런데 Observer에서 onNext 이벤트를 소비하는 과정에서도 에러가 발생할 수 있는데 이 때도 onError 이벤트로 
+
 
 \subsubsection{Subject}
 
 \section{리액티브 타입}
 \subsection{Observable}
-% 기본 원칙 http://reactivex.io/documentation/contract.html
-% 여기서 Rx Design Guidelines 문서도 다운받을 수 있다.
 
 % https://github.com/ReactiveX/RxJava/wiki/Creating-Observables
 
