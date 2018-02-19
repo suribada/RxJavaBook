@@ -73,7 +73,7 @@ public class CarInformationRevised {
     }
 
     public Observable<Integer> getVelocityObservable() {
-        ...
+        //...
         return Observable.create(e -> e.onNext(10));
     }
 
