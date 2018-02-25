@@ -21,6 +21,8 @@
 원리를 알면 각 내용을 외울 필요가 없다. 
 
 용어에 답이 있거나 질문 안에 답이 있는 경우가 많다.
+
+알고나면 안 쓰면 불편하다.
 \tableofcontents
 
 https://ahea.wordpress.com/2017/02/13/reactive-streams/
@@ -51,6 +53,9 @@ http://sculove.github.io/blog/2016/06/22/Reactive-Programming/
 Event streams capture a sequence of input events such as mouse click, touch movement, or signal updates.
 
 \section{리액티브 프로그래밍}
+proactive vs reactive
+http://blog.danlew.net/2017/07/27/an-introduction-to-functional-reactive-programming/
+
 리액티브 라이브러리
 https://github.com/schlangster/cpp.react
 
@@ -117,6 +122,8 @@ https://docs.microsoft.com/ko-kr/dotnet/csharp/programming-guide/concepts/linq/q
 
 https://en.wikipedia.org/wiki/Reactive_extensions
 
+FRP 내용이 필요한가?
+
 \subsection{옵서버 패턴}
 http://reactivex.io/documentation/contract.html
 
@@ -134,8 +141,10 @@ emit, emission
 
 이벤트는 onNext, onError, onComplete를 주로 얘기한다.
 
+예를 들어 EditText에서 addTextChangedListener() 메서드에 전달되는 TextWatcher 인터페이스를 보면 afterTextChanged(), beforeTextChanged(), onTextChanged()와 같이 세 개의 콜백 메서드가 있다. 이때는 세 가지 이벤트로 각각 구분
+
 주로 관찰자를 래핑하고 이벤트 메서드 직접 호출
-\subsection{쌍대}
+\subsection{Iterable의 쌍대}
 
 Observable, 연산자, 구독자가 세 축이다.
 Observable은 이벤트 개수
@@ -164,7 +173,7 @@ java.lang.Readable
 android.text.Spannable
 	java.lang.Throwable
 
-\subsection{함수형 인터페이스}
+\subsection{함수형 프로그래밍}
 Fure Function, High order function
 
 
@@ -250,6 +259,7 @@ CountDownLatch를 사용해왔다.
 https://teamtreehouse.com/community/callbacks-vs-event-handlers
 https://ko.wikipedia.org/wiki/%EC%BD%9C%EB%B0%B1
 % 날씨 구하기
+http://blog.naver.com/PostView.nhn?blogId=2hyoin&logNo=220398943180
 
 \section{UI 반복 변경}
 
