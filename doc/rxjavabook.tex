@@ -174,8 +174,59 @@ android.text.Spannable
 	java.lang.Throwable
 
 \subsection{함수형 프로그래밍}
+% 선언형으로 가는 길에 functional progrmming이 있다.
+
+이것 때문에 어렵다.
+https://softwareengineering.stackexchange.com/questions/209517/why-is-imperative-programming-preferred-over-functional-programming
+
+라인수가 적어도 이해하기 쉽지 않다. 짧고 표현력이 있지만..
+https://softwareengineering.stackexchange.com/questions/158715/are-small-amounts-of-functional-programming-understandable-by-non-fp-people/158721#158721
+
+Imperative programming – defines computation as statements that change a program state.
+
+Declarative programming – defines program logic, but not detailed control flow.
+
+Functional programming – treats programs as evaluating mathematical functions and avoids state and mutable data
+
+Event-driven programming – program control flow is determined by events, such as sensor inputs or user actions (mouse clicks, key presses) or messages from other programs or threads.
+
+컴퓨팅 자원이 무한하다면 속도는 동일하다?
+자바 스크립트가 대표적... 오히려 객체를 쓰는 게 적다..
+
+함수형 언어가 있고 함수형 스타일을 지원하는 언어가 있다.
+
 Fure Function, High order function
 
+SAM
+인터페이스나 함수나 동격이다. 함수가 하나밖에 없기 때문에.
+인터페이스는 감싸는 역할 뿐
+
+함수형 프로그래밍 & 순수 함수
+https://en.wikipedia.org/wiki/Functional_programming
+https://ko.wikipedia.org/wiki/%ED%95%A8%EC%88%98%ED%98%95_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D
+
+리턴이 없는 것은 기본적으로 사이드 이펙트가 있다는 말이다.
+
+고차 함수 정의
+https://ko.wikipedia.org/wiki/%EA%B3%A0%EC%B0%A8_%ED%95%A8%EC%88%98
+
+Lazy evaluation is one of them, and it may take months before one starts to understand why lazy evaluation is an excellent feature, and not an annoyance.(?)
+
+For example, I consider writing pure functions to be extremely important for any software written in any language (where by "pure" I mean no side-effects), because:
+
+they're easier to unit test
+they're much more composable than side-effecting functions
+they're easier to debug
+I also often avoid mutating values and variables -- another concept borrowed from FP.
+
+Now about functional programming. I think that the major benefits are:
+- Closer alignment to mathematical thinking; you tend to spell out your ideas in a format close to mathematical definitions rather than iterative programs.
+- No (or at least fewer) side-effects: your functions do not influence other functions, which is great for concurrency and parallelization, but also for debugging.
+- Fewer lines of code, without sacrificing conceptual clarity: Lisp is more powerful than non-functional languages, in a similar way as C++ is more powerful than Assembler. You spend a greater proportion of your project with thinking than writing, but eventually, you will probably find that you are more productive (get more features done in less time). Also, fewer LOC means easier maintenance.
+
+
+단점? 다른 내용도 있다.
+https://alvinalexander.com/scala/fp-book/disadvantages-of-functional-programming
 
 제네릭에 대한 이해도 필요하다.
 PECS(producer extends consumer super)
@@ -214,7 +265,7 @@ Java8을 지원하면 내용이 제거되니 지금은 대강만 쓰자.
 안드로이드 스튜디오에서 사용방법은 https://github.com/evant/gradle-retrolambda를 참고하자.
 \end{comment}
 
-\section{ReactiveX 규약}
+\section{ReactiveX 계약}
 실제 프로그램에서는 여러가지 이벤트가 동시에 발생하는데 어떻게 하나씩 소비된다는 말일까? 바로 이벤트 종류별로 스트림이 별도이다. 특정 버튼 클릭 이벤트를 동시에 발생시키지 못하는 것을 생각해보자. 
 
 질문이 또 있을 수 있다. 스레드에서 동시 발생되는 이벤트가 있다면 어떨까? 이는 ?절에서 얘기하는 ReactiveX 규약에서 동시 발생 이벤트는 권장하지 않는다. 빠뜨려지는 이벤트가 있으면 이벤트를 제대로 처리할 수 없는 것이다.
