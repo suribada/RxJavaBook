@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.suribada.rxjavabook.R;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -104,6 +105,36 @@ public class FunctionalActivity extends Activity {
                        }
                    }
         );
+    }
+
+    public void onClickButton3(View view) {
+        perfLambdaTest();
+        perfAnonyousTest();
+    }
+
+    private void perfLambdaTest() {
+        long start = System.currentTimeMillis();
+        AtomicInteger value = new AtomicInteger(0);
+        for (int i = 0; i < 10000000; i++) {
+            new Runnable() {
+                @Override
+                public void run() {
+                    //System.out.println(value.getAndIncrement());
+                }
+            }.run();
+        }
+        System.out.println("elapsed 1=" + (System.currentTimeMillis() - start));
+    }
+
+    public void perfAnonyousTest() {
+        long start = System.currentTimeMillis();
+        AtomicInteger value = new AtomicInteger(0);
+        for (int i = 0; i < 10000000; i++) {
+            ((Runnable) () -> {
+                //System.out.println(value.getAndIncrement())
+            }).run();
+        }
+        System.out.println("elapsed 2=" + (System.currentTimeMillis() - start));
     }
 
 }
