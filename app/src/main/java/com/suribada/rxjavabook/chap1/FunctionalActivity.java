@@ -108,32 +108,41 @@ public class FunctionalActivity extends Activity {
     }
 
     public void onClickButton3(View view) {
-        perfLambdaTest();
-        perfAnonyousTest();
+        perfLambdaTest(10_000_000);
+        perfAnonyousTest(10_000_000);
     }
 
-    private void perfLambdaTest() {
+    public void onClickButton4(View view) {
+        perfLambdaTest(5);
+        perfAnonyousTest(5);
+    }
+
+    private void perfLambdaTest(int count) {
         long start = System.currentTimeMillis();
         AtomicInteger value = new AtomicInteger(0);
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < count; i++) {
             new Runnable() {
                 @Override
                 public void run() {
+                    System.out.println(this);
                     //System.out.println(value.getAndIncrement());
                 }
             }.run();
         }
+        System.out.println("this=" + this);
         System.out.println("elapsed 1=" + (System.currentTimeMillis() - start));
     }
 
-    public void perfAnonyousTest() {
+    public void perfAnonyousTest(int count) {
         long start = System.currentTimeMillis();
         AtomicInteger value = new AtomicInteger(0);
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < count; i++) {
             ((Runnable) () -> {
+                System.out.println(this);
                 //System.out.println(value.getAndIncrement())
             }).run();
         }
+        System.out.println("this=" + this);
         System.out.println("elapsed 2=" + (System.currentTimeMillis() - start));
     }
 
