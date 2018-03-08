@@ -40,6 +40,13 @@ public class ObserverActivity extends Activity {
                 .filter(x -> x <= 1000)
                 .map(x -> findNearPrime(x))
                 .subscribe(System.out::println);
+
+        Observable.just(1, 2, 4, 7, 8, 11, 14)
+                .filter(x -> x % 2 == 0) // (1)
+                .map(x -> x * 100) // (2)
+                .filter(x -> x <= 1000) // (3)
+                .map(x -> findNearPrime(x)) // (4)
+                .subscribe(System.out::println);
     }
 
     private int findNearPrime(Integer x) {
