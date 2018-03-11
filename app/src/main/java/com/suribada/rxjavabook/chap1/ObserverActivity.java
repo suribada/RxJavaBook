@@ -3,6 +3,7 @@ package com.suribada.rxjavabook.chap1;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 
 import com.suribada.rxjavabook.R;
@@ -16,13 +17,15 @@ import io.reactivex.Observable;
  */
 public class ObserverActivity extends Activity {
 
+    private static final String TAG = "ObserverActivity";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_button);
+        setContentView(R.layout.text_and_two_buttons);
     }
 
-    public void onClickButton(View view) {
+    public void onClickButton1(View view) {
         Observable<Integer> source = Observable.just(1, 2, 4, 7, 8, 11, 14); // (1)
 
         Observable<Integer> obs1 = source.filter(x -> x % 2 == 0);
@@ -41,12 +44,30 @@ public class ObserverActivity extends Activity {
                 .map(x -> findNearPrime(x))
                 .subscribe(System.out::println);
 
-        Observable.just(1, 2, 4, 7, 8, 11, 14)
-                .filter(x -> x % 2 == 0) // (1)
-                .map(x -> x * 100) // (2)
-                .filter(x -> x <= 1000) // (3)
-                .map(x -> findNearPrime(x)) // (4)
+        Observable.just(1, 2, 4, 7, 8, 11, 14)  // (1)
+                .filter(x -> x % 2 == 0) // (2)
+                .map(x -> x * 100) // (3)
+                .filter(x -> x <= 1000) // (4)
+                .map(x -> findNearPrime(x)) // (5)
                 .subscribe(System.out::println);
+    }
+
+    public void onClickButton2(View view) {
+        Observable.just(1, 2, 4, 7, 8, 11, 14)
+                .filter(x -> x % 2 == 0)
+                .map(x -> { // (1) 시작
+                    Log.d(TAG, "value=" + x);
+                    return x * 100;
+                }) // (1) 끝
+                .subscribe(System.out::println);
+
+        Observable.just(1, 2, 4, 7, 8, 11, 14)
+                .filter(x -> x % 2 == 0)
+                .doOnNext(x -> Log.d(TAG, "value=" + x)) // (2)
+                .map(x -> x * 100)  // (3)
+                .subscribe(System.out::println);
+
+
     }
 
     private int findNearPrime(Integer x) {

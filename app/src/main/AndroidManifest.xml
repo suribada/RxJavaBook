@@ -130,7 +130,6 @@
             android:label="chap1/Observer">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -141,6 +140,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".chap1.FunctionalActivity" android:label="chap1/Functional">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".chap1.CollectActivity" android:label="chap1/SideEffect">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
