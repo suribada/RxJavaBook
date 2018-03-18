@@ -26,11 +26,21 @@
 알고나면 안 쓰면 불편하다.
 \tableofcontents
 
+웹 문서 인용은 주석에 주로 주석에 표시한다. 책 인용은 본문에 주로 표시하고 번역서가 있는 경우는 번역서를 표시하고 번역서가 없는 경우에 원서를 표시한다. 
+
+
 https://ahea.wordpress.com/2017/02/13/reactive-streams/
 https://www.reactivemanifesto.org/ko
 http://junsikshim.github.io/2017/04/13/Why-Reactive.html
 https://www.oreilly.com/learning/why-reactive
 
+<장제목>1장 리액티브 익스텐션
+1장에서는 RxJava에 적용된 리액티브 익스텐션의 개념과 필요성, 그리고 어떤 장점이 있는지 살펴보자.
+
+
+이 절에서는 리액티브 프로그래밍이 필요한 이유와 리액티브 프로그래밍의 기본적인 형태, 리액티브 익스텍션은 리액티브에 무엇을 더한 것인지, 그리고 RxJava에는 어떻게 적용되는지 살펴보자.
+
+// 아래 챕터는 한 단계씩 올림
 \chapter{리액티브 익스텐션}
 
 https://tylermcginnis.com/imperative-vs-declarative-programming/
@@ -175,6 +185,9 @@ android.text.Spannable
 	java.lang.Throwable
 
 \subsection{함수형 프로그래밍}
+람다
+https://skyoo2003.github.io/post/2016/11/09/java8-lambda-expression
+
 부작용 얘기
 원문: http://blog.jenkster.com/2015/12/what-is-functional-programming.html
 번역문: 
@@ -309,11 +322,14 @@ Java8을 지원하면 내용이 제거되니 지금은 대강만 쓰자.
 http://reactivex.io/documentation/contract.html에 Rx Design 가이드라인
 % 여기서 Rx Design Guidelines 문서도 다운받을 수 있다.
 
-\subsection{종료 이벤트는 이벤트 스트림 종료}
+\subsection{Observable과 Observer 간의 통신}
 
 \subsection{이벤트 순서와 횟수}
+유한 이벤트에서 종료 이벤트를 쓰지 않는 건 어떨까? Observable에서 몇 개의 onNext 이벤트를 발생시키고 onComple나 onError가 없는 경우이다.
 
-\subsection{Null 데이터 허용 안됨}
+\subsection{종료 이벤트는 이벤트 스트림을 종료시킴}
+
+\subsection{null 데이터 허용 안됨}
 
 \section{RxJava}
 % 뒤에 어디를 참고하라는 내용을 말하도록 하자.

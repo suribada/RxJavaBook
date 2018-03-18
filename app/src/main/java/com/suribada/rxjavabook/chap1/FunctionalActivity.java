@@ -144,6 +144,9 @@ public class FunctionalActivity extends Activity {
         }
         System.out.println("this=" + this);
         System.out.println("elapsed 2=" + (System.currentTimeMillis() - start));
+
     }
+
+
 
 }

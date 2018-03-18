@@ -72,9 +72,21 @@ public class CollectActivity extends Activity {
         obs.subscribe(this::showData);
     }
 
+    public void onClickButton3(View view) {
+        List<SearchOption> searchOptions = Arrays.asList(new SearchOption("distance", true),
+                new SearchOption("recent", false), new SearchOption("price", false),
+                new SearchOption("brand", true));
+        Single<ArrayList<String>> obs = Observable.fromIterable(searchOptions)
+                .filter(SearchOption::isInUse)
+                .map(SearchOption::getName)
+                .collect(ArrayList<String>::new, List::add); // (1)
+        obs.subscribe(this::showData);
+        obs.subscribe(this::showData);
+    }
+
     class SearchOption {
-        final String name;
-        final boolean isInUse;
+        String name;
+        boolean isInUse;
 
         SearchOption(String name, boolean isInUse) {
             this.name = name;
@@ -87,6 +99,10 @@ public class CollectActivity extends Activity {
 
         boolean isInUse() {
             return isInUse;
+        }
+
+        void setInUse(boolean isInUse) {
+            this.isInUse = isInUse;
         }
     }
 

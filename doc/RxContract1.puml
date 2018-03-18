@@ -1,0 +1,31 @@
+@startuml
+interface ObservableSource<T> {
+{abstract} void subscribe(Observer<? super T> observer)
+}
+abstract class Observable<T> {
+{abstract} void subscribeActual(Observer<? super T> observer)
+}
+
+interface Disposable<T> {
+{abstract} void dispose()
+{abstract}boolean isDisposed()
+}
+
+ObservableSource <|.. Observable
+
+class ObservableFilter<T>
+class ObservableMap<T, U>
+class FilterObserver<T>
+class MapObserver<T, U>
+
+Observable <|-- ObservableFilter
+Observable <|-- ObservableMap
+
+ObservableFilter +-- FilterObserver
+ObservableMap +-- MapObserver
+
+Disposable <|.. FilterObserver
+Disposable <|.. MapObserver
+
+
+@enduml
