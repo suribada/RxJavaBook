@@ -323,6 +323,8 @@ http://reactivex.io/documentation/contract.html에 Rx Design 가이드라인
 % 여기서 Rx Design Guidelines 문서도 다운받을 수 있다.
 
 \subsection{Observable과 Observer 간의 통신}
+reactive pull
+https://github.com/Froussios/Intro-To-RxJava/blob/master/Part%204%20-%20Concurrency/4.%20Backpressure.md
 
 \subsection{이벤트 순서와 횟수}
 유한 이벤트에서 종료 이벤트를 쓰지 않는 건 어떨까? Observable에서 몇 개의 onNext 이벤트를 발생시키고 onComple나 onError가 없는 경우이다.
@@ -330,6 +332,8 @@ http://reactivex.io/documentation/contract.html에 Rx Design 가이드라인
 \subsection{종료 이벤트는 이벤트 스트림을 종료시킴}
 
 \subsection{null 데이터 허용 안됨}
+
+\subsection{Observer에서는 순차적으로 이벤트를 전달 받음}
 
 \section{RxJava}
 % 뒤에 어디를 참고하라는 내용을 말하도록 하자.
