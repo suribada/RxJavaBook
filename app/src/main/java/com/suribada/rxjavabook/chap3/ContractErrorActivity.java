@@ -28,7 +28,8 @@ public class ContractErrorActivity extends Activity {
         setContentView(R.layout.text_and_button);
         title = (TextView) findViewById(R.id.title);
         button = (Button) findViewById(R.id.button);
-        RxView.clicks(button).flatMap(click -> getBestSeller())
+        RxView.clicks(button)
+                .flatMap(ignored -> getBestSeller())
                 .subscribe(bookTitle -> title.setText(bookTitle),
                         e -> Toast.makeText(this, "문제 발생", Toast.LENGTH_LONG).show()
                 );
