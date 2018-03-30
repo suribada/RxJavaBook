@@ -13,6 +13,8 @@ import com.suribada.rxjavabook.R;
 import java.util.Random;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by lia on 2018-03-21.
@@ -29,7 +31,8 @@ public class ContractErrorActivity extends Activity {
         title = (TextView) findViewById(R.id.title);
         button = (Button) findViewById(R.id.button);
         RxView.clicks(button)
-                .flatMap(ignored -> getBestSeller())
+                .flatMap(ignored -> getBestSeller().subscribeOn(Schedulers.io()))
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bookTitle -> title.setText(bookTitle),
                         e -> Toast.makeText(this, "문제 발생", Toast.LENGTH_LONG).show()
                 );
