@@ -157,6 +157,12 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+        <activity android:name=".chap3.ContractErrorRevisedActivity" android:label="chap3/ContractErrorRevised">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
         <activity android:name=".chap3.ThreadProblemActivity" android:label="chap3/ThreadProblem">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

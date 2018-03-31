@@ -31,7 +31,8 @@ public class ContractErrorActivity extends Activity {
         title = (TextView) findViewById(R.id.title);
         button = (Button) findViewById(R.id.button);
         RxView.clicks(button)
-                .flatMap(ignored -> getBestSeller().subscribeOn(Schedulers.io()))
+                .flatMap(ignored -> getBestSeller()
+                        .subscribeOn(Schedulers.io()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bookTitle -> title.setText(bookTitle),
                         e -> Toast.makeText(this, "문제 발생", Toast.LENGTH_LONG).show()
@@ -41,7 +42,7 @@ public class ContractErrorActivity extends Activity {
     private Observable<String> getBestSeller() {
         Random random = new Random();
         int val = random.nextInt(5);
-        return Observable.just("title " + 10 / val);
+        return Observable.fromCallable(() -> "title " + 10 / val);
     }
 
 }
