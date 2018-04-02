@@ -53,7 +53,6 @@ public class ContractErrorRevisedActivity extends Activity {
     }
 
     interface ViewState {
-
         class Error implements ViewState {
             Throwable e;
 

@@ -58,8 +58,10 @@ public class ContractTest {
     public void nullEventPossible3() {
         Observable.just(1, 2, -1, 1, 2)
                 .map(dollar -> getCurrentPrice3(dollar))
+                .onErrorReturnItem("0 won")
                 .subscribe(System.out::println,
-                        System.err::println);
+                        System.err::println,
+                        () -> System.out.println("onComplete"));
     }
 
     private String getCurrentPrice3(int dollar) {
@@ -70,15 +72,15 @@ public class ContractTest {
     }
 
     @Test
-    public void nullEventPossible5() {
+    public void nullEventPossible4() {
         Observable.just(1, 2, -1, 1, 2)
-                .flatMap(dollar -> getCurrentPrice5(dollar)
+                .flatMap(dollar -> getCurrentPrice4(dollar)
                         .onErrorReturnItem("0 won")) // (1)
                 .subscribe(System.out::println,
                         System.err::println);
     }
 
-    private Observable getCurrentPrice5(int dollar) {
+    private Observable getCurrentPrice4(int dollar) {
         if (dollar < 0) {
             return Observable.error(
                     new IllegalArgumentException("dollar should be bigger than 0")); // (2)

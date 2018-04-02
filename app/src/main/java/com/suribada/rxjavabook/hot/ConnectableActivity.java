@@ -27,8 +27,8 @@ public class ConnectableActivity extends Activity {
     }
 
     private ConnectableObservable<Integer> threeRandoms =
-            //Observable.interval(1, TimeUnit.SECONDS)
-            Observable.range(1, 3)
+            Observable.interval(1, TimeUnit.SECONDS)
+            //Observable.range(1, 3)
                     .map(i -> randomInt()).publish();
 
     public void onClickButton1(View view) {

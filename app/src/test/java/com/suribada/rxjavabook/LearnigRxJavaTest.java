@@ -72,10 +72,13 @@ public class LearnigRxJavaTest {
                 Observable.range(1, 3)
                         .map(i -> randomInt()).publish();
 
-        threeRandoms.subscribe(i -> System.out.println("Observer 1: " + i));
+        threeRandoms.subscribe(i -> System.out.println("Observer 1: " + i),
+                System.err::println,
+                () -> System.out.println("onComplete"));
 
         threeRandoms.reduce(0, (total, next) -> total + next)
-                .subscribe(i -> System.out.println("Observer 2: " + i));
+                .subscribe(i -> System.out.println("Observer 2: " + i),
+                    System.err::println);
 
         threeRandoms.connect();
 
