@@ -1,0 +1,18 @@
+[
+  {
+    "category" : 1,
+    "categoryName" : "소설"
+  },
+  {
+    "category" : 2,
+    "categoryName" : "고전"
+  },
+  {
+    "category" : 4,
+    "categoryName" : "실용서"
+  },
+  {
+    "category" : 7,
+    "categoryName" : "IT"
+  }
+]

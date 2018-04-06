@@ -1,0 +1,27 @@
+[
+  {
+    "category" : 7,
+    "title" : "딥러닝 이정도는 알아야",
+    "author": "새우깡"
+  },
+  {
+    "category" : 7,
+    "title" : "차한대 개발자를 위한 안드로이드",
+    "author": "자니"
+  },
+  {
+    "category" : 7,
+    "title" : "차두대 개발자를 위한 코틀린",
+    "author": "커니"
+  },
+  {
+    "category" : 7,
+    "title" : "발로 번역한 RxJava",
+    "author": "김인태"
+  },
+  {
+    "category" : 7,
+    "title" : "시험에 나오는 안드로이드"
+    "author": "노재춘"
+  }
+]
