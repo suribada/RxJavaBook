@@ -1,16 +1,16 @@
 [
   {
-    "category" : 4,
+    "categoryId" : 4,
     "title" : "스키 교본",
     "author": "스키탄다스키"
   },
   {
-    "category" : 4,
+    "categoryId" : 4,
     "title" : "스위스 여행",
     "author": "하이디"
   },
   {
-    "category" : 4,
+    "categoryId" : 4,
     "title" : "바둑 고수되기",
     "author": "바둑이"
   }

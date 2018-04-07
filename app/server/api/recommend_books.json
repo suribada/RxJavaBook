@@ -1,11 +1,11 @@
 [
   {
-    "category" : 1,
+    "categoryId" : 1,
     "title" : "저수지의 개들",
     "author": "멍멍이"
   },
   {
-    "category" : 2,
+    "categoryId" : 2,
     "title" : "안나 카레리나",
     "author": "톨스토이"
   }
