@@ -55,9 +55,21 @@ public class BookApiCallActivity extends Activity {
 
     public void onClickButton3(View view) {
         repository.getBookCategories().toObservable()
-                .flatMapIterable(categories -> repository.getCategoryBooks(category))
+                .flatMapIterable(categories -> categories)
+                .flatMapSingle(category -> repository.getCategoryBooks(category.categoryId))
                 .subscribeOn(Schedulers.io())
-                .collect(ArrayList::new, ArrayList::add)
+                .collect(ArrayList::new, ArrayList::addAll)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(books -> title.setText(books.toString()));
+    }
+
+    public void onClickButton4(View view) {
+        repository.getBookCategories().toObservable()
+                .subscribeOn(Schedulers.io())
+                .flatMapIterable(categories -> categories)
+                .flatMapSingle(category ->
+                        repository.getCategoryBooks(category.categoryId).subscribeOn(Schedulers.io()))
+                .collect(ArrayList::new, ArrayList::addAll)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(books -> title.setText(books.toString()));
     }
