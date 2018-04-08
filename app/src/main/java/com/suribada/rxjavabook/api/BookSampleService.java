@@ -18,25 +18,25 @@ import retrofit2.http.Query;
  */
 public interface BookSampleService {
 
-    @GET("/api/region.json")
+    @GET("api/region.json")
     Single<Region> getRegion(@Query("latitude") double latitude, @Query("longitude") double longitude);
 
-    @GET("/api/weather.json")
+    @GET("api/weather.json")
     Single<Weather> getWeather(@Query("query") int areaCode);
 
-    @GET("/api/weather_detail.json")
+    @GET("api/weather_detail.json")
     Single<WeatherDetail> getWeatherDetail(@Query("query") int areaCode);
 
-    @GET("/api/book_category.json")
+    @GET("api/book_category.json")
     Single<List<BookCategory>> getBookCategories();
 
-    @GET("/api/bestseller.json")
+    @GET("api/bestseller.json")
     Single<List<Book>> getBestSeller();
 
-    @GET("/api/recommend_books.json")
+    @GET("api/recommend_books.json")
     Single<List<Book>> getRecommendBooks();
 
-    @GET("/api/category{id}.json")
+    @GET("api/category{id}.json")
     Single<List<Book>> getCategoryBooks(@Path("id") int id);
 
 }

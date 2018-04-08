@@ -71,7 +71,7 @@ public class WeatherApiCallActivity extends Activity {
                     Pair::new)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(pair -> title.setText(pair.toString()));
+                .subscribe(pair -> title.setText(pair.first + ", " + pair.second));
     }
 
     public void onClickButton4(View view) {
@@ -80,7 +80,7 @@ public class WeatherApiCallActivity extends Activity {
                     repository.getWeatherDetail(regionCode).subscribeOn(Schedulers.io()),
                     Pair::new)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(pair -> title.setText(pair.toString()));
+                .subscribe(pair -> title.setText(pair.first + ", " + pair.second));
     }
 
 }

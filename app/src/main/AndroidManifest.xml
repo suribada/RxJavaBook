@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.suribada.rxjavabook">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -182,6 +183,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".chap1.LegacyTwoButtonClickActivity" android:label="chap1/LegacyTwoButtonClickActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".chap6.WeatherApiCallActivity" android:label="chap6/WeatherApiCallActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".chap6.BookApiCallActivity" android:label="chap6/BookApiCallActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
