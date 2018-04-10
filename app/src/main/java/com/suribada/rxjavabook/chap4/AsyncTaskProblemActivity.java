@@ -62,7 +62,9 @@ public class AsyncTaskProblemActivity extends Activity {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             if (bitmap == null) {
-                // 에러 메시지 보여주기
+                // 에러 메시지 UI에 보여주기
+                image.setImageBitmap(null);
+                Toast.makeText(AsyncTaskProblemActivity.this, "에러 발생", Toast.LENGTH_LONG).show();
                 return;
             }
             image.setImageBitmap(bitmap);
@@ -143,6 +145,5 @@ public class AsyncTaskProblemActivity extends Activity {
         }
 
     }
-
 
 }

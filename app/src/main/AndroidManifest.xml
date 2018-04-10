@@ -13,7 +13,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -23,7 +22,6 @@
             android:label="subject/TerminatedStateSubject">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -32,7 +30,6 @@
             android:label="learning/LearningRxJavaTest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -50,7 +47,6 @@
             android:label="replay/ColdObservable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -59,7 +55,6 @@
             android:label="replay/ReplaySubject">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -68,7 +63,6 @@
             android:label="replay/ConnectableTest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -77,7 +71,6 @@
             android:label="scheduler/SchedulerTest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -86,7 +79,6 @@
             android:label="scheduler/Trampoline">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -95,7 +87,6 @@
             android:label="switch/SwitchMap">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -104,25 +95,22 @@
             android:label="chap7/StopWatch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".tryreactive.HandlerRepeatActivity"
+            android:name=".chap4.HandlerRepeatActivity"
             android:label="tryreactive/HandlerRepeat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".tryreactive.RxRepeatActivity"
-            android:label="tryreactive/RxRepeat">
+            android:name=".chap5.RepeatDisposeActivity"
+            android:label="chap5/RepeatDisposeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -183,6 +171,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".chap1.LegacyTwoButtonClickActivity" android:label="chap1/LegacyTwoButtonClickActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".chap4.AsyncTaskProblemActivity" android:label="chap4/AsyncTaskProblemActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
