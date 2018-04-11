@@ -7,11 +7,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.os.AsyncTaskCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,15 +64,131 @@ public class AsyncTaskProblemActivity extends Activity {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            if (bitmap == null) {
-                // 에러 메시지 UI에 보여주기
+            if (bitmap == null) { // (1) 시작
                 image.setImageBitmap(null);
-                Toast.makeText(AsyncTaskProblemActivity.this, "에러 발생", Toast.LENGTH_LONG).show();
+                Toast.makeText(AsyncTaskProblemActivity.this, "에러 발생",
+                        Toast.LENGTH_LONG).show();
                 return;
-            }
+            } // (1)  끝
             image.setImageBitmap(bitmap);
         }
+
     }
+
+    private class BitmapDownloadTask2 extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                return downloadBitmap(urls[0]);
+            } catch (Exception e) {
+                runOnUiThread(() -> { // (1)
+                    image.setImageBitmap(null);
+                    Toast.makeText(AsyncTaskProblemActivity.this, "에러 발생",
+                            Toast.LENGTH_LONG).show();
+                }); // (1) 끝
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (bitmap != null) {
+                image.setImageBitmap(bitmap);
+            }
+        }
+
+    }
+
+    private static final int BITMAP_DOWNLOAD_ERROR = 26;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case BITMAP_DOWNLOAD_ERROR:
+                    image.setImageBitmap(null);
+                    Toast.makeText(AsyncTaskProblemActivity.this, "에러 발생",
+                            Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
+    };
+
+    private class BitmapDownloadTask3 extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                return downloadBitmap(urls[0]);
+            } catch (Exception e) {
+                handler.sendEmptyMessage(BITMAP_DOWNLOAD_ERROR);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (bitmap != null) {
+                image.setImageBitmap(bitmap);
+            }
+        }
+
+    }
+
+    private class BitmapDownloadTask4 extends AsyncTask<String, Void, Boolean> {
+
+        private Bitmap bitmap;
+
+        @Override
+        protected Boolean doInBackground(String... urls) {
+            try {
+                bitmap = downloadBitmap(urls[0]);
+                return Boolean.TRUE;
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (!result) { // (1) 시작
+                image.setImageBitmap(null);
+                Toast.makeText(AsyncTaskProblemActivity.this, "에러 발생",
+                        Toast.LENGTH_LONG).show();
+                return;
+            } // (1)  끝
+            image.setImageBitmap(bitmap);
+        }
+
+    }
+
+    private class BitmapDownloadTask5 extends AsyncTask<String, Void, Pair<Bitmap, Exception>> {
+
+        private Pair<Bitmap, Exception> pair;
+
+        @Override
+        protected Pair<Bitmap, Exception> doInBackground(String... urls) {
+            try {
+                return Pair.create(downloadBitmap(urls[0]), null);
+            } catch (Exception e) {
+                return Pair.create(null, e);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Pair<Bitmap, Exception> result) {
+            if (pair.second != null) { // (1) 시작
+                image.setImageBitmap(null);
+                Toast.makeText(AsyncTaskProblemActivity.this, "에러 발생",
+                        Toast.LENGTH_LONG).show();
+                return;
+            } // (1)  끝
+            image.setImageBitmap(pair.first);
+        }
+
+    }
+
+
 
     private Bitmap downloadBitmap(String url) throws Exception {
         Random random = new Random();
