@@ -42,7 +42,7 @@ public class AsyncTaskProblemActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_two_buttons);
+        setContentView(R.layout.text_and_three_buttons);
         title = (TextView) findViewById(R.id.title);
         image = (ImageView) findViewById(R.id.image);
     }
@@ -101,9 +101,10 @@ public class AsyncTaskProblemActivity extends Activity {
     }
 
     private static final int BITMAP_DOWNLOAD_ERROR = 26;
+
     private Handler handler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(Message msg) { // (1) 시작
             switch (msg.what) {
                 case BITMAP_DOWNLOAD_ERROR:
                     image.setImageBitmap(null);
@@ -111,7 +112,7 @@ public class AsyncTaskProblemActivity extends Activity {
                             Toast.LENGTH_LONG).show();
                     break;
             }
-        }
+        } // (1) 끝
     };
 
     private class BitmapDownloadTask3 extends AsyncTask<String, Void, Bitmap> {
@@ -121,9 +122,14 @@ public class AsyncTaskProblemActivity extends Activity {
             try {
                 return downloadBitmap(urls[0]);
             } catch (Exception e) {
-                handler.sendEmptyMessage(BITMAP_DOWNLOAD_ERROR);
+                handler.sendEmptyMessage(BITMAP_DOWNLOAD_ERROR); // (2)
                 return null;
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
         }
 
         @Override
@@ -188,7 +194,32 @@ public class AsyncTaskProblemActivity extends Activity {
 
     }
 
+    /**
+     * RuntimeException을 던지면 크래시 발생
+     */
+    private class BitmapDownloadTask6 extends AsyncTask<String, Void, Bitmap> {
 
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                return downloadBitmap(urls[0]);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (bitmap != null) {
+                image.setImageBitmap(bitmap);
+            }
+        }
+
+    }
+
+    public void onClickButton2(View view) {
+        new BitmapDownloadTask6().execute("http://suribada.com/profile.png");
+    }
 
     private Bitmap downloadBitmap(String url) throws Exception {
         Random random = new Random();
@@ -204,7 +235,7 @@ public class AsyncTaskProblemActivity extends Activity {
         throw new FileNotFoundException("file does not exist");
     }
 
-    public void onClickButton2(View view) {
+    public void onClickButton3(View view) {
         composedList.clear();
         title.setText(null);
         AsyncTaskCompat.executeParallel(new AsyncTaskA());
