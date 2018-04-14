@@ -86,7 +86,6 @@ public class ThreadProblemActivity extends Activity {
                 emitter.onComplete(); // (2)
             }).start();
         });
-
         Observable.merge(obs1, obs2).subscribe(value ->
                         System.out.println(Thread.currentThread().getName() + ":" + value),
                 System.err::println,

@@ -35,7 +35,6 @@ public class CollectActivity extends Activity {
         Observable<String> obs = Observable.fromIterable(searchOptions)
                 .filter(SearchOption::isInUse)
                 .map(SearchOption::getName);
-
         obs.subscribe(name -> { // (1) 시작
                     applySearchOptions.add(name); // (2)
                 }, e -> {

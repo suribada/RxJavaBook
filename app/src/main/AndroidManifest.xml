@@ -67,16 +67,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".scheduler.SchedulerActivity"
-            android:label="scheduler/SchedulerTest">
+            android:name=".chap6.SchedulerActivity"
+            android:label="chap6/SchedulerTest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".scheduler.TrampolineActivity"
-            android:label="scheduler/Trampoline">
+            android:name=".chap6.TrampolineActivity"
+            android:label="chap6/Trampoline">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
@@ -122,7 +122,7 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".scheduler.ThreadActivity" android:label="scheduler/Thread">
+        <activity android:name=".chap6.ThreadActivity" android:label="chap6/Thread">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
@@ -189,6 +189,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".chap6.BookApiCallActivity" android:label="chap6/BookApiCallActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".chap6.SubscribeOnObserveOnActivity" android:label="chap6/SubscribeOnObserveOnActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />

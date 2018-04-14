@@ -67,6 +67,11 @@ public class ContractErrorRevisedActivity extends Activity {
             Result(String title) {
                 this.title = title;
             }
+
+            @Override
+            public String toString() {
+                return title;
+            }
         }
     }
 

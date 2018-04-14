@@ -7,6 +7,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.internal.functions.Functions;
 import io.reactivex.internal.observers.LambdaObserver;
 
 /**
@@ -15,7 +16,6 @@ import io.reactivex.internal.observers.LambdaObserver;
 public class RxJavaObservableTest {
 
     private List<String> list = Arrays.asList("Android", "iOS", "Bada");
-
 
     @Test
     public void simpleTest() {
@@ -28,10 +28,11 @@ public class RxJavaObservableTest {
                 new ObservableFilter<String>(
                         new ObservableFromIterable(list),
                         (value -> value.length() > 3)),
-                os -> "OS:" + os);
+                os -> "OS:" + os)
+                .subscribe(this::showText);
 
-        Observer<String> observer = new LambdaObserver<String>(this::showText, null,
-                null, null);
+        Observer<String> observer = new LambdaObserver<>(this::showText,
+                Functions.ON_ERROR_MISSING, Functions.EMPTY_ACTION, Functions.emptyConsumer());
 
         new ObservableFilter<String>(
                 new ObservableFromIterable(list), (value -> value.length() > 3)

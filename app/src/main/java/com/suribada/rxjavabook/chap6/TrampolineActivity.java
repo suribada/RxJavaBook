@@ -1,4 +1,4 @@
-package com.suribada.rxjavabook.scheduler;
+package com.suribada.rxjavabook.chap6;
 
 import android.app.Activity;
 import android.os.Bundle;
