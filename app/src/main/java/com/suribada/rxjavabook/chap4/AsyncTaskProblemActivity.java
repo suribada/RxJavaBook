@@ -29,6 +29,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
+import io.reactivex.Scheduler;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by Noh.Jaechun on 2018. 4. 2..
  */
@@ -42,7 +47,7 @@ public class AsyncTaskProblemActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_three_buttons);
+        setContentView(R.layout.four_buttons);
         title = (TextView) findViewById(R.id.title);
         image = (ImageView) findViewById(R.id.image);
     }
@@ -235,7 +240,29 @@ public class AsyncTaskProblemActivity extends Activity {
         throw new FileNotFoundException("file does not exist");
     }
 
+    private Single<Bitmap> downloadBitmapSingle(String url) {
+        return Single.create(emitter -> {
+            try {
+                emitter.onSuccess(downloadBitmap(url));
+            } catch (Exception e) {
+                emitter.onError(e);
+            }
+        });
+    }
+
     public void onClickButton3(View view) {
+        downloadBitmapSingle("http://suribada.com/profile.png")
+                .subscribeOn(Schedulers.io()) // (1)
+                .observeOn(AndroidSchedulers.mainThread()) // (2)
+                .subscribe(bitmap -> image.setImageBitmap(bitmap),
+                        e -> { // (3) 시작
+                            image.setImageBitmap(null);
+                            Toast.makeText(AsyncTaskProblemActivity.this, "에러 발생",
+                                    Toast.LENGTH_LONG).show();
+                        }); // (3) 끝
+    }
+
+    public void onClickButton4(View view) {
         composedList.clear();
         title.setText(null);
         AsyncTaskCompat.executeParallel(new AsyncTaskA());

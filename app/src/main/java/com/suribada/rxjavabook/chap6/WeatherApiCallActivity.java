@@ -48,12 +48,16 @@ public class WeatherApiCallActivity extends Activity {
 
     public void onClickButton2(View view) {
         Location location = getSampleLocation();
-        repository.getRegion(location)
-                .subscribeOn(Schedulers.io())
+        repository.getRegion(location) // (1)
+                .subscribeOn(Schedulers.io()) // (2)
                 .map(region -> region.areaCode)
-                .flatMap(areaCode -> repository.getWeather(areaCode).subscribeOn(Schedulers.io()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(weather -> title.setText(weather.toString()));
+                .flatMap(areaCode -> repository.getWeather(areaCode) // (3)
+                        .subscribeOn(Schedulers.io())) // (4)
+                .observeOn(AndroidSchedulers.mainThread()) // (5)
+                .subscribe(weather -> title.setText(weather.toString()),
+                        e -> {
+                            // 로그나 Toast
+                        });
     }
 
     @NonNull

@@ -41,4 +41,8 @@
         android:layout_gravity="center_horizontal"
         android:text="Button4"
         android:onClick="onClickButton4"/>
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
 </LinearLayout>

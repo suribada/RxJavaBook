@@ -1,6 +1,7 @@
 package com.suribada.rxjavabook.seudo;
 
 import android.location.Location;
+import android.widget.TextView;
 
 /**
  * 콜백 Hell 표현
@@ -9,8 +10,10 @@ import android.location.Location;
  */
 public class LegacyWeatherRepository {
 
+    private TextView title;
+
     public interface AreaResultListener {
-        void onResult(int code, Area area);
+        void onResult(Area area);
         void onFailure(Throwable e);
     }
 
@@ -22,16 +25,11 @@ public class LegacyWeatherRepository {
     public void requestWeather(Location location) {
         requestLocationCode(location, new AreaResultListener() {
             @Override
-            public void onResult(int code, Area area) {
-                String areaCode = "1111"; // 디폴트 위치
-                if (code == 200) {
-                    areaCode = area.code;
-                }
-                requestWeather(areaCode, new WeatherResultListener() {
-
+            public void onResult(Area area) {
+                requestWeather(area.code, new WeatherResultListener() {
                     @Override
                     public void onResult(int code, Weather weather) {
-                        // 화면에 보여주기
+                        title.setText(weather.toString());
                     }
 
                     @Override
