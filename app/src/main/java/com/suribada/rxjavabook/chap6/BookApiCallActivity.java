@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,6 +22,8 @@ import io.reactivex.schedulers.Schedulers;
  * Created by lia on 2018-04-09.
  */
 public class BookApiCallActivity extends Activity {
+
+    private static final String TAG  = "BookApiCall";
 
     private BookSampleRepository repository = new BookSampleRepository();
 
@@ -45,12 +48,13 @@ public class BookApiCallActivity extends Activity {
     }
 
     public void onClickButton2(View view) {
-        Single.merge(repository.getBestSeller().subscribeOn(Schedulers.io()),
-                    repository.getRecommendBooks().subscribeOn(Schedulers.io()),
-                    repository.getCategoryBooks(7).subscribeOn(Schedulers.io()))
-                .collect(ArrayList::new, ArrayList::addAll)
+        Single.merge(repository.getBestSeller().subscribeOn(Schedulers.io()), // (1)
+                    repository.getRecommendBooks().subscribeOn(Schedulers.io()), // (2)
+                    repository.getCategoryBooks(7).subscribeOn(Schedulers.io())) // (3)
+                .collect(ArrayList::new, ArrayList::addAll) // (4)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(books -> title.setText(books.toString()));
+                .subscribe(books -> title.setText(books.toString()),
+                        e -> Log.d(TAG, "error", e));
     }
 
     public void onClickButton3(View view) {
