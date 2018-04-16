@@ -8,6 +8,12 @@ public class Book {
     public String title;
     public String author;
 
+    public Book(int categoryId, String title, String author) {
+        this.categoryId = categoryId;
+        this.title = title;
+        this.author = author;
+    }
+
     @Override
     public String toString() {
         return "Book{" +
