@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
 
 import java.util.Date;
@@ -26,6 +27,13 @@ public class RepeatRxJavaActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_two_buttons);
+        title = (TextView) findViewById(R.id.title);
+        RxView.visibility(title);
+        try {
+            RxView.selected(title).accept(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private Handler handler = new Handler();

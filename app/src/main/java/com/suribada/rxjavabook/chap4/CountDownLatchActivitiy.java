@@ -29,19 +29,24 @@ import java.util.concurrent.CountDownLatch;
 public class CountDownLatchActivitiy extends Activity {
 
     private static final String TAG = "CountDownLatch";
+    private static final int BESTSELLER = 1;
+    private static final int RECOMMEND = 2;
+    private static final int CATEGORY = 3;
 
-    enum Type {
-        BEST, RECOMMEND, CATEGORY
-    }
-
-    private Map<Type, List<Book>> coverBooks = new HashMap<>();
-    private TextView title;
+    private TextView title, bestseller, recommend, category;
+    private View bestsellerLayout, recommendLayout, categoryLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_two_buttons);
+        setContentView(R.layout.books_main);
         title = (TextView) findViewById(R.id.title);
+        bestsellerLayout = findViewById(R.id.bestseller_layout);
+        recommendLayout = findViewById(R.id.recommend_layout);
+        categoryLayout = findViewById(R.id.category_layout);
+        bestseller = (TextView) findViewById(R.id.bestseller);
+        recommend = (TextView) findViewById(R.id.recommend);
+        category = (TextView) findViewById(R.id.category);
     }
 
     private CountDownLatch latch;
@@ -70,7 +75,8 @@ public class CountDownLatchActivitiy extends Activity {
 
         @Override
         protected void onPostExecute(List<Book> books) {
-            coverBooks.put(Type.BEST, books);
+            bestsellerLayout.setVisibility(View.VISIBLE);
+            bestseller.setText(books.toString());
         }
     }
 
@@ -91,7 +97,8 @@ public class CountDownLatchActivitiy extends Activity {
 
         @Override
         protected void onPostExecute(List<Book> books) {
-            coverBooks.put(Type.RECOMMEND, books);
+            recommendLayout.setVisibility(View.VISIBLE);
+            recommend.setText(books.toString());
         }
     }
 
@@ -113,15 +120,16 @@ public class CountDownLatchActivitiy extends Activity {
 
         @Override
         protected void onPostExecute(List<Book> books) {
-            coverBooks.put(Type.CATEGORY, books);
+            categoryLayout.setVisibility(View.VISIBLE);
+            category.setText(books.toString());
         }
     }
 
-    private void showBooks() {
+    private void showCompletedMessage() {
         
     }
 
-    public void onClickButton2(View view) {
+    public void onClickButton3(View view) {
         composedList.clear();
         title.setText(null);
         AsyncTaskCompat.executeParallel(new AsyncTaskA());
