@@ -51,37 +51,39 @@ public class CountDownLatchActivitiy extends Activity {
 
     private CountDownLatch latch;
 
-    public void onClickButton1(View view) {
-        latch = new CountDownLatch(2);
+    public void onClickButton(View view) {
+        latch = new CountDownLatch(2);  // (1)
         AsyncTaskCompat.executeParallel(new BestSellerAsyncTask());
         AsyncTaskCompat.executeParallel(new RecommendAsyncTask());
         AsyncTaskCompat.executeParallel(new CategoryAsyncTask(), 7);
+        //showCompletedMessage();
     }
 
     private class BestSellerAsyncTask extends AsyncTask<Void, Void, List<Book>> {
-
         @Override
         protected List<Book> doInBackground(Void... voids) {
             List<Book> books = new ArrayList<>();
             try {
-                SystemClock.sleep(3000);
+                SystemClock.sleep(5000);
                 books.add(new Book(1, "채식주의자", "한강"));
                 books.add(new Book(2, "죄와벌", "도스토옙스키"));
             } catch (Exception e) {
                 Log.d(TAG, "error", e);
             }
+            //latch.countDown();
             return books;
         }
 
         @Override
         protected void onPostExecute(List<Book> books) {
+            Log.d(TAG, "first=" + System.currentTimeMillis());
             bestsellerLayout.setVisibility(View.VISIBLE);
             bestseller.setText(books.toString());
+            latch.countDown(); // (2)
         }
     }
 
     private class RecommendAsyncTask extends AsyncTask<Void, Void, List<Book>> {
-
         @Override
         protected List<Book> doInBackground(Void... voids) {
             List<Book> books = new ArrayList<>();
@@ -92,44 +94,60 @@ public class CountDownLatchActivitiy extends Activity {
             } catch (Exception e) {
                 Log.d(TAG, "error", e);
             }
+            //latch.countDown();
             return books;
         }
 
         @Override
         protected void onPostExecute(List<Book> books) {
+            Log.d(TAG, "second=" + System.currentTimeMillis());
             recommendLayout.setVisibility(View.VISIBLE);
             recommend.setText(books.toString());
+            latch.countDown(); // (3)
         }
     }
 
     private class CategoryAsyncTask extends AsyncTask<Integer, Void, List<Book>> {
-
         @Override
         protected List<Book> doInBackground(Integer... categories) {
             int categoryId = categories[0];
             List<Book> books = new ArrayList<>();
             try {
-                SystemClock.sleep(5000);
+                SystemClock.sleep(3000);
                 books.add(new Book(7, "시험에 나오는 안드로이드", "노재춘"));
                 books.add(new Book(7, "발로 번역한 RxJava", "김인태"));
             } catch (Exception e) {
                 Log.d(TAG, "error", e);
+            } finally {
+                try { // (4) 시작
+                    latch.await();
+                } catch (InterruptedException e) {
+                } // (4) 끝
             }
             return books;
         }
 
         @Override
         protected void onPostExecute(List<Book> books) {
+            Log.d(TAG, "third=" + System.currentTimeMillis());
             categoryLayout.setVisibility(View.VISIBLE);
             category.setText(books.toString());
+            showCompletedMessage(); // (5)
+            //latch.countDown();
         }
     }
 
     private void showCompletedMessage() {
-        
+        /*
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+        }
+        */
+        Toast.makeText(this, "completed to load books", Toast.LENGTH_LONG).show();
     }
 
-    public void onClickButton3(View view) {
+    public void onClickButton2(View view) {
         composedList.clear();
         title.setText(null);
         AsyncTaskCompat.executeParallel(new AsyncTaskA());
@@ -188,6 +206,12 @@ public class CountDownLatchActivitiy extends Activity {
             }
         }
 
+    }
+
+    public void onClickButtonClear(View view) {
+        bestsellerLayout.setVisibility(View.GONE);
+        recommendLayout.setVisibility(View.GONE);
+        categoryLayout.setVisibility(View.GONE);
     }
 }
 
