@@ -206,6 +206,18 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+        <activity android:name=".chap4.CountDownLatchNextActivitiy" android:label="chap4/CountDownLatchNextActivitiy">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".chap4.CompletableFutureActivity" android:label="chap4/CompletableFutureActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

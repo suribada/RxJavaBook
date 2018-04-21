@@ -60,13 +60,6 @@
         android:text="AsyncTask 조회"
         android:onClick="onClickButton"/>
     <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Button2"
-        android:onClick="onClickButton2"/>
-    <Button
         android:id="@+id/clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
