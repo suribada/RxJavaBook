@@ -56,10 +56,10 @@ public class CompletableFutureActivity extends Activity {
         CompletableFuture
                 .allOf(completableFutures.toArray(new CompletableFuture[3])) // (1)
                 .thenAccept(ignored -> { // (2) 시작
-                    //handler.post(() -> {
+                    handler.post(() -> {
                         Toast.makeText(CompletableFutureActivity.this,
                                 "completed to load books", Toast.LENGTH_LONG).show();
-                    //});
+                    });
                 }); // (2) 끝
     }
 
@@ -74,10 +74,10 @@ public class CompletableFutureActivity extends Activity {
             }
         }).start();
         return completableFuture.thenAccept(books -> { // (5) 시작
-            //handler.post(() -> {
+            handler.post(() -> {
                 bestsellerLayout.setVisibility(View.VISIBLE);
                 bestseller.setText(books.toString());
-            //});
+            });
         }); // (5) 끝
     }
 
@@ -92,10 +92,10 @@ public class CompletableFutureActivity extends Activity {
             }
         }).start();
         return completableFuture.thenAccept(books -> {
-            //handler.post(() -> {
+            handler.post(() -> {
                 recommendLayout.setVisibility(View.VISIBLE);
                 recommend.setText(books.toString());
-            //});
+            });
         });
     }
 
@@ -110,10 +110,10 @@ public class CompletableFutureActivity extends Activity {
             }
         }).start();
         return completableFuture.thenAccept(books -> {
-            //handler.post(() -> {
+            handler.post(() -> {
                 categoryLayout.setVisibility(View.VISIBLE);
                 category.setText(books.toString());
-            //});
+            });
         });
     }
 
