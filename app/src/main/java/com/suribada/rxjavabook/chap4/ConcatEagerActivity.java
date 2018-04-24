@@ -33,11 +33,24 @@ public class ConcatEagerActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_button);
+        setContentView(R.layout.text_and_two_buttons);
         title = (TextView) findViewById(R.id.title);
     }
 
-    public void onClickButton(View view) {
+    public void onClickButton1(View view) {
+        List<Observable<List<Book>>> booksObservable = Arrays.asList(
+                getBestSellerBooks().toObservable().subscribeOn(Schedulers.io()),
+                getRecommendBooks().toObservable().subscribeOn(Schedulers.io()),
+                getCategoryBooks(7).toObservable().subscribeOn(Schedulers.io()));
+        Observable.concatEager(booksObservable)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(books -> title.setText(books.toString()),
+                        System.err::println,
+                        () -> Toast.makeText(ConcatEagerActivity.this,
+                                "completed to load books", Toast.LENGTH_LONG).show());
+    }
+
+    public void onClickButton2(View view) {
         List<Observable<List<Book>>> booksObservable = Arrays.asList(
                 getBestSellerBooks().toObservable().subscribeOn(Schedulers.io()),
                 getRecommendBooks().toObservable().subscribeOn(Schedulers.io()),
