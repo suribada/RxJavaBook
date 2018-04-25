@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +34,7 @@ public class ConcatEagerActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_two_buttons);
+        setContentView(R.layout.text_and_three_buttons);
         title = (TextView) findViewById(R.id.title);
     }
 
@@ -44,10 +45,15 @@ public class ConcatEagerActivity extends Activity {
                 getCategoryBooks(7).toObservable().subscribeOn(Schedulers.io()));
         Observable.concatEager(booksObservable)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(books -> title.setText(books.toString()),
+                .subscribe(books -> showBooks(books),
                         System.err::println,
                         () -> Toast.makeText(ConcatEagerActivity.this,
                                 "completed to load books", Toast.LENGTH_LONG).show());
+    }
+
+    private void showBooks(List<Book> books) {
+        Log.d(TAG, books.toString());
+        title.setText(books.toString());
     }
 
     public void onClickButton2(View view) {
@@ -56,15 +62,19 @@ public class ConcatEagerActivity extends Activity {
                 getRecommendBooks().toObservable().subscribeOn(Schedulers.io()),
                 getCategoryBooks(7).toObservable().subscribeOn(Schedulers.io()));
         Observable.concatEager(booksObservable)
+            .observeOn(AndroidSchedulers.mainThread()) // ConcurrentModificationException 발생으로 위치 변경
             .scan((total, chunk) -> {
                 total.addAll(chunk);
                 return total;
             })
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(books -> title.setText(books.toString()),
+            .subscribe(books -> showBooks(books),
                     System.err::println,
                     () -> Toast.makeText(ConcatEagerActivity.this,
                             "completed to load books", Toast.LENGTH_LONG).show());
+    }
+
+    public void onClickButton3(View view) {
+        title.setText("");
     }
 
     public Single<List<Book>> getBestSellerBooks() {
