@@ -61,16 +61,17 @@ public class ConcatEagerActivity extends Activity {
                 getBestSellerBooks().toObservable().subscribeOn(Schedulers.io()),
                 getRecommendBooks().toObservable().subscribeOn(Schedulers.io()),
                 getCategoryBooks(7).toObservable().subscribeOn(Schedulers.io()));
-        Observable.concatEager(booksObservable)
-            .observeOn(AndroidSchedulers.mainThread()) // ConcurrentModificationException 발생으로 위치 변경
-            .scan((total, chunk) -> {
+        Observable.concatEager(booksObservable) // (1)
+            .observeOn(AndroidSchedulers.mainThread()) // (2)
+            .scan((total, chunk) -> { // (3) 시작
                 total.addAll(chunk);
                 return total;
-            })
+            }) // (3) 끝
             .subscribe(books -> showBooks(books),
                     System.err::println,
                     () -> Toast.makeText(ConcatEagerActivity.this,
-                            "completed to load books", Toast.LENGTH_LONG).show());
+                            "completed to load books", Toast.LENGTH_LONG).show()
+            );
     }
 
     public void onClickButton3(View view) {

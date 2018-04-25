@@ -47,12 +47,12 @@ public class MergeActivity extends Activity {
 
     public void onClickButton(View view) {
         Single.merge(getBestSellerBooks().map(books -> Pair.create(BESTSELLER, books))
-                        .subscribeOn(Schedulers.io()),
+                        .subscribeOn(Schedulers.io()), // (1)
                 getRecommendBooks().map(books -> Pair.create(Type.RECOMMEND, books))
-                        .subscribeOn(Schedulers.io()),
+                        .subscribeOn(Schedulers.io()), // (2)
                 getCategoryBooks(7).map(books -> Pair.create(Type.CATEGORY, books))
-                        .subscribeOn(Schedulers.io()))
-            .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())) // (3)
+            .observeOn(AndroidSchedulers.mainThread()) // (4)
             .subscribe(pair -> {
                     switch (pair.first) {
                         case BESTSELLER:
@@ -69,18 +69,19 @@ public class MergeActivity extends Activity {
                             break;
                     }
                 }, System.err::println,
-                    () -> Toast.makeText(MergeActivity.this,
-                            "completed to load books", Toast.LENGTH_LONG).show());
+                    () -> Toast.makeText(MergeActivity.this, // (5) 시작
+                            "completed to load books", Toast.LENGTH_LONG).show() // (5) 끝
+            );
     }
 
     public Single<List<Book>> getBestSellerBooks() {
-        return Single.create(emitter -> {
+        return Single.create(emitter -> { // (6) 시작
             try {
                 emitter.onSuccess(loadBooks(BESTSELLER));
             } catch (Exception e) {
                 emitter.onError(e);
             }
-        });
+        }); // (6) 끝
     }
 
     public Single<List<Book>> getRecommendBooks() {
