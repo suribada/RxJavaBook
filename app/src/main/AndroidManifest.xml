@@ -100,7 +100,15 @@
         </activity>
         <activity
             android:name=".chap4.HandlerRepeatActivity"
-            android:label="tryreactive/HandlerRepeat">
+            android:label="chap4/HandlerRepeat">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".chap4.RepeatRxJavaActivity"
+            android:label="chap4/RepeatRxJavaActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
@@ -212,7 +220,7 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".chap4.CompletableFutureActivity" android:label="chap4/CompletableFutureActivity">
+        <activity android:name=".chap4.CompletableFutureActivity" android:label="chap4/CompletableFutureActivity(Java8 누가)">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
@@ -230,7 +238,7 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".chap4.ConditionActivitiy" android:label="chap4/ConditionActivitiy">
+        <activity android:name=".chap4.ConditionActivitiy" android:label="chap4/ConditionActivitiy(Invalid Sample)">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />

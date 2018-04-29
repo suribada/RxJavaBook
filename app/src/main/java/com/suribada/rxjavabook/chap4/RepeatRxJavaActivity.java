@@ -12,6 +12,11 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Noh.Jaechun on 2018. 4. 2..
@@ -19,43 +24,31 @@ import java.util.Date;
 
 public class RepeatRxJavaActivity extends Activity {
 
-    private static final String TAG = "RepeatHandlerActivity";
+    private static final String TAG = "RepeatRxJavaActivity";
 
     private TextView title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_two_buttons);
+        setContentView(R.layout.text_and_button);
         title = (TextView) findViewById(R.id.title);
-        RxView.visibility(title);
-        try {
-            RxView.selected(title).accept(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
-    private Handler handler = new Handler();
-
     private static final int DELAY_TIME = 2000;
-    private Runnable updateTimeTask = new Runnable() {
+    private Disposable disposable;
 
-        @Override
-        public void run() {
-            Log.d(TAG, "currentDate=" + new Date()); // 현재 시간을 로그에 출력한다.
-            handler.postDelayed(this, DELAY_TIME); // Runnable 자기 자신을 MesssageQueue에 넣는다.
-        }
-
-    };
-
-    public void onClickButton1(View view) {
-        handler.post(updateTimeTask);
+    public void onClickButton(View view) {
+        disposable = Observable.interval(0, DELAY_TIME, TimeUnit.MILLISECONDS) // (1)
+                .observeOn(AndroidSchedulers.mainThread()) // (2)
+                .subscribe(ignored -> title.setText("current=" + new Date()));
     }
 
     @Override
     protected void onDestroy() {
-        handler.removeCallbacksAndMessages(null);
+        if (disposable != null) {
+            disposable.dispose(); // (3)
+        }
         super.onDestroy();
     }
 

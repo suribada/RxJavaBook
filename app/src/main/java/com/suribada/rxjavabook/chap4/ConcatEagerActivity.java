@@ -62,13 +62,13 @@ public class ConcatEagerActivity extends Activity {
                 getRecommendBooks().toObservable().subscribeOn(Schedulers.io()),
                 getCategoryBooks(7).toObservable().subscribeOn(Schedulers.io()));
         Observable.concatEager(bookObservables) // (1)
-            .observeOn(AndroidSchedulers.mainThread()) // (2)
-            .scan((total, chunk) -> { // (3) 시작
+            .scan((total, chunk) -> { // (2) 시작
                 total.addAll(chunk);
                 return total;
-            }) // (3) 끝
+            }) // (2) 끝
+            .observeOn(AndroidSchedulers.mainThread()) // (3)
             .subscribe(books -> showBooks(books),
-                    System.err::println,
+                    Throwable::printStackTrace,
                     () -> showCompletedMessage()
             );
     }

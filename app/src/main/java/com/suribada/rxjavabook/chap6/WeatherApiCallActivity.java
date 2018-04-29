@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.facebook.stetho.Stetho;
 import com.suribada.rxjavabook.R;
 import com.suribada.rxjavabook.api.BookSampleRepository;
+import com.suribada.rxjavabook.api.model.Weather;
 
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
@@ -44,6 +45,12 @@ public class WeatherApiCallActivity extends Activity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(weather -> title.setText(weather.toString()));
+    }
+
+    public Single<Weather> getWeather(Location location) {
+        return repository.getRegion(location)
+                .map(region -> region.areaCode)
+                .flatMap(repository::getWeather);
     }
 
     public void onClickButton2(View view) {

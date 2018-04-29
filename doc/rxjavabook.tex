@@ -364,6 +364,20 @@ https://github.com/ReactiveX/RxAndroid/wiki 이 페이지를 참고하자.
 \subsection{동시에 결과 적용}
 CountDownLatch를 사용해왔다.
 
+ConcurrentModificationException이 발생했었는데? 이상하다..
+concatEager는 하위로 보낼 때 하나씩 onNext가 끝날 때까지 기다린다.
+
+        Observable.concatEager(bookObservables) // (1)
+            .scan((total, chunk) -> { // (3) 시작
+                System.out.println("start=" + System.currentTimeMillis() + ", " + chunk.toString()
+                + "," + Thread.currentThread().getName());
+                SystemClock.sleep(5000);
+                total.addAll(chunk);
+                System.out.println("end=" + System.currentTimeMillis());
+                return total;
+            }) // (3) 끝
+            
+
 \section{콜백 중첩 문제}
 https://teamtreehouse.com/community/callbacks-vs-event-handlers
 https://ko.wikipedia.org/wiki/%EC%BD%9C%EB%B0%B1
@@ -375,6 +389,14 @@ http://blog.naver.com/PostView.nhn?blogId=2hyoin&logNo=220398943180
 \section{순차 API 호출}
 음성 TTS
 여러 개 약관
+
+순서가 중요한 메서드 호출
+API는 호출 순서가 중요한 때가 있다. 필자는 과거에 회사 동료가 페이스북 SDK를 사용해서 연동하는 걸 옆에서 본 적이 있었는데 연동 작업에 꽤 애먹는 것을 본 적이 있다. 결국 작업이 성공했을때 동료의 결론은 호출 순서가 중요하다는 것이었다. if 문에 따른 여러 실행 경로가 있고 서버에 먼저 전송해야 할 필수 데이터가 있다면 누가 하더라도 만만치 않은 작업이었을 것이다. 현재의 페이스북 SDK는 과거만큼 복잡해보이지는 않아서 그나마 다행인데, 어쨌든 이와 같이 순서가 중요한 작업들은 어디서나 존재한다. 
+
+네이버 오픈 API에 보면 TTS 기능이 있다[주석]. 이 기능은 텍스트를 서버에 전송하면 서버에서 응답으로 mp3 파일을 생성해주는 것이다.
+
+[주석] https://developers.naver.com/docs/clova/api/CSS/API_Guide.md#UsingAPI 서비스 구분에 따라서 URL은 변경 가능성이 있다. URL이 달라졌다면 우상단의 검색 기능을 활용해보자.
+
 
 \section{상호 참조 제거}
 ListView 의 ListAdapter 에 ListView 를 전달하는 것을 보기도 했다.
