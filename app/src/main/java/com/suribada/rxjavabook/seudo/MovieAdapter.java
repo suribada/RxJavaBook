@@ -26,10 +26,25 @@ class MovieAdapter extends ArrayAdapter<Movie> {
     private final LayoutInflater inflater;
     private ListView listView;
 
+    interface ListSelectionListener {
+        void onTitleClick(int position);
+    }
+
+    private ListSelectionListener listSelectionListener;
+
     MovieAdapter(Context context, ListView listView, List<Movie> movies) { // (1)
         super(context, 0, movies);
         inflater = LayoutInflater.from(context);
         this.listView = listView;
+    }
+
+    MovieAdapter(Context context, List<Movie> movies) {
+        super(context, 0, movies);
+        inflater = LayoutInflater.from(context);
+    }
+
+    void setListSelectionListener(ListSelectionListener listSelectionListener) { // (1)'
+        this.listSelectionListener = listSelectionListener;
     }
 
     @NonNull
@@ -46,7 +61,8 @@ class MovieAdapter extends ArrayAdapter<Movie> {
         Movie item = getItem(position);
         holder.title.setText(Html.fromHtml(item.title));
         holder.title.setOnClickListener(v -> { // (2) 시작
-            listView.setSelection(position);
+            //listView.setSelection(position);
+            listSelectionListener.onTitleClick(position);
         }); // (2) 끝
         if (TextUtils.isEmpty(item.subtitle)) {
             holder.subtitle.setVisibility(View.GONE);
