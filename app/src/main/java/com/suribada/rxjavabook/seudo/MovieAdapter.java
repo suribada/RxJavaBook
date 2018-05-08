@@ -62,7 +62,9 @@ class MovieAdapter extends ArrayAdapter<Movie> {
         holder.title.setText(Html.fromHtml(item.title));
         holder.title.setOnClickListener(v -> { // (2) 시작
             //listView.setSelection(position);
-            listSelectionListener.onTitleClick(position);
+            if (listSelectionListener != null) {
+                listSelectionListener.onTitleClick(position);
+            }
         }); // (2) 끝
         if (TextUtils.isEmpty(item.subtitle)) {
             holder.subtitle.setVisibility(View.GONE);
