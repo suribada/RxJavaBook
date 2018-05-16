@@ -415,6 +415,12 @@ http://www.hanbit.co.kr/media/channel/view.html?cms_code=CMS7222611536
 고수준 구성 요소, 저수준 구성 요소
 https://en.wikipedia.org/wiki/High-_and_low-level
 
+\section{리스너 인터페이스 대체}
+프래그먼트에서 이벤트 전달 받기
+액티비티에서 프래그먼트를 포함하기도 하고 프래그먼트 내에서 또 프래그먼트를 포함하기도 하는데 프래그먼트에서도 액티비티나 부모 프래그먼트에 이벤트 전달이 필요할 때가 많다.
+
+프래그먼트의 특징으로 액티비티에 모든 뷰를 넣지 않고 여러 곳에 재사용할 수 있다고 하는데 
+
 \section{선언적 예외 처리}
 %DataFormatter 예제
 Base64 encode, decode 예제도?
@@ -592,6 +598,7 @@ subscribe에는 Observer가 전달된다. 그런데 Observer를 그냥 쓰면 �
 
 
 \subsection{구독 제거}
+unregisterReceiver, setOnClickListener(null), setOnLongClickListener(null) 등 여러가지가 있는데 인터페이스를 동일하게 묶는 효과도 있다.
 dispose는 event가 계속 오는 도중에 끝내려는 의도가 있다. onComplete나 onError가 정상적으로 불려서 다 끝난 것은 dipose가 필요하지 않다.
 interval 같은 건 반드시 dispose  해야 하는 거고 just 같은 건 필요 없다.
 

@@ -1,40 +1,38 @@
-package com.suribada.rxjavabook.seudo;
+package com.suribada.rxjavabook.chap4.legacylogin;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import java.util.ArrayList;
+import com.suribada.rxjavabook.seudo.LoginMessage;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.BehaviorSubject;
+import java.util.ArrayList;
 
 /**
  * Created by Naver on 2017. 10. 13..
  */
-public class LegacyLoginManager {
+public class LoginManager {
 
     private static final Object lock = new Object();
 
-    private static LegacyLoginManager instance;
+    private static LoginManager instance;
 
-    public static LegacyLoginManager getInstance(Context context) {
+    public static LoginManager getInstance(Context context) { // (1) 시작
         synchronized (lock) {
             if (instance == null) {
-                instance =  new LegacyLoginManager(context.getApplicationContext());
+                instance =  new LoginManager(context.getApplicationContext());
             }
             return instance;
         }
-    }
+    } // (1) 끝
 
     public interface LoginListener {
-
         void loginStatusChanged(boolean login);
     }
 
     // java.util.Observables 처럼 동기화 고려 필요
-    private ArrayList<LoginListener> loginListeners = new ArrayList<>();
+    private ArrayList<LoginListener> loginListeners = new ArrayList<>(); // (2) 시작
 
     public  void  addLoginListener(LoginListener loginListener) {
         loginListeners.add(loginListener);
@@ -48,9 +46,9 @@ public class LegacyLoginManager {
         for (LoginListener each : loginListeners) {
             each.loginStatusChanged(login);
         }
-    }
+    } // (2) 끝
 
-    private LegacyLoginManager(Context context) {
+    private LoginManager(Context context) {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LoginMessage.LOGIN_FINISH);
         intentFilter.addAction(LoginMessage.LOGOUT_FINISH);
@@ -80,9 +78,14 @@ public class LegacyLoginManager {
         // 로그인 화면 뛰워서 그 안에서 로그인하고 그 결과를 브로드캐스트
     }
 
+    public void login() {
+        //...
+        notifyLoginStatus(true); // (3)
+    }
+
     public void logout() {
-        // 콜백 등에서 호출
-        notifyLoginStatus(false);
+        //...
+        notifyLoginStatus(false); // (4)
     }
 
 }

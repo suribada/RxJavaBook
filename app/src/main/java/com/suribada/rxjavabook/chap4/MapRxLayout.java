@@ -16,16 +16,15 @@ import io.reactivex.Observable;
 /**
  * Created by Noh.Jaechun on 2018. 5. 9
  */
-
 public class MapRxLayout extends FrameLayout {
 
     private View zoomIn, zoomOut, gpsActivation;
 
     public MapRxLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        inflate(context, R.layout.books_main, this);
+        inflate(context, R.layout.map_layout, this);
         zoomIn = findViewById(R.id.zoom_in);
-        zoomOut = findViewById(R.id.zoom_in);
+        zoomOut = findViewById(R.id.zoom_out);
         gpsActivation = findViewById(R.id.gps_activation);
     }
 

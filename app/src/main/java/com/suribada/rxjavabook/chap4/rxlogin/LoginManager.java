@@ -1,9 +1,11 @@
-package com.suribada.rxjavabook.seudo;
+package com.suribada.rxjavabook.chap4.rxlogin;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+
+import com.suribada.rxjavabook.seudo.LoginMessage;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
@@ -43,11 +45,11 @@ public class LoginManager {
         }, intentFilter);
     }
 
-    private BehaviorSubject<Boolean> subject = BehaviorSubject.create();
+    private BehaviorSubject<Boolean> subject = BehaviorSubject.create(); // (1)
 
-    public Observable<Boolean> getObservable() {
+    public Observable<Boolean> getObservable() { // (2) 시작
         return subject.distinctUntilChanged();
-    }
+    } // (2) 끝
 
     public void ssoLogin() {
         // 콜백 등에서 호출
@@ -58,9 +60,14 @@ public class LoginManager {
         // 로그인 화면 뛰워서 그 안에서 로그인하고 그 결과를 브로드캐스트
     }
 
+    public void login() {
+        //...
+        subject.onNext(true); // (3)
+    }
+
     public void logout() {
-        // 콜백 등에서 호출
-        subject.onNext(false);
+        //...
+        subject.onNext(false); // (4)
     }
 
 }

@@ -30,7 +30,7 @@ public class MapNonRxLayout extends FrameLayout implements View.OnClickListener 
         super(context, attrs);
         inflate(context, R.layout.map_layout, this);
         zoomIn = findViewById(R.id.zoom_in);
-        zoomOut = findViewById(R.id.zoom_in);
+        zoomOut = findViewById(R.id.zoom_out);
         gpsActivation = findViewById(R.id.gps_activation);
         zoomIn.setOnClickListener(this);
         zoomOut.setOnClickListener(this);
@@ -39,6 +39,12 @@ public class MapNonRxLayout extends FrameLayout implements View.OnClickListener 
 
     public void setMapListener(@Nullable MapListener mapListener) { // (2) 시작
         this.mapListener = mapListener;
+        /*
+        OnClickListener onClickListener = (mapListener == null) ? null : this;
+        zoomIn.setOnClickListener(onClickListener);
+        zoomOut.setOnClickListener(onClickListener);
+        gpsActivation.setOnClickListener(onClickListener);
+        */
     } // (2) 끝
 
     @Override

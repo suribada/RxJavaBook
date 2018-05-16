@@ -1,4 +1,4 @@
-package com.suribada.rxjavabook.seudo;
+package com.suribada.rxjavabook.chap4.rxlogin;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,18 +17,20 @@ public class LoginManagerClient extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        disposable = LoginManager.getInstance(this).getObservable().subscribe(login -> {
-           if (login) {
-               // 로그인 상태에 따른 화면 변경
-           } else {
-               // 로그아웃 상태에 따른 화면 변경
-           }
-        });
+        //...
+        disposable = LoginManager.getInstance(this).getObservable() // (1) 시작
+                .subscribe(login -> {
+                   if (login) {
+                       // 로그인 상태에 따른 화면 변경
+                   } else {
+                       // 로그아웃 상태에 따른 화면 변경
+                   }
+                }); // (1) 끝
     }
 
     @Override
     protected void onDestroy() {
-        disposable.dispose();
+        disposable.dispose(); // (2)
         super.onDestroy();
     }
 
