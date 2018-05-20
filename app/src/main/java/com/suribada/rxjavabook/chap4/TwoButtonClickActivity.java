@@ -1,4 +1,4 @@
-package com.suribada.rxjavabook.chap1;
+package com.suribada.rxjavabook.chap4;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
+import com.suribada.rxjavabook.chap1.ObserverActivity;
 
 import io.reactivex.Observable;
 
@@ -27,13 +28,14 @@ public class TwoButtonClickActivity extends Activity {
         button3 = (Button) findViewById(R.id.button3);
         button4 = (Button) findViewById(R.id.button4);
         button5 = (Button) findViewById(R.id.button5);
-        Observable.mergeArray(RxView.clicks(button1).take(1),
+        Observable.mergeArray(
+                RxView.clicks(button1).take(1), // (1)
                 RxView.clicks(button2).take(1),
                 RxView.clicks(button3).take(1),
                 RxView.clicks(button4).take(1),
                 RxView.clicks(button5).take(1))
-            .take(2)
-            .ignoreElements()
+            .take(2) // (2)
+            .ignoreElements() // (3)
             .subscribe(() -> {
                 startActivity(new Intent(this, ObserverActivity.class));
                 finish();

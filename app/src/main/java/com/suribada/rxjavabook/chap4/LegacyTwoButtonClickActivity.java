@@ -1,4 +1,4 @@
-package com.suribada.rxjavabook.chap1;
+package com.suribada.rxjavabook.chap4;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.widget.Button;
 
 import com.suribada.rxjavabook.R;
+import com.suribada.rxjavabook.chap1.ObserverActivity;
 
 
 /**
@@ -27,9 +28,9 @@ public class LegacyTwoButtonClickActivity extends Activity {
         button4 = (Button) findViewById(R.id.button4);
         button5 = (Button) findViewById(R.id.button5);
         button1.setOnClickListener(v -> {
-            if (!clicks[0]) {
+            if (!clicks[0]) { // (1)
                 clicks[0] = true;
-                checkTwoButtonClicked();
+                checkTwoButtonClicked(); // (2)
             }
 
         });
@@ -66,9 +67,9 @@ public class LegacyTwoButtonClickActivity extends Activity {
     private void checkTwoButtonClicked() {
         int count = 0;
         for (int i = 0; i < 5; i++) {
-            if (clicks[i]) {
+            if (clicks[i]) { // (3) 시작
                 count++;
-            }
+            } // (3) 끝
             if (count == 2) {
                 startActivity(new Intent(this, ObserverActivity.class));
                 finish();

@@ -22,10 +22,11 @@ public class DateFormatterClient extends Activity {
 
     public void saveScheduleRxJava(Schedule schedule) {
         DateFormatter formatter = new DateFormatter();
+        //long timeInMillis = 0L;
         formatter.getTimeInMillis(schedule.date).subscribe(timeInMillis -> {
-            //...
+            //... // (1)
         }, e -> {
-            Toast.makeText(this, "Input Error", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Input Error", Toast.LENGTH_LONG).show(); // (2)
         });
     }
 

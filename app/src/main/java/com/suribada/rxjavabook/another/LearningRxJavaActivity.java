@@ -1,9 +1,11 @@
 package com.suribada.rxjavabook.another;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 
 import com.suribada.rxjavabook.R;
@@ -315,6 +317,7 @@ public class LearningRxJavaActivity extends Activity {
                 });
         }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     static Flowable<Integer> randomGenerator(int min, int max) {
         return Flowable.generate(emitter ->
                 emitter.onNext(ThreadLocalRandom.current().nextInt(min, max))

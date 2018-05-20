@@ -172,13 +172,13 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".chap1.TwoButtonClickActivity" android:label="chap1/TwoButtonClickActivity">
+        <activity android:name=".chap4.TwoButtonClickActivity" android:label="chap4/TwoButtonClickActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".chap1.LegacyTwoButtonClickActivity" android:label="chap1/LegacyTwoButtonClickActivity">
+        <activity android:name=".chap4.LegacyTwoButtonClickActivity" android:label="chap4/LegacyTwoButtonClickActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
