@@ -13,6 +13,8 @@ import android.widget.FrameLayout;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 
 /**
@@ -40,8 +42,10 @@ public class MapRxFragment extends Fragment {
 
     public Observable<Integer> getZoomObservable() { // (2) 시작
         Observable<Integer> zoomInObservable = RxView.clicks(zoomIn)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .map(Void -> Integer.valueOf(1));
         Observable<Integer> zoomOutObservable = RxView.clicks(zoomOut)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .map(Void -> Integer.valueOf(-1));
         return zoomInObservable.mergeWith(zoomOutObservable);
     } // (2) 끝
