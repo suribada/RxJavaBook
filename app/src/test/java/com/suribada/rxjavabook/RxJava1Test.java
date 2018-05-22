@@ -73,9 +73,9 @@ public class RxJava1Test {
     @Test
     public void testGugudan() {
         Observable.range(2, 8)
-            .flatMap(row -> Observable.range(1, 9)
-                    .map(col -> String.format("%d x %d = %d", row, col, row * col)))
-            .subscribe(System.out::println);
+                .flatMap(row -> Observable.range(1, 9)
+                        .map(col -> String.format("%d x %d = %d", row, col, row * col)))
+                .subscribe(System.out::println);
 
     }
 
