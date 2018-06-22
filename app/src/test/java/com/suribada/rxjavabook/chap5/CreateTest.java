@@ -3,6 +3,7 @@ package com.suribada.rxjavabook.chap5;
 import org.junit.Test;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public class CreateTest {
 
@@ -17,6 +18,15 @@ public class CreateTest {
             }
             return toNo;
         }).flatMap(obs -> obs).subscribe(System.out::println);
+    }
+
+    @Test
+    public void testInnerCreate() {
+        Observable.just("noh", "jae", "chun")
+                .flatMap(name -> Observable.<String>create(emitter -> {
+                    emitter.onNext("char=" + name.charAt(0));
+                }).concatMap(value -> Observable.range(0, value.length())))
+                        .subscribe(System.out::println);
     }
 
 }
