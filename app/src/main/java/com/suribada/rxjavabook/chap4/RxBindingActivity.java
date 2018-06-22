@@ -33,34 +33,36 @@ public class RxBindingActivity extends Activity {
     private CheckBox checkBox;
     private View area;
 
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+     // private Consumer<? super CharSequence> textChange = RxTextView.text(title); // (1)
+     private Consumer<? super CharSequence> textChange; // (2)
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rxbinding_layout);
         title = (TextView) findViewById(R.id.title);
+        textChange = RxTextView.text(title); // (3)
         checkBox = (CheckBox) findViewById(R.id.check);
         area = findViewById(R.id.area);
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> area.setVisibility(isChecked ? View.VISIBLE : View.GONE));
-        RxCompoundButton.checkedChanges(checkBox).subscribe(RxView.visibility(area));
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked)
+                -> area.setVisibility(isChecked ? View.VISIBLE : View.GONE));
+        RxCompoundButton.checkedChanges(checkBox).subscribe(RxView.visibility(area)); // (4)
     }
-
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-    private Consumer<? super CharSequence> textChange = RxTextView.text(title); // (1)
 
     public void onClickButton(View view) {
         compositeDisposable.add(Observable.interval(5, TimeUnit.SECONDS)
                 .map(value -> ("current value1=" + value))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(title::setText)); // (2)
+                .subscribe(title::setText)); // (5)
         compositeDisposable.add(Observable.interval(7, TimeUnit.SECONDS)
                 .map(value -> ("current value2=" + value))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(RxTextView.text(title))); // (3)
+                .subscribe(RxTextView.text(title))); // (6)
         compositeDisposable.add(Observable.interval(9, TimeUnit.SECONDS)
                 .map(value -> ("current value3=" + value))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(textChange)); // (4)
+                .subscribe(textChange)); // (7)
     }
 
     @Override
