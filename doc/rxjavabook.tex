@@ -44,7 +44,20 @@ https://www.oreilly.com/learning/why-reactive
 https://www.slideshare.net/Tomik/practical-rxjava-for-android
 
 // 아래 챕터는 한 단계씩 올림
+\chapter{보완할 부분}
+- fromCallbable과 API 연결 샘플
+- 시점의 복잡함 해결하는 것 설명
+- null을 리턴하는 것도 
+
+
 \chapter{리액티브 익스텐션}
+
+<노트>
+Complexity kills. 오라일리의 Reactive Programming With RxJava(RxJava를 활용한 리액티브 프로그래밍, 인사이트 역)의 머리말에 Ray Ozzie의 말이 언급되었다. 목적어가 없는 이 문장은 바로 목적어가 너무나 당연해서 뺀 것이다. 목적어는 바로 개발자인 우리들(us)이다. ‘복잡성은 우리를 죽인다’가 직역이고 ‘복잡성 때문에 죽을 지경이다’가 의역이고 더 나아가면 ‘복잡성은 진짜 지랄맞다’가 우리말 어감에 잘 맞는 표현이 될 것 같다.
+</노트>
+
+[주석]필자는 번역 리뷰에 참가해서 관련한 논의에 참여한 바 있다.
+
 
 https://tylermcginnis.com/imperative-vs-declarative-programming/
 
@@ -116,6 +129,8 @@ https://www.tibco.com/blog/2010/03/12/events-versus-data/
 https://stackoverflow.com/questions/29787684/java-8-stream-vs-collection-storage
 
 http://www.baeldung.com/java-inifinite-streams
+
+[주석] 중국의 어느 지방에서는 둑을 지울 때 옆에 추가로 물이 흐를 수 있는 하천을 만든다고 한다. 기술의 발전이나 합리성 여부와 상관없이, 물이 넘치지 않게 조절하는 가능한 방법인 듯 하다.
 
 \subsection{리액티브 라이브러리}
 
@@ -318,6 +333,8 @@ Java8을 지원하면 내용이 제거되니 지금은 대강만 쓰자.
 자바 8부터 지원하는 람다식을 쓸 수 있다.
 안드로이드 스튜디오에서 사용방법은 https://github.com/evant/gradle-retrolambda를 참고하자.
 \end{comment}
+
+\subsection{리액티브 라이브러리}
 
 \section{ReactiveX 계약}
 실제 프로그램에서는 여러가지 이벤트가 동시에 발생하는데 어떻게 하나씩 소비된다는 말일까? 바로 이벤트 종류별로 스트림이 별도이다. 특정 버튼 클릭 이벤트를 동시에 발생시키지 못하는 것을 생각해보자. 
@@ -1707,6 +1724,8 @@ pressed
 selected
 visibility
 는 Consumer를 리턴하는 것이다.
+
+throttle 이 편하다.
 
 \section{RxRelay}
 Subject는 터미널 이벤트를 받으면 더 이벤트를 받을 수 없다.

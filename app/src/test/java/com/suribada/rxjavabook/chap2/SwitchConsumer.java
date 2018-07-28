@@ -3,9 +3,15 @@ package com.suribada.rxjavabook.chap2;
 import com.suribada.rxjavabook.chap3.ContractErrorRevisedActivity;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import io.reactivex.Emitter;
+import io.reactivex.Observable;
+import io.reactivex.functions.BiConsumer;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Predicate;
+import io.reactivex.internal.functions.ObjectHelper;
+import io.reactivex.internal.operators.observable.ObservableInternalHelper;
 
 /**
  * Created by Noh.Jaechun on 2018-04-10.
@@ -48,6 +54,24 @@ public class SwitchConsumer<T> implements Consumer<T> {
             return false;
         }
 
+    }
+
+    public static <T, S, M> Observable<T> generate(
+            final Callable<S> initialState,
+            final BiConsumer<S, Emitter<S>> generator,
+            Consumer<? super M> disposeState) {
+        ObjectHelper.requireNonNull(generator, "generator  is null");
+        return null;
+    }
+
+    public static <T, S> Observable<T> fromIterable(Iterable<? extends S> source) {
+        return null;
+    }
+
+    public class Observable2<T> {
+        public <T> void accept(T t) {
+
+        }
     }
 
 }

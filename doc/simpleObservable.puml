@@ -1,0 +1,10 @@
+@startuml
+interface ObservableSource<T> {
+{abstract} void subscribe(Observer<? super T> observer)
+}
+abstract class Observable<T> {
+{abstract} void subscribeActual(Observer<? super T> observer)
+}
+
+ObservableSource <|.. Observable
+@enduml

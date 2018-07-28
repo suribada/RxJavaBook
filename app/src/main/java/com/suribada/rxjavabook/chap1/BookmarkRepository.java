@@ -73,14 +73,14 @@ public class BookmarkRepository {
         void onFailed(Exception e);
     }
 
-    Completable setTitleRxJava(String title) {
+    public Completable setTitleRxJava(String title) {
         return Completable.fromCallable(() -> {
             setTitle("heetak");
             return null;
         });
     }
 
-    Single<String> getTitleRxJava() {
+    public Single<String> getTitleRxJava() {
         return Single.fromCallable(() -> "http://endofhope");
     }
 
