@@ -44,7 +44,7 @@ public class GenericsTest {
     @Test
     public void assign() {
         Number number = 1;
-        Integer a = number; // (1)
+        //Integer a = number; // (1) 컴파일 에러
         Integer b = 7;
         Number number2 = b; // (2)
         List<Number> numbers = new ArrayList<>();
@@ -56,7 +56,7 @@ public class GenericsTest {
         integers.add(2);
         integers.add(3);
         integers.add(4);
-        List<Number> numbers = integers; // (1)
+        //List<Number> numbers = integers; // (1)
         List<? extends Number> numbers2 = integers; // (2)
     }
 
@@ -92,13 +92,13 @@ public class GenericsTest {
         List<Dog> dogs = new ArrayList<>();
         List<BullDog> bulldogs = new ArrayList<>();
         List<? super Dog> dogs2 = new ArrayList<>();
-        dogs = objects; // (1) (시작) 컴파일 에러
-        dogs = animals;
-        dogs = bulldogs; // (1) 끝
+        //dogs = objects; // (1) (시작) 컴파일 에러
+        //dogs = animals;
+        //dogs = bulldogs; // (1) 끝
         dogs2 = objects; // (2) 시작
         dogs2 = animals;
         dogs2 = dogs; // (2) 끝
-        dogs2 = bulldogs; // (3) 컴파일 에러
+        //dogs2 = bulldogs; // (3) 컴파일 에러
     }
 
     @Test
@@ -135,7 +135,7 @@ public class GenericsTest {
                 return input.name();
             }
         };
-        Observable<CharSequence> names5 = dogs.map(mapFunction5); // (5) 컴파일 에러
+        //Observable<CharSequence> names5 = dogs.map(mapFunction5); // (5) 컴파일 에러
     }
 
     class Animal{}
@@ -164,15 +164,30 @@ public class GenericsTest {
     public void inferType() {
         Observable.just("박응주", "하동현", "신중섭"); // (1)
         Observable.just(1, "최희탁", "이창신", new Dog("happy")); // (2)
+    }
 
-        Observable.<CharSequence>just("박응주", "하동현", "신중섭"); // (3)
-        Observable<CharSequence> reviewers = Observable.just("박응주", "하동현", "신중섭"); // (4)
+    @Test
+    public void inferType2() {
+        Observable.<CharSequence>just("박응주", "하동현", "신중섭"); // (1)
+        Observable<CharSequence> reviewers = Observable.just("박응주", "하동현", "신중섭"); // ()
+    }
 
-        Observable.create(emitter -> { // (5) 시작
+    @Test
+    public void inferType3() {
+        Observable.create(emitter -> {
             emitter.onNext("알리바바");
             emitter.onNext("40인의 도둑");
             emitter.onComplete();
-        }); // (5)
+        }).subscribe(value -> {
+            //System.out.println(value.length()); // 컴파일 에러
+        });
+        Observable.<String>create(emitter -> {
+            emitter.onNext("알리바바");
+            emitter.onNext("40인의 도둑");
+            emitter.onComplete();
+        }).subscribe(value -> {
+            System.out.println(value.length());
+        });
     }
 
 }

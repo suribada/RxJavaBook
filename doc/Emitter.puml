@@ -11,6 +11,10 @@ class CreateEmitter<T>
 class ObservableCreate<T>
 class FlowableCreate<T>
 abstract class BaseEmitter
+class GeneratorDisposable<T, S>
+class ObservableGenerate<T, S>
+class GeneratorSubscription<T, S>
+class FlowableGenerate<T, S>
 
 Emitter <|-- ObservableEmitter
 Emitter <|-- FlowableEmitter
@@ -18,5 +22,10 @@ ObservableEmitter <|.. CreateEmitter
 ObservableCreate +-- CreateEmitter
 FlowableEmitter <|.. BaseEmitter
 FlowableCreate +-- BaseEmitter
+Emitter <|.. GeneratorDisposable
+Emitter <|.. GeneratorSubscription
+ObservableGenerate +-- GeneratorDisposable
+FlowableGenerate +-- GeneratorSubscription
+
 
 @enduml
