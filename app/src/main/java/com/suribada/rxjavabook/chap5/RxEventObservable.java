@@ -9,16 +9,16 @@ import io.reactivex.Observable;
  */
 public class RxEventObservable {
 
-    private final static Object EVENT = new Object();
+    private final static Object EVENT = new Object(); // (1)
 
     public static Observable<Object> clicks(View view) {
         return Observable.create(emitter -> {
             view.setOnClickListener(v -> {
-                if (!emitter.isDisposed()) {
-                    emitter.onNext(EVENT);
+                if (!emitter.isDisposed()) { // (2)
+                    emitter.onNext(EVENT); // (3)
                 }
             });
-            emitter.setCancellable(() -> view.setOnClickListener(null));
+            emitter.setCancellable(() -> view.setOnClickListener(null)); // (4)
         });
     }
 

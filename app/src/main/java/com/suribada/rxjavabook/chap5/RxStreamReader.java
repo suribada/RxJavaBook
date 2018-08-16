@@ -16,18 +16,18 @@ public class RxStreamReader {
 
     public static Observable<String> lines(InputStream inputStream) {
         return Observable.create(emitter -> {
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(inputStream, "UTF-8"))) {
+            try (BufferedReader br = new BufferedReader( // (1) 시작
+                    new InputStreamReader(inputStream, "UTF-8"))) { // (1) 끝
                 String line;
-                while ((line = br.readLine()) != null && !emitter.isDisposed()) {
-                    emitter.onNext(line);
+                while ((line = br.readLine()) != null && !emitter.isDisposed()) { // (2)
+                    emitter.onNext(line); // (3)
                 }
                 if (!emitter.isDisposed()) {
-                    emitter.onComplete();
+                    emitter.onComplete(); // (4)
                 }
             } catch (IOException e) {
                 if (!emitter.isDisposed()) {
-                    emitter.onError(e);
+                    emitter.onError(e); // (5)
                 }
             }
         });

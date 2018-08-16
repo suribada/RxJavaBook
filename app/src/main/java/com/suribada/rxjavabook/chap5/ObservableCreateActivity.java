@@ -11,6 +11,7 @@ import com.suribada.rxjavabook.R;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.PrintWriter;
 
 import io.reactivex.Single;
@@ -32,8 +33,7 @@ public class ObservableCreateActivity extends Activity {
         setContentView(R.layout.four_buttons);
         title = findViewById(R.id.title);
         button = findViewById(R.id.button1);
-        try (FileOutputStream fos = openFileOutput("book.txt", Context.MODE_PRIVATE);
-                PrintWriter out = new PrintWriter(fos)) {
+        try (PrintWriter out = new PrintWriter(openFileOutput("book.txt", Context.MODE_PRIVATE))) {
             out.println("자바");
             out.println("안드로이드");
             out.println("RxJava");
@@ -72,31 +72,31 @@ public class ObservableCreateActivity extends Activity {
     public void onClickButton3(View view) {
         // first option
         try {
-            fileDisposable = RxStreamReader.lines(openFileInput("book.txt"))
-                    .scan(new StringBuilder(), (sb, line) ->  sb.append(line))
-                    .map(StringBuilder::toString)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(value -> {
-                        title.setText(value);
-                    }, e -> Toast.makeText(this, "reading file error", Toast.LENGTH_LONG).show(),
-                    () -> Toast.makeText(this, "reading file complete", Toast.LENGTH_LONG).show());
+            fileDisposable = RxStreamReader.lines(openFileInput("book.txt")) // (1)
+                .scan(new StringBuilder(), (sb, line) ->  sb.append(line + '\n')) // (2)
+                .map(StringBuilder::toString) // (3)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(value -> {
+                    title.setText(value);
+                }, e -> Toast.makeText(this, "reading file error", Toast.LENGTH_LONG).show(),
+                () -> Toast.makeText(this, "reading file complete", Toast.LENGTH_LONG).show());
         } catch (FileNotFoundException e) {
-            Toast.makeText(this, "File not exits", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "File not exits", Toast.LENGTH_LONG).show(); // (3)
         }
         // second option
-        Single.fromCallable(() -> openFileInput("book.txt"))
-            .flatMapObservable(RxStreamReader::lines)
-                .scan(new StringBuilder(), (sb, line) ->  sb.append(line))
+        fileDisposable = Single.fromCallable(() -> openFileInput("book.txt")) // (1)
+            .flatMapObservable(RxStreamReader::lines) // (2)
+                .scan(new StringBuilder(), (sb, line) ->  sb.append(line + '\n'))
                 .map(StringBuilder::toString)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(value -> {
                     title.setText(value);
                 }, e -> {
-                    if (e instanceof FileNotFoundException) {
+                    if (e instanceof FileNotFoundException) { // (3)
                         Toast.makeText(this, "File not exits", Toast.LENGTH_LONG).show();
-                    } else {
+                    } else { // (3) 끝
                         Toast.makeText(this, "reading file error", Toast.LENGTH_LONG).show();
                     }
                 }, () -> Toast.makeText(this, "reading file complete", Toast.LENGTH_LONG).show());
@@ -106,6 +106,15 @@ public class ObservableCreateActivity extends Activity {
         if (fileDisposable != null && !fileDisposable.isDisposed()) {
             fileDisposable.dispose();
         }
+    }
+
+    interface StreamReadListener {
+
+    }
+
+    public void lines(InputStream inputStream, boolean firstLine, int fetchLines,
+            int batchReadLines, int skipLines, StreamReadListener streamReadListener) {
+        //...
     }
 
 }
