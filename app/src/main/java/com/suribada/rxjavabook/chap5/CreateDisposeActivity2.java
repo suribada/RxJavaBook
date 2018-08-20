@@ -2,7 +2,6 @@ package com.suribada.rxjavabook.chap5;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
@@ -20,19 +19,18 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Noh.Jaechun on 2018. 8. 17..
  */
-public class CreateDisposeActivity extends Activity {
+public class CreateDisposeActivity2 extends Activity {
 
     private TextView elapsed, randomNumbers;
-    private Disposable elapsedDisposable, generateDisposable;
+    private Disposable elapsedDisposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_random);
         elapsed = findViewById(R.id.elapsed);
-        //....
         randomNumbers = findViewById(R.id.random_numbers);
-        elapsedDisposable = Observable.interval(1, TimeUnit.SECONDS) // (1)
+        elapsedDisposable = Observable.interval(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(time -> elapsed.setText("elapsed time=" + time));
     }
@@ -40,29 +38,11 @@ public class CreateDisposeActivity extends Activity {
     private Random random = new Random();
 
     public void onClickGenerate(View view) {
-        generateDisposable = Observable.interval(0,10, TimeUnit.SECONDS)
-            .doOnDispose(() -> elapsedDisposable.dispose())
-            .map(ignored -> generateRandom6())
-            .map(numbers -> {
-                StringBuilder sb = new StringBuilder();
-                for (int each : numbers) {
-                    sb.append(each + " ");
-                }
-                return sb.toString();
-            }).observeOn(AndroidSchedulers.mainThread())
-            .subscribe(value -> randomNumbers.setText("Selected Numbers: " + value));
-        /*
-        generateDisposable = Observable.<int[]>create(emitter -> { // (2)
-                emitter.setDisposable(elapsedDisposable); // (3)
-                while (!emitter.isDisposed()) {
-                    int[] numbers = generateRandom6();
-                    if (!emitter.isDisposed()) {
-                        emitter.onNext(numbers);
-                    }
-                    if (!emitter.isDisposed()) {
-                       SystemClock.sleep(10000); // (4)
-                    }
-                }
+        Observable.<int[]>create(emitter -> {
+                emitter.setDisposable(elapsedDisposable);
+                int[] numbers = generateRandom6();
+                emitter.onNext(numbers);
+                emitter.onComplete(); // (1)
             }).map(numbers -> {
                 StringBuilder sb = new StringBuilder();
                 for (int each : numbers) {
@@ -72,7 +52,6 @@ public class CreateDisposeActivity extends Activity {
             }).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(value -> randomNumbers.setText("Selected Numbers: " + value));
-            */
     }
 
     private int[] generateRandom6() {
@@ -90,16 +69,6 @@ public class CreateDisposeActivity extends Activity {
     }
 
     public void onClickOk(View view) {
-        if (generateDisposable != null && !generateDisposable.isDisposed()) { // (5) 시작
-            generateDisposable.dispose();
-        } // (5) 끝
     }
 
-    @Override
-    protected void onDestroy() {
-        if (generateDisposable != null && !generateDisposable.isDisposed()) {
-            generateDisposable.dispose();
-        }
-        super.onDestroy();
-    }
 }

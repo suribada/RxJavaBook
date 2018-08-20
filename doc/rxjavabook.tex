@@ -46,10 +46,11 @@ https://www.slideshare.net/Tomik/practical-rxjava-for-android
 
 // 아래 챕터는 한 단계씩 올림
 \chapter{보완할 부분}
-- fromCallbable과 API 연결 샘플
 - 시점의 복잡함 해결하는 것 설명
 - null을 리턴하는 것도 
 - fromFuture cancel 안 되는 거?
+- disposed 체크하고 dipose 하는 것...
+- create에서 onComplete에서 dipose 해버린다.
 
 
 \chapter{리액티브 익스텐션}
@@ -895,6 +896,9 @@ disposeState는 최종 상태를 나타낸다.
 무한 루프에서 계속 값을 만들어내고 dispose하거나 터미널 상태가 되어야만 루프문이 끝이 난다.
 Emitter에서 상태에 따라 onComplete를 호출할 수도 있다.
 scan 연산자를 대신 할 수도 있다.
+
+https://stackoverflow.com/questions/37683832/observable-generate-in-rxjava
+https://en.wikipedia.org/wiki/Corecursion
 
 % unsafeCreate 굳이 필요 없음
 
