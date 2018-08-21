@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import io.reactivex.Observable;
+import okio.Buffer;
 
 /**
  * Created by Noh.Jaechun on 2018. 8. 6..
@@ -31,6 +32,23 @@ public class RxStreamReader {
                 }
             }
         });
+    }
+
+    public static Observable<String> linesUsing(InputStream inputStream) {
+        return Observable.using(() -> new BufferedReader( // (1)
+            new InputStreamReader(inputStream, "UTF-8")), // (1) 끝
+            br -> { // (2) 시작
+                return Observable.create(emitter -> {
+                    String line;
+                    while ((line = br.readLine()) != null && !emitter.isDisposed()) {
+                        emitter.onNext(line);
+                    }
+                    if (!emitter.isDisposed()) {
+                        emitter.onComplete();
+                    }
+                });
+            }, // (2) 끝
+            br -> br.close()); // (3)
     }
 
 }
