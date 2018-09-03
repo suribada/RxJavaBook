@@ -71,6 +71,7 @@ public class ObservableCreateActivity extends Activity {
 
     public void onClickButton3(View view) {
         // first option
+        /*
         try {
             fileDisposable = RxStreamReader.lines(openFileInput("book.txt")) // (1)
                 .scan(new StringBuilder(), (sb, line) ->  sb.append(line + '\n')) // (2)
@@ -84,9 +85,10 @@ public class ObservableCreateActivity extends Activity {
         } catch (FileNotFoundException e) {
             Toast.makeText(this, "File not exits", Toast.LENGTH_LONG).show(); // (3)
         }
+        */
         // second option
         fileDisposable = Single.fromCallable(() -> openFileInput("book.txt")) // (1)
-            .flatMapObservable(RxStreamReader::lines) // (2)
+            .flatMapObservable(RxStreamReader::linesGenerate) // (2)
                 .scan(new StringBuilder(), (sb, line) ->  sb.append(line + '\n'))
                 .map(StringBuilder::toString)
                 .subscribeOn(Schedulers.io())

@@ -51,4 +51,18 @@ public class RxStreamReader {
             br -> br.close()); // (3)
     }
 
+    public static Observable<String> linesGenerate(InputStream inputStream) {
+        return Observable.generate(() -> new BufferedReader( // (1)
+                    new InputStreamReader(inputStream, "UTF-8")), // (1) 끝
+                (br, emitter) -> { // (2) 시작
+                    String line = br.readLine(); // (3) 시작
+                    if (line != null) {
+                        emitter.onNext(line);
+                    } else {
+                        emitter.onComplete();
+                    } // (3) 끝
+                },
+                br -> br.close()); // (4)
+    }
+
 }

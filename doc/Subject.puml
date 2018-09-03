@@ -1,8 +1,21 @@
 @startuml
 
-abstract class Observable
-interface Observer
-abstract class Subject
+abstract class Observable {
+{abstract} void subscribeActual(Observer<? super T> observer)
+}
+interface Observer<T> {
+    {abstract} void onSubscribe(Disposable d)
+    {abstract} onNext(T value)
+    {abstract} onError(Throwable error)
+    {abstract} onComplete()
+}
+abstract class Subject {
+{abstract} boolean hasObservers()
+{abstract} boolean hasThrowable()
+{abstract} boolean hasComplete()
+{abstract} Throwable getThrowable()
+Subject<T> toSerialized()
+}
 class PublishSubject
 class BehaviorSubject
 class AsyncSubject
@@ -14,8 +27,8 @@ Observable <|-- Subject
 Observer <|.. Subject
 Subject <|-- PublishSubject
 Subject <|-- BehaviorSubject
-Subject <|-- AsyncSubject
 Subject <|-- ReplaySubject
+Subject <|-- AsyncSubject
 Subject <|-- UnicastSubject
 Subject <|-- SerializedSubject
 
