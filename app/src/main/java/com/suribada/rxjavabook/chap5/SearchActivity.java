@@ -19,7 +19,6 @@ import io.reactivex.subjects.Subject;
 public class SearchActivity extends Activity {
 
     private EditText searchText;
-    private Button search, weatherKeyword, carKeyword, rxjavaKeyword;
 
     private Subject<String> keywordSubject = PublishSubject.create();
 
@@ -28,6 +27,7 @@ public class SearchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_subject);
         searchText = findViewById(R.id.search_text);
+        keywordSubject.subscribe(keyword -> searchKeyword(keyword));
     }
 
     public void onClickSearch(View view) {

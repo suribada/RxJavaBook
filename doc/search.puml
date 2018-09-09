@@ -1,0 +1,7 @@
+@startuml
+salt
+{
+  {"           " | [검색]}
+  {[날씨] | [자동차]  | [RxJava]}
+}
+@enduml

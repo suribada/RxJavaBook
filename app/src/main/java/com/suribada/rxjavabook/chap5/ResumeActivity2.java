@@ -22,14 +22,14 @@ public class ResumeActivity2 extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_button);
-        resumeSubject.skip(1)
+        resumeSubject.skip(1) // (1)
             .subscribe(ignored -> showResumeMessage());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        resumeSubject.onNext(0);
+        resumeSubject.onNext(0); // (2)
     }
 
     private void showResumeMessage() {
