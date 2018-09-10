@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp">
+    <TableRow>
+        <TextView
+            android:id="@+id/title1"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:textColor="#000"
+            tools:text="minutes=1"/>
+        <CheckBox android:id="@+id/check1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:checked="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10dp"
+            android:textColor="#000"
+            android:text="경과시간 분 갱신"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:id="@+id/title2"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:textColor="#000"
+            tools:text="seconds=74"/>
+        <CheckBox android:id="@+id/check2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:checked="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10dp"
+            android:textColor="#000"
+            android:text="경과시간 초 갱신"/>
+    </TableRow>
+</TableLayout>
