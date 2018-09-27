@@ -1,5 +1,7 @@
 package com.suribada.rxjavabook.chap5;
 
+import com.suribada.rxjavabook.SystemClock;
+
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -14,11 +16,7 @@ public class IntervalTest {
                 .flatMap(value -> mappedValue(value)
                         .onErrorResumeNext(Observable.empty()))
                 .subscribe(System.out::println);
-        try {
-            Thread.sleep(20000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        SystemClock.sleep(20000);
     }
 
     private Observable mappedValue(long value) {

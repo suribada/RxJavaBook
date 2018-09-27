@@ -1,5 +1,7 @@
 package com.suribada.rxjavabook.chap5;
 
+import com.suribada.rxjavabook.SystemClock;
+
 import org.junit.Test;
 
 import io.reactivex.Observable;
@@ -16,7 +18,7 @@ import io.reactivex.subjects.UnicastSubject;
 public class SubjectTest {
 
     @Test
-    public void testSerialSubject() throws InterruptedException {
+    public void testSerialSubject() {
         //Observable<Integer> obs = PublishSubject.<Integer>create().serialize();
         Subject<Integer> subject = PublishSubject.<Integer>create().toSerialized(); // (1)
         subject.subscribe(System.out::println); // (2)
@@ -32,7 +34,7 @@ public class SubjectTest {
             subject.onNext(7);
             subject.onNext(8);
         }).start();
-        Thread.sleep(2000);
+        SystemClock.sleep(2000);
     }
 
     @Test

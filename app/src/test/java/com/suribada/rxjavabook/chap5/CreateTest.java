@@ -1,5 +1,7 @@
 package com.suribada.rxjavabook.chap5;
 
+import com.suribada.rxjavabook.SystemClock;
+
 import org.junit.Test;
 
 import io.reactivex.Emitter;
@@ -54,11 +56,7 @@ public class CreateTest {
         obs.subscribe(value -> System.out.println(Thread.currentThread().getName() + ":" + value),
                 System.err::println,
                 () -> System.out.println("onComplete"));
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        SystemClock.sleep(2000);
     }
 
     @Test
@@ -73,11 +71,7 @@ public class CreateTest {
             }
         });
         obs.subscribe(System.out::println);
-        try {
-            Thread.sleep(20000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        SystemClock.sleep(20000);
     }
 
 

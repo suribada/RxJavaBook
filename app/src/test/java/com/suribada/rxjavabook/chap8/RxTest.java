@@ -2,6 +2,8 @@ package com.suribada.rxjavabook.chap8;
 
 import android.support.annotation.NonNull;
 
+import com.suribada.rxjavabook.SystemClock;
+
 import org.junit.Test;
 import org.reactivestreams.Publisher;
 
@@ -25,11 +27,7 @@ public class RxTest {
                 () -> System.out.println("success"),
                 e -> System.err.println(e)
         );
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        SystemClock.sleep(1000);
     }
 
     @NonNull
@@ -50,11 +48,7 @@ public class RxTest {
                         () -> System.out.println("success"),
                         e -> System.err.println(e)
                 );
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        SystemClock.sleep(1000);
     }
 
     @NonNull
