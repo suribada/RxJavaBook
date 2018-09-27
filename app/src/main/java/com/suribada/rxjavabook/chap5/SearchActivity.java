@@ -27,14 +27,14 @@ public class SearchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_subject);
         searchText = findViewById(R.id.search_text);
-        keywordSubject.subscribe(keyword -> searchKeyword(keyword));
+        keywordSubject.subscribe(keyword -> searchKeyword(keyword)); // (1)
     }
 
-    public void onClickSearch(View view) {
+    public void onClickSearch(View view) { // (2) 시작
         keywordSubject.onNext(searchText.getText().toString());
-    }
+    } // (2) 끝
 
-    public void onClickWeather(View view) {
+    public void onClickWeather(View view) { // (3) 시작
         keywordSubject.onNext("날씨");
     }
 
@@ -44,7 +44,7 @@ public class SearchActivity extends Activity {
 
     public void onClickRxJava(View view) {
         keywordSubject.onNext("RxJava");
-    }
+    } // (3) 끝
 
     private void searchKeyword(String keyword) {
         Toast.makeText(this, "keyword=" + keyword, Toast.LENGTH_LONG).show();
