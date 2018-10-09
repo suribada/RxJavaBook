@@ -22,4 +22,9 @@ public class Param<T> implements Consumer2<T> {
     public <T> T get() {
         return null;
     }
+
+    @Override
+    public T get2() {
+        return null;
+    }
 }

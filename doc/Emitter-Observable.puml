@@ -5,27 +5,34 @@ interface Emitter<T> {
     {abstract} onError(Throwable error)
     {abstract} onComplete()
 }
-interface ObservableEmitter<T>
-interface FlowableEmitter<T>
+interface ObservableEmitter<T> {
+    {abstract} isDisposed()
+    {abstract} setDisposable(Disposable d)
+    {abstract} setCancellable(Cancellable c)
+    {abstract} serialize()
+}
+interface Disposable {
+    {abstract} dispose()
+    {abstract} isDisposed()
+}
+
 class CreateEmitter<T>
 class ObservableCreate<T>
-class FlowableCreate<T>
-abstract class BaseEmitter
 class GeneratorDisposable<T, S>
 class ObservableGenerate<T, S>
-class GeneratorSubscription<T, S>
-class FlowableGenerate<T, S>
+abstract class Observable<T>
+
 
 Emitter <|-- ObservableEmitter
-Emitter <|-- FlowableEmitter
 ObservableEmitter <|.. CreateEmitter
 ObservableCreate +-- CreateEmitter
-FlowableEmitter <|.. BaseEmitter
-FlowableCreate +-- BaseEmitter
+Disposable <|. CreateEmitter
 Emitter <|.. GeneratorDisposable
-Emitter <|.. GeneratorSubscription
 ObservableGenerate +-- GeneratorDisposable
-FlowableGenerate +-- GeneratorSubscription
+Disposable <|.. GeneratorDisposable
+Observable <|-- ObservableCreate
+Observable <|-- ObservableGenerate
+
 
 
 @enduml

@@ -3,15 +3,22 @@ package com.suribada.rxjavabook.chap6;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ThreadActivity extends Activity {
+
+    private static final String TAG = "suribada";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +75,22 @@ public class ThreadActivity extends Activity {
                 @Override
                 public void run() {
                     SystemClock.sleep(1000);
-                    System.out.println(k);
+                    Log.d(TAG, Thread.currentThread().getName() + ", value=" + k);
+                }
+            });
+        };
+
+    }
+
+    public void onClickButton4(View view) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        for (int i = 0; i < 50; i++) {
+            final int k = i;
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    SystemClock.sleep(1000);
+                    Log.d(TAG, "value=" + k);
                 }
             });
         };

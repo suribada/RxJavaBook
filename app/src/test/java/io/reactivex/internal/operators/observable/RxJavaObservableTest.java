@@ -7,6 +7,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.functions.Functions;
 import io.reactivex.internal.observers.LambdaObserver;
 
@@ -24,31 +25,32 @@ public class RxJavaObservableTest {
                 .map(os -> "OS:" + os)
                 .subscribe(this::showText);
 
-        new ObservableMap<>(
-                new ObservableFilter<String>(
-                        new ObservableFromIterable(list),
-                        (value -> value.length() > 3)),
-                os -> "OS:" + os)
+        new ObservableMap<>( // (1)
+                new ObservableFilter<String>( // (2)
+                        new ObservableFromIterable(list), // (3)
+                        (value -> value.length() > 3)), // (4)
+                os -> "OS:" + os) // (5)
                 .subscribe(this::showText);
 
         Observer<String> observer = new LambdaObserver<>(this::showText,
                 Functions.ON_ERROR_MISSING, Functions.EMPTY_ACTION, Functions.emptyConsumer());
 
         new ObservableFilter<String>(
-                new ObservableFromIterable(list), (value -> value.length() > 3)
-        ).subscribeActual(new ObservableMap.MapObserver(observer, os -> "OS:" + os));
+                new ObservableFromIterable(list), // (1)
+                (value -> value.length() > 3) // (2)
+        ).subscribeActual(
+                new ObservableMap.MapObserver(observer, os -> "OS:" + os)); // (3)
 
         // 최종
         new ObservableFromIterable(list).subscribeActual(
-                new ObservableFilter.FilterObserver<String>(
-                        new ObservableMap.MapObserver(observer, os -> "OS:" + os),
-                        (value -> value.length() > 3)));
+                new ObservableFilter.FilterObserver<String>( // (1)
+                        new ObservableMap.MapObserver(observer, os -> "OS:" + os), // (2)
+                        (value -> value.length() > 3))); // (3)
 
     }
 
     private void showText(String input) {
         System.out.println("input=" + input);
     }
-
 
 }

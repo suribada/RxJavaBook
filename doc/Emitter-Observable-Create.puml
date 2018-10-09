@@ -1,0 +1,30 @@
+@startuml
+
+interface Emitter<T> {
+    {abstract} onNext(T value)
+    {abstract} onError(Throwable error)
+    {abstract} onComplete()
+}
+interface ObservableEmitter<T> {
+    {abstract} isDisposed()
+    {abstract} setDisposable(Disposable d)
+    {abstract} setCancellable(Cancellable c)
+    {abstract} serialize()
+}
+interface Disposable {
+    {abstract} dispose()
+    {abstract} isDisposed()
+}
+
+class CreateEmitter<T>
+class ObservableCreate<T>
+abstract class Observable<T>
+
+
+Emitter <|-- ObservableEmitter
+ObservableEmitter <|.. CreateEmitter
+ObservableCreate +-- CreateEmitter
+Disposable <|. CreateEmitter
+Observable <|-- ObservableCreate
+
+@enduml
