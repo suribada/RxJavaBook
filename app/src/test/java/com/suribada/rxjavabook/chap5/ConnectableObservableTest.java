@@ -243,4 +243,122 @@ public class ConnectableObservableTest {
                 .subscribe(min -> System.out.println("average2=" + min));
         SystemClock.sleep(10000);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRefCount_withZeroSubscriberCount() {
+        Observable<Integer> obs = Observable.range(1, 10)
+                .doOnNext(value -> System.out.println("next=" + value))
+                .publish().refCount(0); // (1)
+        obs.doOnSubscribe(disposable -> System.out.println("observer1 subscribed"))
+                .subscribe(value -> System.out.println("value=" + value));
+        obs.doOnSubscribe(disposable -> System.out.println("observer2 subscribed2"))
+                .subscribe(value -> System.out.println("value=" + value));
+        obs.doOnSubscribe(disposable -> System.out.println("observer3 subscribed"))
+                .subscribe(value -> System.out.println("value=" + value));
+    }
+
+    @Test
+    public void testRefCount() {
+        Observable<Integer> obs = Observable.range(1, 3)
+                .doOnNext(value -> System.out.println("next=" + value))
+                .doOnDispose(() -> System.out.println("source disposed"))
+                .publish().refCount(2); // (1)
+        obs.doOnSubscribe(disposable -> System.out.println("observer1 subscribed"))
+                .doOnDispose(() -> System.out.println("observer1 disposed"))
+                .subscribe(value -> System.out.println("value1=" + value)); // (2)
+        obs.doOnSubscribe(disposable -> System.out.println("observer2 subscribed"))
+                .doOnDispose(() -> System.out.println("observer2 disposed"))
+                .subscribe(value -> System.out.println("value2=" + value)); // (3)
+        obs.doOnSubscribe(disposable -> System.out.println("observer3 subscribed"))
+                .subscribe(value -> System.out.println("value3=" + value)); // (4)
+        obs.doOnSubscribe(disposable -> System.out.println("observer4 subscribed"))
+                .subscribe(value -> System.out.println("value4=" + value)); // (5)
+        obs.doOnSubscribe(disposable -> System.out.println("observer5 subscribed"))
+                .subscribe(value -> System.out.println("value5=" + value)); // (6)
+    }
+
+    @Test
+    public void testAutoConnect_forDiff() {
+        Observable<Integer> obs = Observable.range(1, 3)
+                .doOnNext(value -> System.out.println("next=" + value))
+                .doOnDispose(() -> System.out.println("source disposed"))
+                .publish().autoConnect(2); // (1)
+        obs.doOnSubscribe(disposable -> System.out.println("observer1 subscribed"))
+                .doOnDispose(() -> System.out.println("observer1 disposed"))
+                .subscribe(value -> System.out.println("value1=" + value)); // (2)
+        obs.doOnSubscribe(disposable -> System.out.println("observer2 subscribed"))
+                .doOnDispose(() -> System.out.println("observer2 disposed"))
+                .subscribe(value -> System.out.println("value2=" + value)); // (3)
+        obs.doOnSubscribe(disposable -> System.out.println("observer3 subscribed"))
+                .subscribe(value -> System.out.println("value3=" + value)); // (4)
+        obs.doOnSubscribe(disposable -> System.out.println("observer4 subscribed"))
+                .subscribe(value -> System.out.println("value4=" + value)); // (5)
+        obs.doOnSubscribe(disposable -> System.out.println("observer5 subscribed"))
+                .subscribe(value -> System.out.println("value5=" + value)); // (6)
+    }
+
+    @Test
+    public void testRefCount_interval() {
+        Observable<Long> obs = Observable.interval(100, TimeUnit.MILLISECONDS)
+                .doOnNext(value -> System.out.println("next=" + value))
+                .doOnDispose(() -> System.out.println("source disposed"))
+                .publish().refCount(2); // (1)
+        obs.take(3)
+                .doOnSubscribe(disposable -> System.out.println("observer1 subscribed"))
+                .doOnDispose(() -> System.out.println("observer1 disposed"))
+                .subscribe(value -> System.out.println("value1=" + value));
+        obs.take(5)
+                .doOnSubscribe(disposable -> System.out.println("observer2 subscribed"))
+                .doOnDispose(() -> System.out.println("observer2 disposed"))
+                .subscribe(value -> System.out.println("value2=" + value));
+        //SystemClock.sleep(1000);
+        obs.take(2)
+                .doOnSubscribe(disposable -> System.out.println("observer3 subscribed"))
+                .subscribe(value -> System.out.println("value3=" + value));
+        obs.take(4)
+                .doOnSubscribe(disposable -> System.out.println("observer4 subscribed"))
+                .subscribe(value -> System.out.println("value4=" + value));
+        //SystemClock.sleep(1000);
+        obs.take(7)
+                .doOnSubscribe(disposable -> System.out.println("observer5 subscribed"))
+                .subscribe(value -> System.out.println("value5=" + value));
+        SystemClock.sleep(1000);
+    }
+
+    @Test
+    public void testPublishWithSelector() {
+        Observable<Long> observable = Observable.interval(100, TimeUnit.MILLISECONDS)
+                .doOnSubscribe(disposable -> System.out.println("interval Observable subscribed"))
+                .publish(obs -> obs.take(10));
+        observable.subscribe(value -> System.out.println("observer1=" + value));
+        SystemClock.sleep(500);
+        observable.subscribe(value -> System.out.println("observer2=" + value));
+        SystemClock.sleep(1500);
+    }
+
+    @Test
+    public void testPublishWithSelectorAnotherType() {
+        Observable<String> observable = Observable.interval(100, TimeUnit.MILLISECONDS)
+                .publish(obs -> obs.map(value -> "kk" + value));
+        observable.subscribe(value -> System.out.println("observer1=" + value));
+        SystemClock.sleep(500);
+        observable.subscribe(value -> System.out.println("observer2=" + value));
+        SystemClock.sleep(1500);
+    }
+
+    @Test
+    public void testReplay() {
+        Observable<Long> obs = Observable.interval(100, TimeUnit.MILLISECONDS)
+                .take(5)
+                .doOnNext(value -> System.out.println("next=" + value))
+                .replay().autoConnect(2); // (1)
+        obs.doOnSubscribe(disposable -> System.out.println("observer1 subscribed"))
+                .subscribe(value -> System.out.println("value1=" + value)); // (2)
+        obs.doOnSubscribe(disposable -> System.out.println("observer2 subscribed"))
+                .subscribe(value -> System.out.println("value2=" + value)); // (3)
+        SystemClock.sleep(300);
+        obs.doOnSubscribe(disposable -> System.out.println("observer3 subscribed"))
+                .subscribe(value -> System.out.println("value3=" + value)); // (4)
+        SystemClock.sleep(1000);
+    }
 }
