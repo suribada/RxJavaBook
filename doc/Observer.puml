@@ -1,0 +1,20 @@
+@startuml
+
+interface Observer<T>
+interface Disposable
+
+abstract class DefaultObserver<T>
+class DisposableObserver<T>
+class ResourceObserver<T>
+abstract class Subject<T>
+
+Observer <|.. DefaultObserver
+Observer <|.. DisposableObserver
+Observer <|.. ResourceObserver
+Observer <|.. Subject
+
+Disposable <|.. DisposableObserver
+Disposable <|.. ResourceObserver
+Disposable <|.. Subject
+
+@enduml

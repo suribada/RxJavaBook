@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.internal.observers.LambdaObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**

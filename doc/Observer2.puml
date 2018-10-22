@@ -1,0 +1,22 @@
+@startuml
+
+interface Observer<T>
+interface Disposable
+
+class LambdaObserver<T>
+class MapObserver<T, U>
+class FilterObserver<T>
+class ObservableMap<T, U>
+class ObservableFilter<T>
+
+MapObserver +-- ObservableMap
+FilterObserver +-- ObservableFilter
+Observer <|.. LambdaObserver
+Observer <|.. MapObserver
+Observer <|.. FilterObserver
+
+Disposable <|.. LambdaObserver
+Disposable <|.. MapObserver
+Disposable <|.. FilterObserver
+
+@enduml
