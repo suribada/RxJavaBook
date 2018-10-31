@@ -7,7 +7,9 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.disposables.ArrayCompositeDisposable;
 import io.reactivex.internal.functions.Functions;
 import io.reactivex.internal.observers.LambdaObserver;
 
@@ -36,16 +38,22 @@ public class RxJavaObservableTest {
                 Functions.ON_ERROR_MISSING, Functions.EMPTY_ACTION, Functions.emptyConsumer());
 
         new ObservableFilter<String>(
-                new ObservableFromIterable(list), // (1)
-                (value -> value.length() > 3) // (2)
-        ).subscribeActual(
-                new ObservableMap.MapObserver(observer, os -> "OS:" + os)); // (3)
+                    new ObservableFromIterable(list), // (1)
+                    (value -> value.length() > 3) // (2)
+                ).subscribeActual(
+                    new ObservableMap.MapObserver(observer, os -> "OS:" + os)
+                ); // (3)
 
         // 최종
-        new ObservableFromIterable(list).subscribeActual(
-                new ObservableFilter.FilterObserver<String>( // (1)
-                        new ObservableMap.MapObserver(observer, os -> "OS:" + os), // (2)
-                        (value -> value.length() > 3))); // (3)
+        new ObservableFromIterable(list)
+                .subscribeActual(
+                        new ObservableFilter.FilterObserver<String>( // (1)
+                            new ObservableMap.MapObserver(observer, os -> "OS:" + os), // (2)
+                            (value -> value.length() > 3)
+                        )
+                ); // (3)
+        ArrayCompositeDisposable compositeDisposable = new ArrayCompositeDisposable(3);
+        CompositeDisposable compositeDisposable1 = new CompositeDisposable();
 
     }
 
