@@ -1,0 +1,16 @@
+@startuml
+
+interface Observer<T>
+interface Disposable
+
+class SafeObserver<T>
+class SerializedObserver<T>
+class TestObserver<T>
+
+Observer <|.. SafeObserver
+Observer <|.. SerializedObserver
+Observer <|.. TestObserver
+
+Disposable <|.. SafeObserver
+Disposable <|.. SerializedObserver
+@enduml
