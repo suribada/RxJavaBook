@@ -1,0 +1,17 @@
+@startuml
+
+interface Disposable
+
+class ObservableRange<Integer>
+class ObservableInterval<Long>
+class ObservableCreate<T>
+
+RangeDisposable +-- ObservableRange
+IntervalObserver +-- ObservableInterval
+CreateEmitter +-- ObservableCreate
+
+Disposable <|.. RangeDisposable
+Disposable <|.. IntervalObserver
+Disposable <|.. CreateEmitter
+
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+hide footbox
+ObservableInterval.IntervalObserver -> ObservableFilter.FilterObserver : onSubscribe(this)
+ObservableFilter.FilterObserver -> ObservableMap.MapObserver : onSubscribe(this)
+ObservableMap.MapObserver -> LambdaObserver : onSubscribe(this)
+@enduml

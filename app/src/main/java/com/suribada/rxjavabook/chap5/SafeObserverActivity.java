@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.suribada.rxjavabook.R;
 
+import hu.akarnokd.rxjava2.debug.RxJavaAssemblyTracking;
 import io.reactivex.Observable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.SafeObserver;
@@ -23,6 +24,7 @@ public class SafeObserverActivity extends Activity {
     }
 
     public void onClickButton1(View view) {
+        RxJavaAssemblyTracking.enable();
         DisposableObserver<Integer> observer = new DisposableObserver<Integer>() {
             @Override
             public void onNext(Integer t) {
@@ -43,6 +45,7 @@ public class SafeObserverActivity extends Activity {
         Observable.just(1, 2, 3, 0, 1, 2)
                 .map(value -> 10 / value) // (2)
                 .subscribe(observer);
+        RxJavaAssemblyTracking.disable();
     }
 
     public void onClickButton2(View view) {

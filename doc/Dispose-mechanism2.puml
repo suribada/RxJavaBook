@@ -1,0 +1,6 @@
+@startuml
+hide footbox
+LambdaObserver -> ObservableMap.MapObserver : dispose
+ObservableMap.MapObserver ->  ObservableFilter.FilterObserver: dispose
+ObservableFilter.FilterObserver -> ObservableInterval.IntervalObserver : dispose
+@enduml

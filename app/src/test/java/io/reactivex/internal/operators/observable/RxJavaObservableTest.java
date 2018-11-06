@@ -1,10 +1,13 @@
 package io.reactivex.internal.operators.observable;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
+import hu.akarnokd.rxjava2.debug.RxJavaAssemblyTracking;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
@@ -19,6 +22,16 @@ import io.reactivex.internal.observers.LambdaObserver;
 public class RxJavaObservableTest {
 
     private List<String> list = Arrays.asList("Android", "iOS", "Bada");
+
+    @Before
+    public void before() {
+        RxJavaAssemblyTracking.enable();
+    }
+
+    @After
+    public void after() {
+        RxJavaAssemblyTracking.disable();
+    }
 
     @Test
     public void simpleTest() {
