@@ -11,7 +11,6 @@ import com.suribada.rxjavabook.R;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class DisposableActivity extends Activity {
@@ -19,10 +18,7 @@ public class DisposableActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_two_buttons);
-        findViewById(R.id.button1).setOnClickListener(view -> {
-            startInterval();
-        });
+        setContentView(R.layout.four_buttons);
     }
 
     private Disposable disposable;
@@ -38,8 +34,22 @@ public class DisposableActivity extends Activity {
         disposable.dispose(); // (2)
     }
 
-    public void onClickButton2(View view) {
+    public void onClickButton1(View view) {
         startInterval();
+    }
+
+    public void onClickButton2(View view) {
+        stopInterval();
+    }
+
+    public void onClickButton3(View view) {
+        Disposable disposable = Observable.fromArray(1, 2, 3, 4)
+                .map(value -> value * 1000)
+                .subscribe(System.out::println,
+                        Throwable::printStackTrace,
+                        () -> System.out.println("onComplete"));
+        // ...
+        disposable.dispose(); // (1)
     }
 
 }

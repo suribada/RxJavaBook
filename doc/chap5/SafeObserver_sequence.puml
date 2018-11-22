@@ -1,0 +1,10 @@
+@startuml
+hide footbox
+ObservableXxx -> SafeObserver: onNext
+SafeObserver --> ObservableXxx: dispose
+SafeObserver -> SafeObserver : onError
+ObservableXxx -> SafeObserver: onError
+SafeObserver -> RxJavaPlugins : onError
+ObservableXxx -> SafeObserver: onComplete
+SafeObserver -> RxJavaPlugins : onError
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+hide footbox
+loop 4 times
+ObservableFromArray -> ObservableMap: onNext
+ObservableMap -> LambdaObserver: onNext
+end
+ObservableFromArray -> ObservableMap: onComplete
+ObservableMap -> LambdaObserver: onComplete
+@enduml
