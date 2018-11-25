@@ -1,0 +1,18 @@
+@startuml
+hide footbox
+actor Actor
+Actor -> ObservableMap : subscribe
+ObservableMap -> ObservableMap:subscribeActual
+create MapObserver
+ObservableMap -> MapObserver : new
+ObservableMap -> ObservableFilter : subscribe(MapObserver)
+ObservableFilter -> ObservableFilter:subscribeActual
+create FilterObserver
+ObservableFilter -> FilterObserver : new
+ObservableFilter -> ObservableFromIterable:subscribe(FilterObserver)
+ObservableFromIterable -> ObservableFromIterable:subscribeActual
+create FromIterableDisposable
+ObservableFromIterable -> FromIterableDisposable
+FilterObserver -> FromIterableDisposable:onSubscribe
+FromIterableDisposable -> FromIterableDisposable : run
+@enduml

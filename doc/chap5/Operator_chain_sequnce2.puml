@@ -1,0 +1,7 @@
+@startuml
+hide footbox
+FromIterableDisposable -> FromIterableDisposable : run
+FromIterableDisposable -> FilterObserver : onNext
+FilterObserver -> MapObserver: onNext
+MapObserver -> LambdaObserver : onNext
+@enduml
