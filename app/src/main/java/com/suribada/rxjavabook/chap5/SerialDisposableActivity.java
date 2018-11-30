@@ -8,6 +8,9 @@ import android.view.View;
 
 import com.suribada.rxjavabook.R;
 
+import java.util.Arrays;
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -61,6 +64,23 @@ public class SerialDisposableActivity extends Activity {
 
     public void onClickButton3(View view) {
         searchRecent2("keyword" + (i++));
+    }
+
+
+    public void wrongCompositeDisposable() {
+        List<String> keywords = Arrays.asList("김", "노", "박");
+        Observable.fromIterable(keywords)
+                .filter(keyword -> keyword.length() > 0)
+                .subscribe(keyword -> {
+                    compositeDisposable.add(searchApi(keyword)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(System.out::println));
+                });
+        compositeDisposable.add(Observable.fromIterable(keywords)
+                .filter(keyword -> keyword.length() > 0)
+                .flatMap(keyword -> searchApi(keyword)
+                            .subscribeOn(Schedulers.io()))
+                .subscribe(System.out::println));
     }
 
     @Override
