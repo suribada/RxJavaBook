@@ -181,11 +181,21 @@ public class GenericsTest {
         }).subscribe(value -> {
             //System.out.println(value.length()); // 컴파일 에러
         });
+        // option 1
         Observable.<String>create(emitter -> {
             emitter.onNext("알리바바");
             emitter.onNext("40인의 도둑");
             emitter.onComplete();
         }).subscribe(value -> {
+            System.out.println(value.length());
+        });
+        // option 2
+        Observable<String> persons = Observable.<String>create(emitter -> {
+            emitter.onNext("알리바바");
+            emitter.onNext("40인의 도둑");
+            emitter.onComplete();
+        });
+        persons.subscribe(value -> {
             System.out.println(value.length());
         });
     }

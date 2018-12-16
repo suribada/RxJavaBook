@@ -1,0 +1,13 @@
+@startuml
+
+abstract class Scheduler
+
+Scheduler <|-- ComputationScheduler
+Scheduler <|-- IoScheduler
+Scheduler <|-- NewThreadScheduler
+Scheduler <|-- TrampolineScheduler
+Scheduler <|-- SingleScheduler
+Scheduler <|-- ExecutorScheduler
+Scheduler <|-- TestScheduler
+
+@enduml

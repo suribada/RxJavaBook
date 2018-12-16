@@ -762,6 +762,9 @@ https://stackoverflow.com/questions/46941843/rxjava-2-assembly-process
 https://line.github.io/armeria/xref/com/linecorp/armeria/common/rxjava/RequestContextAssembly.html
 https://m.blog.naver.com/PostView.nhn?blogId=syung1104&logNo=221147813397&proxyReferer=&proxyReferer=https%3A%2F%2Fwww.google.co.kr%2F
 
+<소제목>그 밖의 용도
+RxJavaPlugins는 전역 에러 핸들러 외에 사용하는 용도가 더 있다. 테스트 케이스를 작성할 때 initXxxScheduler() 메서드를 사용해서 원래 메서드에서 사용하는 Scheduler를 오버라이드할 수 있다. 테스트 케이스에서는 메인 스레드에서 네트워크 통신을 해도 무관하므로 메인 스레드에서
+
 \chapter{Observable}
 % https://github.com/mgp/effective-rxjava/blob/master/items/understand-observable-and-observer-chains.md
 데이터 소스를 이벤트 스트림으로 변경한 것이다.
@@ -964,11 +967,26 @@ subscribe가 2개 이상 되면 안된다.
 \subsection{ConnectableObservable}
 % 클래스 다이어그램
 
+
+다음 코드를 살펴보자.
+
+코드 5-? 연산자를 복잡하게 중첩해서 사용
+<코드>
+Observable<Long> observable = Observable.interval(1, TimeUnit.SECONDS)
+   .publish(obs -> obs.take(5).concatWith(obs.takeUntil(obs.skipWhile(i -> i <= 7))));
+observable.subscribe(System.out::println);
+</코드>
+
+코드 5-?에서는 ``obs``가 람다 식에서 3번이나 쓰이지만 1개의 스트림만 사용한다. 코드 5-?의 결과는  1초마다 0~7까지 출력되는 것이다. 일부러 만든 예제라서 굳이 이렇게 만들 필요는 없지만, 실제에서 ``Observable``을 복잡하게 중첩해서 사용하는 경우가 많다.
+
+
 \section{replay}
 다시 보기, 재현의 의미이다. 양상이 다르다.
 
 \chapter{스케줄러}
 % http://www.baeldung.com/rxjava-schedulers
+http://introtorx.com/Content/v1.0.10621.0/15_SchedulingAndThreading.html#AdvancedFeaturesOfSchedulers
+
 기본적으로 Observable과 Observer는 하나의 동일한 스레드에서 동작한다.
 
 한번에 하나의 이벤트만 내보내는 RxJava 규약에 맞게 동작하도록 되어 있다.

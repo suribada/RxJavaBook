@@ -61,7 +61,7 @@ public class SelectorTest {
 
     @Test
     public void publishWithSelector() throws InterruptedException {
-        Observable<Long> observable = Observable.interval(1000, TimeUnit.MILLISECONDS)
+        Observable<Long> observable = Observable.interval(1000, TimeUnit.MILLISECONDS).doOnNext(value -> System.out.println("source value=" + value))
                 .publish(obs -> obs.take(5).concatWith(obs.skip(3)));
         observable
                 .doOnNext(value -> System.out.println(System.currentTimeMillis()))
@@ -69,6 +69,26 @@ public class SelectorTest {
         Thread.sleep(10000);
         observable.subscribe(value -> System.out.println("observer2=" + value));
         Thread.sleep(10000);
+    }
+
+    @Test
+    public void publishWithSelector_finite() throws InterruptedException {
+        Observable<Long> observable = Observable.interval(1000, TimeUnit.MILLISECONDS).doOnNext(value -> System.out.println("source value=" + value))
+                .publish(obs -> obs.take(5).concatWith(obs.skip(3).take(2)));
+        observable
+                .doOnNext(value -> System.out.println(System.currentTimeMillis()))
+                .subscribe(value -> System.out.println("observer1=" + value));
+        Thread.sleep(10000);
+    }
+
+    @Test
+    public void publishWithSelector_once_in_a_while() throws InterruptedException {
+        Observable<Long> observable = Observable.interval(1, TimeUnit.SECONDS)
+                .publish(obs -> obs.skip(1).take(1).concatWith(obs.skip(2).take(2)).concatWith(obs.skip(3).take(3)));
+        observable
+                .doOnNext(value -> System.out.println(System.currentTimeMillis()))
+                .subscribe(value -> System.out.println("observer1=" + value));
+        Thread.sleep(15000);
     }
 
     /** 내부에서 PublishSubject를 사용하므로 이 내용은 아니다 */
@@ -86,15 +106,15 @@ public class SelectorTest {
     @Test
     public void publishWithSelector_internal() throws InterruptedException {
         PublishSubject<Long> publishSubject = PublishSubject.create(); // (1)
-        Observable.interval(1000, TimeUnit.MILLISECONDS).subscribe(publishSubject); // (2)
-        publishSubject.take(5).concatWith(publishSubject.skip(3))
+        Observable.interval(1, TimeUnit.SECONDS).subscribe(publishSubject); // (2)
+        publishSubject.take(5).concatWith(publishSubject.skip(3).take(2))
                 .subscribe(System.out::println);
-        Thread.sleep(10000);
+        Thread.sleep(15000);
     }
 
     @Test
     public void publishWithSelector2() throws InterruptedException {
-        Observable<Long> observable = Observable.interval(1000, TimeUnit.MILLISECONDS)
+        Observable<Long> observable = Observable.interval(1, TimeUnit.SECONDS)
                 .publish(obs -> obs.take(15).concatWith(obs.takeWhile(x -> x < 7)));
         observable
                 .doOnNext(value -> System.out.println(System.currentTimeMillis()))
@@ -106,7 +126,7 @@ public class SelectorTest {
 
     @Test
     public void testTakeUntilWithPublishedStreamUsingSelector() throws InterruptedException {
-        Observable<Long> observable = Observable.interval(1000, TimeUnit.MILLISECONDS)
+        Observable<Long> observable = Observable.interval(1, TimeUnit.SECONDS)
             .publish(obs -> obs.take(5).concatWith(obs.takeUntil(obs.skipWhile(i -> i <= 7))));
         observable.subscribe(System.out::println);
         Thread.sleep(10000);
