@@ -4,10 +4,11 @@ abstract class Scheduler
 
 Scheduler <|-- ComputationScheduler
 Scheduler <|-- IoScheduler
-Scheduler <|-- NewThreadScheduler
-Scheduler <|-- TrampolineScheduler
 Scheduler <|-- SingleScheduler
+Scheduler <|-- TrampolineScheduler
+Scheduler <|-- NewThreadScheduler
 Scheduler <|-- ExecutorScheduler
 Scheduler <|-- TestScheduler
 
+hide members
 @enduml

@@ -9,7 +9,17 @@ Worker +-- Scheduler
 
 Worker <|-- EventLoopWorker1
 Worker <|-- EventLoopWorker2
+Worker <|-- ScheduledWorker
+Worker <|-- TrampolineWorker
+Worker <|-- NewThreadWorker
+Worker <|-- ExecutorWorker
+Worker <|-- TestWorker
 EventLoopWorker1 +-- ComputationScheduler
 EventLoopWorker2 +-- IoScheduler
+ScheduledWorker +-- SingleScheduler
+TrampolineWorker +-- TrampolineScheduler
+ExecutorWorker +-- ExecutorScheduler
+TestWorker +-- TestScheduler
 
+hide members
 @enduml
