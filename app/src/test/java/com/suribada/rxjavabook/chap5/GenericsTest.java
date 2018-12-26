@@ -102,6 +102,14 @@ public class GenericsTest {
     }
 
     @Test
+    public void assignList() {
+        List<? extends Dog> dogs = new ArrayList<>();
+        List<? super Dog> dogs2 = new ArrayList<>();
+        List<?> objects = dogs;
+        List<?> objects2 = dogs2;
+    }
+
+    @Test
     public void map() {
         Observable<Dog> dogs = Observable.just(new Dog("happy"), new Dog("그냥개"), new Dog("모짜렐라"));
         Observable<CharSequence> names1 = dogs.map(dog -> dog.name()); // (1)

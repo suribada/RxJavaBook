@@ -1,0 +1,13 @@
+@startuml
+
+interface Image
+
+class ArticleImage
+class CommentImage
+
+
+Image <|.. ArticleImage
+Image <|.. CommentImage
+
+
+@enduml
