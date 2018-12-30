@@ -30,21 +30,21 @@ public class Main {
         image.share();
     }
 
+    /*
     public void makeAndShareList(List<Image> images) {
         for (Image image : images) {
             image.makeThumbnail();
             image.share();
         }
     }
+    */
 
-    /*
     public void makeAndShareList(List<? extends Image> images) {
         for (Image image : images) {
             image.makeThumbnail();
             image.share();
         }
     }
-    */
 
     private void makeThumbnail() {
     }

@@ -131,7 +131,7 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".chap6.ThreadActivity" android:label="chap6/Thread">
+        <activity android:name=".chap6.ThreadActivity" android:label="chap6/ThreadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />

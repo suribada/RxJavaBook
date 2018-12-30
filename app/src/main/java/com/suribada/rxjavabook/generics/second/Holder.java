@@ -16,6 +16,7 @@ public class Holder<T> {
     }
 
     // 1st
+    /*
     public void set(Holder<T> t) {
         this.t = t.get();
     }
@@ -23,6 +24,7 @@ public class Holder<T> {
     public void transfer(Holder<T> holder) {
         holder.set(t);
     }
+    */
 
     // 2nd
     public void set(Holder<? extends T> holder) {

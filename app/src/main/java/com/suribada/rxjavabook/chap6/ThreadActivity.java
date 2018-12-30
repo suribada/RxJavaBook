@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.suribada.rxjavabook.R;
 
@@ -16,29 +17,34 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class ThreadActivity extends Activity {
 
     private static final String TAG = "suribada";
 
+    private TextView titleTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.four_buttons);
+        setContentView(R.layout.five_buttons);
+        titleTextView = findViewById(R.id.title);
     }
 
     public void onClickButton1(View view) {
-        for (int i = 0; i < 10; i++) {
+        int count = 5;
+        for (int i = 0; i < count; i++) {
             final int k = i;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("" + k + "번째: "
-                            + Thread.currentThread().getPriority());
-                    SystemClock.sleep(1000);
-                    System.out.println(k);
-                }
+            new Thread(() -> {
+//                System.out.println("" + k + "번째: "
+//                        + Thread.currentThread().getPriority());
+                // sleep을 쓰면 개수가 적을 때는 순서가 맞기도 한다.
+                //SystemClock.sleep(1000);
+                System.out.println(Thread.currentThread().getName() + ": value="  + k);
             }).start();
-
         }
     }
 
@@ -95,6 +101,25 @@ public class ThreadActivity extends Activity {
             });
         };
 
+    }
+
+    public void onClickButton5(View view) {
+        Observable.range(0, 5)
+                .subscribeOn(Schedulers.computation()) // (1)
+                .doOnNext(value -> System.out.println("observable " + Thread.currentThread().getName() // (2) 시작
+                        + ": value=" + value)) // (2) 끝
+                .observeOn(AndroidSchedulers.mainThread()) // (3)
+                .subscribe(value -> System.out.println("observer " + Thread.currentThread().getName()
+                        + ": value=" + value));
+    }
+
+    public void onClickButton5_2(View view) {
+        Observable.range(0, 5)
+                .subscribeOn(Schedulers.computation()) // (1)
+                .doOnNext(value -> System.out.println("observable " + Thread.currentThread().getName() // (2) 시작
+                        + ": value=" + value)) // (2) 끝
+                .observeOn(AndroidSchedulers.mainThread()) // (3)
+                .subscribe(value -> titleTextView.setText("value=" + value));
     }
 
 }
