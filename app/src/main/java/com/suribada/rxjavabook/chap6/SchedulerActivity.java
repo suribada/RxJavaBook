@@ -46,9 +46,9 @@ public class SchedulerActivity extends Activity {
     }
 
 
-    private void printThread(String input) {
+    private void printThread(String value) {
         SystemClock.sleep(2000);
-        System.out.println(input + " Thread " + Thread.currentThread().getName());
+        System.out.println(Thread.currentThread().getName() + ": value=" + value);
     }
 
     public void onClickButton3(View view) {

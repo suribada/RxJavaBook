@@ -125,4 +125,16 @@ public class ThreadTest {
             this.name = name;
         }
     }
+
+    @Test
+    public void testThreadNested() {
+        new Thread(() -> {
+            new Thread(() -> {
+                new Thread(() -> {
+                    System.out.println("thread=" + Thread.currentThread().getName()); // (1)
+                }, "thread1").start();
+            }, "thread2").start();
+        }, "thread3").start();
+        SystemClock.sleep(500);
+    }
 }

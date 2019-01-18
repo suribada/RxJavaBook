@@ -58,7 +58,7 @@ public class SubscribeOnObserveOnActivity extends Activity {
     }
 
     private void log(String value) {
-        System.out.println("thread=" + Thread.currentThread().getName() + ", value=" + value);
+        System.out.println(Thread.currentThread().getName() + ": value=" + value);
     }
 
 }
