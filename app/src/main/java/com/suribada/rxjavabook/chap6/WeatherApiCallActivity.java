@@ -33,7 +33,7 @@ public class WeatherApiCallActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.four_buttons);
-        title = (TextView) findViewById(R.id.title);
+        title = findViewById(R.id.title);
         Stetho.initializeWithDefaults(this);
     }
 

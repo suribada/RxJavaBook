@@ -4,6 +4,8 @@ import com.suribada.rxjavabook.SystemClock;
 
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
@@ -60,18 +62,8 @@ public class ScheduleWhenTest {
 
     private Scheduler throttleScheduler() {
         return Schedulers.computation().when(workerActions -> {
-            Flowable<Completable> workers = workerActions.map(new Function<Flowable<Completable>, Completable>() {
-                @Override
-                public Completable apply(Flowable<Completable> actions) {
-                    return Completable.concat(actions);
-                }
-            });
-            return Completable.concat(workers.map(new Function<Completable, Completable>() {
-                @Override
-                public Completable apply(Completable worker) {
-                    return worker.delay(1, SECONDS);
-                }
-            }));
+            Flowable<Completable> workers = workerActions.map(actions -> Completable.concat(actions));
+            return Completable.concat(workers.map(worker -> worker.delay(1, SECONDS)));
         });
     }
 
@@ -89,4 +81,42 @@ public class ScheduleWhenTest {
             return Completable.merge(Flowable.merge(workers), 2);
         });
     }
+
+    @Test
+    public void twoInterval() {
+        Scheduler scheduler = maxConcurrentScheduler();
+        Observable.interval(5, TimeUnit.SECONDS, scheduler)
+                .subscribe(value -> System.out.println(System.currentTimeMillis() +", first="  +  value));
+        Observable.interval(8, TimeUnit.SECONDS, scheduler)
+                .subscribe(value -> System.out.println(System.currentTimeMillis() +", second=" + value));
+        SystemClock.sleep(60000);
+    }
+
+    /**
+     * 끝이 나야만 다음 Observable을 시작한다. 따라서 세 번째 Observable은 동작하지 않는다.
+     */
+    @Test
+    public void threeInterval() {
+        Scheduler scheduler = maxConcurrentScheduler();
+        Observable.interval(5, TimeUnit.SECONDS, scheduler)
+                .subscribe(value -> System.out.println(System.currentTimeMillis() +", first="  +  value));
+        Observable.interval(8, TimeUnit.SECONDS, scheduler)
+                .subscribe(value -> System.out.println(System.currentTimeMillis() +", second=" + value));
+        Observable.interval(10, TimeUnit.SECONDS, scheduler)
+                .subscribe(value -> System.out.println(System.currentTimeMillis() +", third=" + value));
+        SystemClock.sleep(60000);
+    }
+
+    @Test
+    public void threeInterval2() {
+        Scheduler scheduler = maxConcurrentScheduler();
+        Observable.interval(5, TimeUnit.SECONDS, scheduler).take(3)
+                .subscribe(value -> System.out.println(System.currentTimeMillis() +", first="  +  value));
+        Observable.interval(8, TimeUnit.SECONDS, scheduler)
+                .subscribe(value -> System.out.println(System.currentTimeMillis() +", second=" + value));
+        Observable.interval(10, TimeUnit.SECONDS, scheduler)
+                .subscribe(value -> System.out.println(System.currentTimeMillis() +", third=" + value));
+        SystemClock.sleep(60000);
+    }
+
 }
