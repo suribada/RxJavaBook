@@ -16,8 +16,6 @@ import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -28,20 +26,19 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  */
 public class StopWatchActivity extends Activity {
 
-    @BindView(R.id.time)
     TextView time;
 
-    @BindView(R.id.start)
     ToggleButton start;
 
-    @BindView(R.id.init)
     Button init;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stop_watch);
-        ButterKnife.bind(this);
+        time = findViewById(R.id.time);
+        start = findViewById(R.id.start);
+        init = findViewById(R.id.init);
         time.setText(String.valueOf(0));
         RxCompoundButton.checkedChanges(start).switchMap(checked -> {
                 if (checked) {

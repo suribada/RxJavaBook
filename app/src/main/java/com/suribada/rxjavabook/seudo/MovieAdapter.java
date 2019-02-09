@@ -18,9 +18,6 @@ import com.suribada.rxjavabook.R;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 class MovieAdapter extends ArrayAdapter<Movie> {
 
     private final LayoutInflater inflater;
@@ -82,17 +79,16 @@ class MovieAdapter extends ArrayAdapter<Movie> {
     }
 
     class ViewHolder {
-        @BindView(R.id.thumb_image)
         ImageView thumbImage;
-        @BindView(R.id.title)
         TextView title;
-        @BindView(R.id.subtitle)
         TextView subtitle;
-        @BindView(R.id.director)
         TextView director;
 
         ViewHolder(View view) {
-            ButterKnife.bind(this, view);
+            thumbImage = view.findViewById(R.id.thumb_image);
+            title = view.findViewById(R.id.title);
+            subtitle = view.findViewById(R.id.subtitle);
+            director = view.findViewById(R.id.director);
         }
 
     }

@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class ScheduleWhenTest {
+public class SchedulerWhenTest {
 
     @Test
     public void testNormal() {

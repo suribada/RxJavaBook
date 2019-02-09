@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
 
