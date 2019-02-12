@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.v4.os.AsyncTaskCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -37,7 +36,7 @@ public class ConditionActivitiy extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_button);
-        title = (TextView) findViewById(R.id.title);
+        title = findViewById(R.id.title);
     }
 
     private Lock lock =  new ReentrantLock();
@@ -47,9 +46,9 @@ public class ConditionActivitiy extends Activity {
     private ArrayList<Book> allBooks = new ArrayList<>();
 
     public void onClickButton(View view) {
-        AsyncTaskCompat.executeParallel(new BestSellerAsyncTask());
-        AsyncTaskCompat.executeParallel(new RecommendAsyncTask());
-        AsyncTaskCompat.executeParallel(new CategoryAsyncTask(), 7);
+        new BestSellerAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new RecommendAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new CategoryAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 7);
     }
 
     private class BestSellerAsyncTask extends AsyncTask<Void, Void, List<Book>> {

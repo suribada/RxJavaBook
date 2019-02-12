@@ -12,4 +12,8 @@ public class Member {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return "member=" + name;
+    }
 }

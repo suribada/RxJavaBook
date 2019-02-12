@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.v4.os.AsyncTaskCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -31,14 +30,14 @@ public class TwoAsyncTaskActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_button);
-        title = (TextView) findViewById(R.id.title);
+        title = findViewById(R.id.title);
     }
 
     public void onClickButton(View view) {
         composedList.clear();
         title.setText(null);
-        AsyncTaskCompat.executeParallel(new AsyncTaskA());
-        AsyncTaskCompat.executeParallel(new AsyncTaskB());
+        new AsyncTaskA().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new AsyncTaskB().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private ArrayList<String> composedList = new ArrayList<>();

@@ -8,9 +8,10 @@ import android.view.View;
 
 import com.suribada.rxjavabook.R;
 
-import java.util.concurrent.TimeUnit;
-
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -19,7 +20,7 @@ public class FlatMapActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_three_buttons);
+        setContentView(R.layout.four_buttons);
     }
 
     public void onClickButton1(View view) {
@@ -32,12 +33,19 @@ public class FlatMapActivity extends Activity {
     public void onClickButton2(View view) {
         getMembers().subscribeOn(Schedulers.io())
                 .flatMap(member -> getProfile(member).subscribeOn(Schedulers.io()), 20) // (1)
+                .doOnEach(profile -> System.out.println(Thread.currentThread().getName() + ":" + profile.toString()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(System.out::println);
     }
 
     private Observable<Member> getMembers() {
-        return Observable.range(1, 10000)
+        return Observable.range(1, 10000) // onClickButton1() 에서 OutOfMemoryError가 나게 하려면 count=10000 정도로 크게 하면 된다.
+                .map(value -> new Member("David " + value));
+
+    }
+
+    private Observable<Member> getAnotherMembers() {
+        return Observable.range(201, 200)
                 .map(value -> new Member("David " + value));
 
     }
@@ -59,6 +67,32 @@ public class FlatMapActivity extends Activity {
                 .flatMap(t -> Observable.range(t * 10, 2)
                         .subscribeOn(Schedulers.computation()), m);
         source.subscribe(System.out::println);
+    }
+
+    public void onClickButton4(View view) {
+        takeProfiles();
+    }
+
+    private void takeProfiles() {
+        Scheduler maxConcurrentScheduler = getMaxConcurrentScheduler(); // (1)
+        getMembers().subscribeOn(maxConcurrentScheduler)
+                .doOnEach(System.out::println)
+                .flatMap(member -> getProfile(member).subscribeOn(maxConcurrentScheduler)) // (2)
+                .doOnEach(profile -> System.out.println(Thread.currentThread().getName() + ":" + profile.toString()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(System.out::println);
+        getAnotherMembers().subscribeOn(maxConcurrentScheduler)
+                .flatMap(member -> getProfile(member).subscribeOn(maxConcurrentScheduler)) // (3)
+                .doOnEach(profile -> System.out.println(Thread.currentThread().getName() + ":" + profile.toString()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(System.out::println);
+    }
+
+    private Scheduler getMaxConcurrentScheduler() {
+        return Schedulers.io().when(workerActions -> {
+            Flowable<Completable> workers = workerActions.map(actions -> Completable.concat(actions));
+            return Completable.merge(workers, 5);
+        });
     }
 
 }

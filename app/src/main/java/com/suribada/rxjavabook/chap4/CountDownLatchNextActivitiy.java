@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.v4.os.AsyncTaskCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -52,9 +51,9 @@ public class CountDownLatchNextActivitiy extends Activity {
 
     public void onClickButton(View view) {
         latch = new CountDownLatch(3);  // (1)
-        AsyncTaskCompat.executeParallel(new BestSellerAsyncTask());
-        AsyncTaskCompat.executeParallel(new RecommendAsyncTask());
-        AsyncTaskCompat.executeParallel(new CategoryAsyncTask(), 7);
+        new BestSellerAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new RecommendAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new CategoryAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 7);
         showCompletedMessage(); // (2)
     }
 
