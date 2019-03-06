@@ -1159,6 +1159,9 @@ https://github.com/square/retrofit/issues/1936(Async로 이제는 가능한 듯.
 https://tomcat.apache.org/tomcat-8.5-doc/config/http.html
 okhttp에서 maxRequestsPerHost나 maxRequests는 enque에 대한 얘기
 
+\section{SchedulerWhen}
+when() 메서드의 함수 매개변수에서 Observable이 아닌 Flowable이 사용된 이유는 무엇일까? 이는 스레드 조절이 필요한 이유와 같다. 만일 1,000개 이상의 네트워크 API 호출이 ``Observable``로 감싸지고 이들 Observable이 계속해서 구독되면 어떤 현상이 
+
 
 \chapter{주요 연산자}
 

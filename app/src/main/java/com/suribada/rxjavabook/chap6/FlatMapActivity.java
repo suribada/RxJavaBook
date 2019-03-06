@@ -7,20 +7,24 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.suribada.rxjavabook.R;
+import com.suribada.rxjavabook.chap5.SearchResult;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.internal.schedulers.IoScheduler;
 import io.reactivex.schedulers.Schedulers;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class FlatMapActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.four_buttons);
+        setContentView(R.layout.five_buttons);
     }
 
     public void onClickButton1(View view) {
@@ -31,8 +35,44 @@ public class FlatMapActivity extends Activity {
     }
 
     public void onClickButton2(View view) {
+        takeProfilesFlatMap();
+    }
+
+    public void takeProfilesFlatMap() {
         getMembers().subscribeOn(Schedulers.io())
                 .flatMap(member -> getProfile(member).subscribeOn(Schedulers.io()), 20) // (1)
+                .doOnEach(profile -> System.out.println(Thread.currentThread().getName() + ":" + profile.toString()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(System.out::println);
+    }
+
+    private void takeProfilesSchdulerWhen() {
+        Scheduler maxConcurrentScheduler = getMaxConcurrentScheduler(); // (1)
+        getMembers().subscribeOn(maxConcurrentScheduler)
+                .doOnEach(System.out::println)
+                .flatMap(member -> getProfile(member).subscribeOn(maxConcurrentScheduler)) // (2)
+                .doOnEach(profile -> System.out.println(Thread.currentThread().getName() + ":" + profile.toString() + ": ioScheduler.size=" + ((IoScheduler) Schedulers.io()).size()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(System.out::println);
+        getAnotherMembers().subscribeOn(maxConcurrentScheduler)
+                .flatMap(member -> getProfile(member).subscribeOn(maxConcurrentScheduler)) // (3)
+                .doOnEach(profile -> System.out.println(Thread.currentThread().getName() + ":" + profile.toString()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(System.out::println);
+    }
+
+    private void showResults() {
+        Scheduler maxConcurrentScheduler = getMaxConcurrentScheduler(); // (2)
+        getMembers().subscribeOn(maxConcurrentScheduler) // (3)
+                .doOnEach(System.out::println)
+                .flatMap(member -> getProfile(member).subscribeOn(maxConcurrentScheduler)) // (4)
+                .doOnEach(profile -> System.out.println(Thread.currentThread().getName() + ":"
+                        + profile.toString() + ": ioScheduler.size=" + ((IoScheduler) Schedulers.io()).size()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(System.out::println);
+        getSearchResult().subscribeOn(maxConcurrentScheduler) // (5)
+                .flatMap(searchResult ->
+                        getSearchDetail(searchResult).subscribeOn(maxConcurrentScheduler)) // (6)
                 .doOnEach(profile -> System.out.println(Thread.currentThread().getName() + ":" + profile.toString()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(System.out::println);
@@ -47,13 +87,25 @@ public class FlatMapActivity extends Activity {
     private Observable<Member> getAnotherMembers() {
         return Observable.range(201, 200)
                 .map(value -> new Member("David " + value));
+    }
 
+    private Observable<SearchResult> getSearchResult() {
+        return Observable.range(201, 200)
+                .map(value -> new SearchResult("David " + value));
     }
 
     private Observable<Profile> getProfile(Member member) {
         return Observable.create(emitter -> {
             SystemClock.sleep(2000);
             emitter.onNext(new Profile(member));
+            emitter.onComplete(); // 빠뜨리면 2번째 것이 실행되지 않음
+        });
+    }
+
+    private Observable<SearchDetail> getSearchDetail(SearchResult searchResult) {
+        return Observable.create(emitter -> {
+            SystemClock.sleep(2000);
+            emitter.onNext(new SearchDetail(searchResult));
             emitter.onComplete(); // 빠뜨리면 2번째 것이 실행되지 않음
         });
     }
@@ -70,28 +122,34 @@ public class FlatMapActivity extends Activity {
     }
 
     public void onClickButton4(View view) {
-        takeProfiles();
-    }
-
-    private void takeProfiles() {
-        Scheduler maxConcurrentScheduler = getMaxConcurrentScheduler(); // (1)
-        getMembers().subscribeOn(maxConcurrentScheduler)
-                .doOnEach(System.out::println)
-                .flatMap(member -> getProfile(member).subscribeOn(maxConcurrentScheduler)) // (2)
-                .doOnEach(profile -> System.out.println(Thread.currentThread().getName() + ":" + profile.toString()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(System.out::println);
-        getAnotherMembers().subscribeOn(maxConcurrentScheduler)
-                .flatMap(member -> getProfile(member).subscribeOn(maxConcurrentScheduler)) // (3)
-                .doOnEach(profile -> System.out.println(Thread.currentThread().getName() + ":" + profile.toString()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(System.out::println);
+        takeProfilesSchdulerWhen();
     }
 
     private Scheduler getMaxConcurrentScheduler() {
         return Schedulers.io().when(workerActions -> {
+            /*
             Flowable<Completable> workers = workerActions.map(actions -> Completable.concat(actions));
-            return Completable.merge(workers, 5);
+            return Completable.merge(workers, 20); // (3)
+            */
+            return Completable.merge(Flowable.merge(workerActions), 20);
+        });
+    }
+
+    public void onClickButton5(View view) {
+        Scheduler delayScheduler = getDelayScheduler(); // (1)
+        getMembers().subscribeOn(delayScheduler)
+                .doOnEach(System.out::println)
+                .flatMap(member -> getProfile(member).subscribeOn(delayScheduler)
+                        .doOnSubscribe(ignored -> System.out.println("subscribe time=" + System.currentTimeMillis()))
+                        .doOnComplete(() -> System.out.println("complete time=" + System.currentTimeMillis())))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(System.out::println);
+    }
+
+    private Scheduler getDelayScheduler() {
+        return Schedulers.io().when(workerActions -> {
+            Flowable<Completable> workers = workerActions.map(actions -> Completable.concat(actions));
+            return Completable.concat(workers.map(worker -> worker.delay(1, SECONDS)));
         });
     }
 
