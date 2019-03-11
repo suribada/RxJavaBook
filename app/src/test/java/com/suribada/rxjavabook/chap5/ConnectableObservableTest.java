@@ -348,7 +348,7 @@ public class ConnectableObservableTest {
 
     @Test
     public void testReplay() {
-        Observable<Long> obs = Observable.interval(100, TimeUnit.MILLISECONDS)
+        Observable<Long> obs = Observable.interval(1, TimeUnit.SECONDS)
                 .take(5)
                 .doOnNext(value -> System.out.println("next=" + value))
                 .replay().autoConnect(2); // (1)
@@ -356,7 +356,7 @@ public class ConnectableObservableTest {
                 .subscribe(value -> System.out.println("value1=" + value)); // (2)
         obs.doOnSubscribe(disposable -> System.out.println("observer2 subscribed"))
                 .subscribe(value -> System.out.println("value2=" + value)); // (3)
-        SystemClock.sleep(300);
+        SystemClock.sleep(3000);
         obs.doOnSubscribe(disposable -> System.out.println("observer3 subscribed"))
                 .subscribe(value -> System.out.println("value3=" + value)); // (4)
         SystemClock.sleep(1000);

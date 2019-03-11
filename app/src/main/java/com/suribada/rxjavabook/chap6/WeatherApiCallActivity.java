@@ -6,6 +6,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.suribada.rxjavabook.R;
 import com.suribada.rxjavabook.api.BookSampleRepository;
 import com.suribada.rxjavabook.api.model.Weather;
 
+import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,6 +26,8 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Noh.Jaechun on 2018-04-08.
  */
 public class WeatherApiCallActivity extends Activity {
+
+    private static final String TAG  = "WeatherApiCall";
 
     private BookSampleRepository repository = new BookSampleRepository();
 
@@ -40,11 +44,12 @@ public class WeatherApiCallActivity extends Activity {
     public void onClickButton1(View view) {
         Location location = getSampleLocation();
         repository.getRegion(location)
+                .subscribeOn(Schedulers.io()) // (1)
                 .map(region -> region.areaCode)
                 .flatMap(repository::getWeather)
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(weather -> title.setText(weather.toString()));
+                .subscribe(weather -> title.setText(weather.toString()),
+                        e -> Log.d(TAG, "error", e));
     }
 
     public Single<Weather> getWeather(Location location) {
@@ -55,16 +60,14 @@ public class WeatherApiCallActivity extends Activity {
 
     public void onClickButton2(View view) {
         Location location = getSampleLocation();
-        repository.getRegion(location) // (1)
-                .subscribeOn(Schedulers.io()) // (2)
+        repository.getRegion(location)
+                .subscribeOn(Schedulers.io()) // (1)
                 .map(region -> region.areaCode)
-                .flatMap(areaCode -> repository.getWeather(areaCode) // (3)
-                        .subscribeOn(Schedulers.io())) // (4)
-                .observeOn(AndroidSchedulers.mainThread()) // (5)
+                .flatMap(areaCode -> repository.getWeather(areaCode)
+                        .subscribeOn(Schedulers.io())) // (2)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(weather -> title.setText(weather.toString()),
-                        e -> {
-                            // 로그나 Toast
-                        });
+                        e -> Log.d(TAG, "error", e));
     }
 
     @NonNull
@@ -92,6 +95,16 @@ public class WeatherApiCallActivity extends Activity {
                     Pair::new)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(pair -> title.setText(pair.first + ", " + pair.second));
+    }
+
+    public void onClickButton4_Observable(View view) {
+        int regionCode = 111;
+        Observable.zip(repository.getWeatherObservable(regionCode).subscribeOn(Schedulers.io()), // (1)
+                repository.getWeatherDetailObservable(regionCode).subscribeOn(Schedulers.io()), // (2)
+                Pair::new)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(pair -> title.setText(pair.first + ", " + pair.second),
+                        e -> Log.d(TAG, "error", e));
     }
 
 }

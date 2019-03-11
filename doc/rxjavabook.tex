@@ -29,6 +29,19 @@
 웹 문서 인용은 주석에 주로 주석에 표시한다. 책 인용은 본문에 주로 표시하고 번역서가 있는 경우는 번역서를 표시하고 번역서가 없는 경우에 원서를 표시한다. 
 
 
+RxJava와 관련해서 build.gradle에 사용한 의존성은 다음과 같다.
+</코드>
+dependencies {
+    ...
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.10',
+        'io.reactivex.rxjava2:rxandroid:2.0.1',
+        'com.squareup.retrofit2:adapter-rxjava2:2.2.0',
+        'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    ...
+}
+</코드>
+
+
 https://ahea.wordpress.com/2017/02/13/reactive-streams/
 https://www.reactivemanifesto.org/ko
 http://junsikshim.github.io/2017/04/13/Why-Reactive.html

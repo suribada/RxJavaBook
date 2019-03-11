@@ -12,6 +12,7 @@ import com.suribada.rxjavabook.api.model.WeatherDetail;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.annotations.SchedulerSupport;
 import io.reactivex.schedulers.Schedulers;
@@ -55,8 +56,16 @@ public class BookSampleRepository {
         return getBookSampleService().getWeather(areaCode);
     }
 
+    public Observable<Weather> getWeatherObservable(int areaCode) {
+        return getBookSampleService().getWeather(areaCode).toObservable();
+    }
+
     public Single<WeatherDetail> getWeatherDetail(int areaCode) {
         return getBookSampleService().getWeatherDetail(areaCode);
+    }
+
+    public Observable<WeatherDetail> getWeatherDetailObservable(int areaCode) {
+        return getBookSampleService().getWeatherDetail(areaCode).toObservable();
     }
 
     public Single<List<BookCategory>> getBookCategories() {
@@ -73,6 +82,22 @@ public class BookSampleRepository {
 
     public Single<List<Book>> getCategoryBooks(int categoryId) {
         return getBookSampleService().getCategoryBooks(categoryId);
+    }
+
+    public Observable<List<BookCategory>> getBookCategoriesObservable() {
+        return getBookSampleService().getBookCategories().toObservable();
+    }
+
+    public Observable<List<Book>> getBestSellerObservable() {
+        return getBookSampleService().getBestSeller().toObservable();
+    }
+
+    public Observable<List<Book>> getRecommendBooksObservable() {
+        return getBookSampleService().getRecommendBooks().toObservable();
+    }
+
+    public Observable<List<Book>> getCategoryBooksObservable(int categoryId) {
+        return getBookSampleService().getCategoryBooks(categoryId).toObservable();
     }
 
 }
