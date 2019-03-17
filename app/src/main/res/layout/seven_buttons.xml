@@ -18,7 +18,6 @@
         android:layout_marginLeft="10dp"
         android:text="progress"
         android:textSize="20sp"/>
-
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
@@ -58,4 +57,18 @@
         android:layout_gravity="center_horizontal"
         android:text="Button5"
         android:onClick="onClickButton5"/>
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Button6"
+        android:onClick="onClickButton6"/>
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Button7"
+        android:onClick="onClickButton7"/>
 </LinearLayout>
