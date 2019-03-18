@@ -42,4 +42,26 @@
             android:textColorHint="#ff0f00"
             android:textCursorDrawable="@null"
             android:textSize="20dp"/>
+
+    <com.suribada.rxjavabook.etc.ExpandableEditText
+            android:id="@+id/edit_text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:clickable="true"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:hint="입력하삼"
+            android:imeOptions="flagNoExtractUi"
+            android:includeFontPadding="false"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxHeight="70dp"
+            android:minHeight="18dp"
+            android:paddingLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="#ff00ff"
+            android:textColorHint="#ff0f00"
+            android:textCursorDrawable="@null"
+            android:textSize="20dp"/>
 </LinearLayout>
