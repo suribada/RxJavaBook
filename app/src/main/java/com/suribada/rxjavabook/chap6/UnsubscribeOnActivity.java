@@ -32,12 +32,10 @@ public class UnsubscribeOnActivity extends Activity {
 
     public void onClickButton2(View view) {
         Disposable disposable = Observable.interval(1, TimeUnit.SECONDS)
-                .doOnDispose(this::log)
+                .doOnDispose(() -> log())
                 .subscribe(System.out::println);
         SystemClock.sleep(5000);
-        new Thread(() -> {
-            disposable.dispose();
-        }).run();
+        new Thread(() -> disposable.dispose(), "disposeThread").start();
         SystemClock.sleep(3000);
     }
 
