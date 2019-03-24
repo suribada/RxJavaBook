@@ -1,9 +1,6 @@
 package com.suribada.rxjavabook.chap5;
 
-import android.accounts.AuthenticatorException;
-
 import java.util.List;
-import java.util.TreeMap;
 
 import io.reactivex.Observable;
 
@@ -28,7 +25,7 @@ public class ShoppingCart {
 
     private void checkUserId1() {
         if (userId == null) {
-            throw new AuthentificationRuntimeException("userId is null");
+            throw new AuthentificationException("userId is null");
         }
     }
 
@@ -41,7 +38,7 @@ public class ShoppingCart {
     }
 
     private Observable checkUserId2() {
-        return (userId == null) ? Observable.error(new AuthentificationRuntimeException("userId is null"))
+        return (userId == null) ? Observable.error(new AuthentificationException("userId is null"))
                 : Observable.empty();
     }
 
@@ -72,7 +69,7 @@ public class ShoppingCart {
 
 
     private <T> Observable<T> checkUserId3() {
-        return (userId == null) ? Observable.error(new AuthentificationRuntimeException("userId is null"))
+        return (userId == null) ? Observable.error(new AuthentificationException("userId is null"))
                 : Observable.empty();
     }
 

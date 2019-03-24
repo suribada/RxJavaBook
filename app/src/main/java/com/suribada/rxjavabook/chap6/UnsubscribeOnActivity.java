@@ -24,19 +24,18 @@ public class UnsubscribeOnActivity extends Activity {
 
     public void onClickButton1(View view) {
         Disposable disposable = Observable.interval(1, TimeUnit.SECONDS)
-                .doOnDispose(this::log)
+                .doOnDispose(this::log) // (1)
                 .subscribe(System.out::println);
         SystemClock.sleep(5000);
-        disposable.dispose();
+        disposable.dispose(); // (2)
     }
 
     public void onClickButton2(View view) {
         Disposable disposable = Observable.interval(1, TimeUnit.SECONDS)
-                .doOnDispose(() -> log())
+                .doOnDispose(this::log) // (1)
                 .subscribe(System.out::println);
         SystemClock.sleep(5000);
-        new Thread(() -> disposable.dispose(), "disposeThread").start();
-        SystemClock.sleep(3000);
+        new Thread(() -> disposable.dispose(), "disposeThread").start(); // (2)
     }
 
     private void log() {
@@ -45,10 +44,10 @@ public class UnsubscribeOnActivity extends Activity {
 
     public void onClickButton3(View view) {
         Disposable disposable = Observable.interval(1, TimeUnit.SECONDS)
-                .doOnDispose(this::log)
-                .unsubscribeOn(Schedulers.io())
+                .doOnDispose(this::log) // (1)
+                .unsubscribeOn(Schedulers.io()) // (2)
                 .subscribe(System.out::println);
         SystemClock.sleep(5000);
-        disposable.dispose();
+        disposable.dispose(); // (3)
     }
 }

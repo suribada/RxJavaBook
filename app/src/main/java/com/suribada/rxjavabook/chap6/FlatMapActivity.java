@@ -127,30 +127,32 @@ public class FlatMapActivity extends Activity {
 
     private Scheduler getMaxConcurrentScheduler() {
         return Schedulers.io().when(workerActions -> {
-            /*
             Flowable<Completable> workers = workerActions.map(actions -> Completable.concat(actions));
             return Completable.merge(workers, 20); // (3)
-            */
-            return Completable.merge(Flowable.merge(workerActions), 20);
+            //return Completable.merge(Flowable.merge(workerActions), 20);
         });
     }
 
     public void onClickButton5(View view) {
-        Scheduler delayScheduler = getDelayScheduler(); // (1)
-        getMembers().subscribeOn(delayScheduler)
-                .doOnEach(System.out::println)
-                .flatMap(member -> getProfile(member).subscribeOn(delayScheduler)
-                        .doOnSubscribe(ignored -> System.out.println("subscribe time=" + System.currentTimeMillis()))
-                        .doOnComplete(() -> System.out.println("complete time=" + System.currentTimeMillis())))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(System.out::println);
+        showResultsDelayed();
     }
 
     private Scheduler getDelayScheduler() {
         return Schedulers.io().when(workerActions -> {
             Flowable<Completable> workers = workerActions.map(actions -> Completable.concat(actions));
-            return Completable.concat(workers.map(worker -> worker.delay(1, SECONDS)));
+            return Completable.concat(workers.map(worker -> worker.delay(1, SECONDS))); // (1)
         });
+    }
+
+    private void showResultsDelayed() {
+        Scheduler delayScheduler = getDelayScheduler();
+        getMembers().subscribeOn(delayScheduler)
+                .doOnEach(System.out::println)
+                .flatMap(member -> getProfile(member).subscribeOn(delayScheduler)
+                        .doOnSubscribe(ignored -> System.out.println(Thread.currentThread().getName() + ": subscribe time=" + System.currentTimeMillis()))
+                        .doOnComplete(() -> System.out.println(Thread.currentThread().getName() + ": complete time=" + System.currentTimeMillis())))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(System.out::println);
     }
 
 }
