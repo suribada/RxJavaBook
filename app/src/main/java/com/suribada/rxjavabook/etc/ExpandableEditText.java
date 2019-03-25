@@ -1,6 +1,8 @@
 package com.suribada.rxjavabook.etc;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.method.KeyListener;
@@ -18,17 +20,17 @@ public class ExpandableEditText extends EditText {
 
     public ExpandableEditText(Context context) {
         super(context);
-        initialize();
+        //initialize();
     }
 
     public ExpandableEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initialize();
+        //initialize();
     }
 
     public ExpandableEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initialize();
+        //initialize();
     }
 
     @Override
@@ -47,18 +49,18 @@ public class ExpandableEditText extends EditText {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isMultiLine()) {
-                    changeMultiline();
-                }
+//                if (!isMultiLine()) {
+//                    changeMultiline();
+//                }
             }
         });
         setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    if (!isMultiLine()) {
-                        changeMultiline();
-                    }
+//                    if (!isMultiLine()) {
+//                        changeMultiline();
+//                    }
                 }
             }
         });
@@ -66,9 +68,9 @@ public class ExpandableEditText extends EditText {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 Log.d("suribada", "onEditorAction inner");
-                if (!isMultiLine()) {
-                    changeMultiline();
-                }
+//                if (!isMultiLine()) {
+//                    changeMultiline();
+//                }
                 return false;
             }
         });
@@ -130,27 +132,27 @@ public class ExpandableEditText extends EditText {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Log.d("suribada", "onKeyDown=" + keyCode + "/" + event.toString());
-        if (!isMultiLine()) {
-            changeMultiline();
-        }
+//        if (!isMultiLine()) {
+//            changeMultiline();
+//        }
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public void onEditorAction(int actionCode) {
         Log.d("suribada", "onEditorAction");
-        if (!isMultiLine()) {
-            changeMultiline();
-        }
+//        if (!isMultiLine()) {
+//            changeMultiline();
+//        }
         super.onEditorAction(actionCode);
     }
 
     @Override
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
         Log.d("suribada", "onKeyPreIme");
-        if (!isMultiLine()) {
-            changeMultiline();
-        }
+//        if (!isMultiLine()) {
+//            changeMultiline();
+//        }
         return super.onKeyPreIme(keyCode, event);
     }
 
@@ -181,9 +183,9 @@ public class ExpandableEditText extends EditText {
         return super.onKeyUp(keyCode, event);
     }
 
-    private boolean isMultiLine() {
-        return (getInputType() & InputType.TYPE_TEXT_FLAG_MULTI_LINE) == InputType.TYPE_TEXT_FLAG_MULTI_LINE;
-    }
+//    private boolean isMultiLine() {
+//        return (getInputType() & InputType.TYPE_TEXT_FLAG_MULTI_LINE) == InputType.TYPE_TEXT_FLAG_MULTI_LINE;
+//    }
 
     public void changeSingleLine() {
         //setMaxHeight(80);

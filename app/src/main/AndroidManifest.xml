@@ -377,6 +377,12 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+        <activity android:name=".chap5.InterruptActivity" android:label="chap5/InterruptActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
         <activity android:name=".chap5.SerialDisposableActivity" android:label="chap5/SerialDisposableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

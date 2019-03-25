@@ -25,7 +25,7 @@
             android:id="@+id/edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
+            android:background="@android:color/holo_blue_light"
             android:clickable="true"
             android:ellipsize="end"
             android:gravity="left|center_vertical"
@@ -41,16 +41,16 @@
             android:textColor="#ff00ff"
             android:textColorHint="#ff0f00"
             android:textCursorDrawable="@null"
-            android:textSize="20dp"/>
-
+            android:textSize="15dp"/>
+    <!--
     <com.suribada.rxjavabook.etc.ExpandableEditText
             android:id="@+id/edit_text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
+            android:background="@android:color/holo_blue_light"
             android:clickable="true"
             android:ellipsize="end"
-            android:gravity="left|center_vertical"
+            android:gravity="top"
             android:hint="입력하삼"
             android:imeOptions="flagNoExtractUi"
             android:includeFontPadding="false"
@@ -64,4 +64,5 @@
             android:textColorHint="#ff0f00"
             android:textCursorDrawable="@null"
             android:textSize="20dp"/>
+            -->
 </LinearLayout>
