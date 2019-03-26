@@ -2,9 +2,13 @@ package com.suribada.rxjavabook.chap3;
 
 import com.thoughtworks.xstream.mapper.Mapper;
 
+import org.json.JSONObject;
 import org.junit.Test;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
+
+import static com.facebook.stetho.inspector.network.PrettyPrinterDisplayType.JSON;
 
 /**
  * Created by Noh.Jaechun on 2018. 3. 29..
@@ -88,7 +92,34 @@ public class ContractTest {
         return Observable.just((dollar * 1000) + " won"); // (3)
     }
 
+    @Test(expected = NullPointerException.class)
+    public void nullEvent_Maybe() {
+        Maybe.just(null)
+                .subscribe(System.out::println,
+                        System.err::println);
+    }
 
+    @Test
+    public void maybeCreate() {
+        Maybe.create(emitter -> {
+            emitter.onSuccess(null);
+        }).subscribe(System.out::println,
+                System.err::println);
+    }
 
+    @Test
+    public void nullEventPossible5() {
+        Observable.just(1, 2, -1, 1, 2)
+                .flatMapMaybe(dollar -> getCurrentPrice5(dollar))
+                .subscribe(System.out::println,
+                        System.err::println);
+    }
+
+    private Maybe<String> getCurrentPrice5(int dollar) {
+        if (dollar < 0) {
+            return Maybe.just(null); // (2)
+        }
+        return Maybe.just((dollar * 1000) + " won"); // (3)
+    }
 
 }

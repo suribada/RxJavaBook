@@ -4,8 +4,10 @@ import com.suribada.rxjavabook.SystemClock;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +15,9 @@ import hu.akarnokd.rxjava2.math.MathObservable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.internal.functions.Functions;
 import io.reactivex.observables.ConnectableObservable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Noh.Jaechun on 2018. 9. 11..
@@ -360,5 +364,35 @@ public class ConnectableObservableTest {
         obs.doOnSubscribe(disposable -> System.out.println("observer3 subscribed"))
                 .subscribe(value -> System.out.println("value3=" + value)); // (4)
         SystemClock.sleep(1000);
+    }
+
+    @Test
+    public void eachCafeLeaders() {
+        Observable<Cafe> obs = getCafeListObservable().flatMapIterable(Functions.identity())
+                .subscribeOn(Schedulers.io())
+                .publish()
+                .autoConnect(2);
+        obs.map(cafe -> cafe.leader).toList().subscribe(System.out::println);
+        obs.map(cafe -> cafe.coleader).toList().subscribe(System.out::println);
+    }
+
+    private Observable<List<Cafe>> getCafeListObservable() {
+        List<Cafe> cafes = new ArrayList<>();
+        cafes.add(new Cafe("승마", "suribada", "horseridingking"));
+        cafes.add(new Cafe("바둑", "ias", "iasadbc"));
+        cafes.add(new Cafe("체스", "eof", "endofhope"));
+        return Observable.just(cafes);
+    }
+
+    class Cafe {
+        String name;
+        String leader; // 운영자
+        String coleader; // 부운영자
+
+        Cafe(String name, String leader, String coleader) {
+            this.name = name;
+            this.leader = leader;
+            this.coleader = coleader;
+        }
     }
 }

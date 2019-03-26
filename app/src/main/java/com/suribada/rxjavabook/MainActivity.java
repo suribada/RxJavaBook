@@ -48,12 +48,6 @@ public class MainActivity extends ListActivity {
 		if (path == null) {
 			path = "";
 		}
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-
-			}
-		})
 		setListAdapter(new SimpleAdapter(this, getData(path),
 				android.R.layout.simple_list_item_1, new String[] { "title" },
 				new int[] { android.R.id.text1 }));

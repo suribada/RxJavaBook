@@ -167,6 +167,12 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+        <activity android:name=".chap3.MaybeActivity" android:label="chap3/MaybeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
         <activity android:name=".chap2.ImmutableActivity" android:label="chap2/ImmutableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
