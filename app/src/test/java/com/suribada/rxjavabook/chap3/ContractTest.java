@@ -84,7 +84,7 @@ public class ContractTest {
                         System.err::println);
     }
 
-    private Observable getCurrentPrice4(int dollar) {
+    private Observable<String> getCurrentPrice4(int dollar) {
         if (dollar < 0) {
             return Observable.error(
                     new IllegalArgumentException("dollar should be bigger than 0")); // (2)

@@ -1,5 +1,7 @@
 package com.suribada.rxjavabook.chap5;
 
+import android.support.v4.util.Pair;
+
 import com.suribada.rxjavabook.SystemClock;
 
 import org.junit.Test;
@@ -367,29 +369,138 @@ public class ConnectableObservableTest {
     }
 
     @Test
-    public void eachCafeLeaders() {
-        Observable<Cafe> obs = getCafeListObservable().flatMapIterable(Functions.identity())
+    public void eachCafeLeaders_inefficeint() {
+        getCafeListObservable()
                 .subscribeOn(Schedulers.io())
-                .publish()
-                .autoConnect(2);
-        obs.map(cafe -> cafe.leader).toList().subscribe(System.out::println);
-        obs.map(cafe -> cafe.coleader).toList().subscribe(System.out::println);
+                .flatMapIterable(v -> v)
+                .map(cafe -> cafe.leader).toList()
+                .subscribe(System.out::println);
+        getCafeListObservable()
+                .subscribeOn(Schedulers.io())
+                .flatMapIterable(v -> v)
+                .map(cafe -> cafe.coleader).toList()
+                .subscribe(System.out::println);
     }
 
-    private Observable<List<Cafe>> getCafeListObservable() {
+    @Test
+    public void eachCafeLeaders_connectable() {
+        ConnectableObservable<Cafe> obs = getCafeListObservable()
+                .subscribeOn(Schedulers.io())
+                .flatMapIterable(v -> v)
+                .publish();
+        obs.map(cafe -> cafe.leader).toList()
+                .subscribe(System.out::println);
+        obs.map(cafe -> cafe.coleader).toList()
+                .subscribe(System.out::println);
+        Disposable disposable = obs.connect();
+    }
+
+    @Test
+    public void eachCafeLeaders() {
+        Observable<Cafe> obs = getCafeListObservable()
+                .subscribeOn(Schedulers.io())
+                .flatMapIterable(v -> v)
+                .publish()
+                .autoConnect(2);
+        obs.map(cafe -> cafe.leader).toList()
+                .subscribe(System.out::println);
+        obs.map(cafe -> cafe.coleader).toList()
+                .subscribe(System.out::println);
+    }
+
+    @Test
+    public void  nestedSubscribe() {
+        getCafeListObservable()
+                .subscribeOn(Schedulers.io())
+                .flatMapIterable(v -> v)
+                .subscribe(cafe -> { // (1) 시작
+                   if (cafe.type == 1) {
+                       findArea(cafe).subscribeOn(Schedulers.io())
+                               .subscribe(area -> { // (2) 시작
+                                  System.out.println("cafe=" + cafe + ", area=" + area);
+                               }); // (2) 끝
+                   } else if (cafe.type == 2) {
+                       findHobby(cafe).subscribeOn(Schedulers.io())
+                               .subscribe(hobby -> { // (3) 시작
+                                   System.out.println("cafe=" + cafe + ", hobby=" + hobby);
+                               }); // (3) 끝
+                   }
+                }); // (1) 끝
+        SystemClock.sleep(1000);
+    }
+
+    @Test
+    public void  nestedSubscribe_refactor_connectable() {
+        ConnectableObservable<Cafe> obs = getCafeListObservable()
+                .subscribeOn(Schedulers.io())
+                .flatMapIterable(v -> v)
+                .publish();
+        obs.filter(cafe -> cafe.type == 1) // (1)
+                .flatMap(cafe -> findArea(cafe).subscribeOn(Schedulers.io())
+                        .map(area -> Pair.create(cafe, area))) // (2)
+                .subscribe(pair -> {
+                    System.out.println("cafe=" + pair.first + ", area=" + pair.second);
+                });
+        obs.filter(cafe -> cafe.type == 2) // (3)
+                .flatMap(cafe -> findHobby(cafe).subscribeOn(Schedulers.io())
+                        .map(area -> Pair.create(cafe, area))) // (4)
+                .subscribe(pair -> {
+                    System.out.println("cafe=" + pair.first + ", hobby=" + pair.second);
+                });
+        Disposable disposable = obs.connect();
+        SystemClock.sleep(1000);
+    }
+
+    /**
+     * 구독 해제 문제 있음
+     *
+     */
+    @Test
+    public void  nestedSubscribe_refactor2() {
+        Observable<Cafe> obs = getCafeListObservable()
+                .subscribeOn(Schedulers.io())
+                .flatMapIterable(v -> v)
+                .publish()
+                .autoConnect(2);
+        obs.filter(cafe -> cafe.type == 1) // (1)
+                .flatMap(cafe -> findArea(cafe).subscribeOn(Schedulers.io())
+                        .map(area -> Pair.create(cafe, area))) // (2)
+                .subscribe(pair -> {
+                    System.out.println("cafe=" + pair.first + ", area=" + pair.second);
+                });
+        obs.filter(cafe -> cafe.type == 2) // (3)
+                .flatMap(cafe -> findHobby(cafe).subscribeOn(Schedulers.io())
+                        .map(area -> Pair.create(cafe, area))) // (4)
+                .subscribe(pair -> {
+                    System.out.println("cafe=" + pair.first + ", hobby=" + pair.second);
+                });
+        SystemClock.sleep(1000);
+    }
+
+    public Observable<List<Cafe>> getCafeListObservable() {
         List<Cafe> cafes = new ArrayList<>();
-        cafes.add(new Cafe("승마", "suribada", "horseridingking"));
-        cafes.add(new Cafe("바둑", "ias", "iasadbc"));
-        cafes.add(new Cafe("체스", "eof", "endofhope"));
+        cafes.add(new Cafe(1, "분당사랑", "suribada", "horseridingking"));
+        cafes.add(new Cafe(2,"바둑사랑", "ias", "iasadbc"));
+        cafes.add(new Cafe(2,"승마사랑", "eof", "endofhope"));
         return Observable.just(cafes);
     }
 
+    public Observable<String> findArea(Cafe cafe) {
+        return Observable.just("분당");
+    }
+
+    public Observable<String> findHobby(Cafe cafe) {
+        return Observable.just("승마");
+    }
+
     class Cafe {
-        String name;
+        int type; // 카페 타입
+        String name; // 카페명
         String leader; // 운영자
         String coleader; // 부운영자
 
-        Cafe(String name, String leader, String coleader) {
+        Cafe(int type, String name, String leader, String coleader) {
+            this.type = type;
             this.name = name;
             this.leader = leader;
             this.coleader = coleader;
