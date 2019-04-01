@@ -197,7 +197,7 @@ public class GenericsTest {
             System.out.println(value.length());
         });
         // option 2
-        Observable<String> persons = Observable.<String>create(emitter -> {
+        Observable<String> persons = Observable.create(emitter -> {
             emitter.onNext("알리바바");
             emitter.onNext("40인의 도둑");
             emitter.onComplete();

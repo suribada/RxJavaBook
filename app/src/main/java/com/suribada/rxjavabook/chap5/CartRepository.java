@@ -16,7 +16,7 @@ public class CartRepository {
         return Observable.just(new Product(), new Product()).toList().toObservable();
     }
 
-    public Observable<TerminalResult> terminate() {
-        return Observable.just(new TerminalResult());
+    public Observable<Result> getResult() {
+        return Observable.just(new Result());
     }
 }

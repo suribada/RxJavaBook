@@ -29,28 +29,28 @@ public class ShoppingCart {
         }
     }
 
+    private Observable checkUserId2() { // (1) 시작
+        return (userId == null) ? Observable.error(new AuthentificationException("userId is null"))
+                : Observable.empty();
+    } // (1) 끝
+
     private Observable<AddResult> add2(Product product) {
-        return Observable.concat(checkUserId2(), repository.add(product));
+        return Observable.concat(checkUserId2(), repository.add(product)); // (2)
     }
 
     private Observable<List<Product>> query2(String keyword) {
-        return Observable.concat(checkUserId2(), repository.query(keyword));
+        return Observable.concat(checkUserId2(), repository.query(keyword)); // (3)
     }
 
-    private Observable checkUserId2() {
-        return (userId == null) ? Observable.error(new AuthentificationException("userId is null"))
-                : Observable.empty();
-    }
-
-    private void logDatabase(TerminalResult terminalResult) {
+    private void log(Result result) {
         //....
     }
 
-    private void terminate2() {
-//        Observable.concat(checkUserId2(), repository.terminate())
-//                .subscribe(result -> logDatabase(result)); // (1) 컴파일 에러
-        Observable<TerminalResult> obs = Observable.concat(checkUserId2(), repository.terminate()); // (2)
-        obs.subscribe(result -> logDatabase(result));
+    private void logCurrent2() {
+//        Observable.concat(checkUserId2(), repository.getResult())
+//                .subscribe(result -> log(result)); // (1) 컴파일 에러
+        Observable<Result> obs = Observable.concat(checkUserId2(), repository.getResult()); // (2)
+        obs.subscribe(result -> log(result));
     }
 
 
@@ -62,9 +62,9 @@ public class ShoppingCart {
         return Observable.concat(checkUserId3(), repository.query(keyword));
     }
 
-    private void terminate3() {
-        Observable.concat(checkUserId3(), repository.terminate())
-                .subscribe(result -> logDatabase(result));
+    private void logCurrent3() {
+        Observable.concat(checkUserId3(), repository.getResult())
+                .subscribe(result -> log(result));
     }
 
 
