@@ -14,10 +14,8 @@ import io.reactivex.Maybe;
 
 public class MaybeActivity extends Activity {
 
-    private String text = "{\"no_best\":\"RxJava\", \"no_good\":\"Android\"}";
-    private String text2 = "{\"best\":\"RxJava\", \"no_good\":\"Android\"}";
-    private String text3 = "{\"no_best\":\"RxJava\", \"good\":\"Android\"}";
-    private String text4 = "{\"best\":\"RxJava\", \"good\":\"Android\"}";
+    private String text = "{\"best\":{\"book\": \"RxJava\"}, \"no_good\":\"Android\"}";
+    private String text2 = "{\"no_best\":\"RxJava\", \"good\":\"Android\"}";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,21 +26,23 @@ public class MaybeActivity extends Activity {
     public void onClickButton1(View view) throws Exception {
         legacy(text);
         legacy(text2);
-        legacy(text3);
-        legacy(text4);
+    }
+
+    private String getDefaultBook() {
+        return null;
     }
 
     private void legacy(String input) throws JSONException {
+        String book = null;
         JSONObject jsonObject = new JSONObject(input);
         JSONObject bookJson = jsonObject.optJSONObject("best");
-        String book = null;
         if (bookJson != null) {
-            book = jsonObject.optString("title");
+            book = jsonObject.optString("book");
             if (book == null) {
-                book = jsonObject.optString("author");
+                book = getDefaultBook();
             }
         } else {
-            book = jsonObject.optString("good");
+            book = getDefaultBook();
         }
         System.out.println("book=" + book);
     }
@@ -50,30 +50,26 @@ public class MaybeActivity extends Activity {
     public void onClickButton2(View view) throws Exception {
        supposeNotNull(text);
        supposeNotNull(text2);
-       supposeNotNull(text3);
-       supposeNotNull(text4);
     }
 
     private void supposeNotNull(String input) throws JSONException {
         JSONObject jsonObject = new JSONObject(input);
         String book = Maybe.fromCallable(() -> jsonObject.optJSONObject("best"))
-                .map(json -> json.optString("title"))
-                .blockingGet(jsonObject.optString("good"));
+                .map(json -> json.optString("book"))
+                .blockingGet(getDefaultBook());
         System.out.println("book=" + book);
     }
 
     public void onClickButton3(View view) throws Exception {
         acceptNullable(text);
         acceptNullable(text2);
-        acceptNullable(text3);
-        acceptNullable(text4);
     }
 
     private void acceptNullable(String input) throws JSONException {
         JSONObject jsonObject = new JSONObject(input);
         String book = Maybe.fromCallable(() -> jsonObject.optJSONObject("best"))
-                .map(json -> json.optString("title"))
-                .concatWith(Maybe.fromCallable(() -> jsonObject.optString("default_book")))
+                .map(json -> json.optString("book"))
+                .concatWith(Maybe.fromCallable(() -> getDefaultBook()))
                 .firstElement().blockingGet();
         System.out.println("book=" + book);
     }
