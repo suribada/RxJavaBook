@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import hu.akarnokd.rxjava2.math.MathObservable;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.internal.functions.Functions;
@@ -368,14 +369,16 @@ public class ConnectableObservableTest {
         SystemClock.sleep(1000);
     }
 
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     @Test
     public void eachCafeLeaders_inefficeint() {
-        getCafeListObservable()
+        Disposable disposable1 = getCafeListObservable()
                 .subscribeOn(Schedulers.io())
                 .flatMapIterable(v -> v)
                 .map(cafe -> cafe.leader).toList()
                 .subscribe(System.out::println);
-        getCafeListObservable()
+        Disposable disposable2 = getCafeListObservable()
                 .subscribeOn(Schedulers.io())
                 .flatMapIterable(v -> v)
                 .map(cafe -> cafe.coleader).toList()
@@ -387,12 +390,12 @@ public class ConnectableObservableTest {
         ConnectableObservable<Cafe> obs = getCafeListObservable()
                 .subscribeOn(Schedulers.io())
                 .flatMapIterable(v -> v)
-                .publish();
-        obs.map(cafe -> cafe.leader).toList()
-                .subscribe(System.out::println);
-        obs.map(cafe -> cafe.coleader).toList()
-                .subscribe(System.out::println);
-        Disposable disposable = obs.connect();
+                .publish(); // (1)
+        obs.map(cafe -> cafe.leader).toList() // (2) 시작
+                .subscribe(System.out::println); // (2) 끝
+        obs.map(cafe -> cafe.coleader).toList() // (3) 시작
+                .subscribe(System.out::println); // (3) 끝
+        Disposable disposable = obs.connect(); // (4)
     }
 
     @Test
@@ -408,19 +411,21 @@ public class ConnectableObservableTest {
                 .subscribe(System.out::println);
     }
 
+    private Disposable disposable, innerDisposable1, innerDisposable2;
+
     @Test
     public void  nestedSubscribe() {
-        getCafeListObservable()
+        disposable = getCafeListObservable()
                 .subscribeOn(Schedulers.io())
                 .flatMapIterable(v -> v)
                 .subscribe(cafe -> { // (1) 시작
                    if (cafe.type == 1) {
-                       findArea(cafe).subscribeOn(Schedulers.io())
+                       innerDisposable1 = findArea(cafe).subscribeOn(Schedulers.io())
                                .subscribe(area -> { // (2) 시작
                                   System.out.println("cafe=" + cafe + ", area=" + area);
                                }); // (2) 끝
                    } else if (cafe.type == 2) {
-                       findHobby(cafe).subscribeOn(Schedulers.io())
+                       innerDisposable2 = findHobby(cafe).subscribeOn(Schedulers.io())
                                .subscribe(hobby -> { // (3) 시작
                                    System.out.println("cafe=" + cafe + ", hobby=" + hobby);
                                }); // (3) 끝
@@ -447,7 +452,7 @@ public class ConnectableObservableTest {
                 .subscribe(pair -> {
                     System.out.println("cafe=" + pair.first + ", hobby=" + pair.second);
                 });
-        Disposable disposable = obs.connect();
+        Disposable disposable = obs.connect(); // (5)
         SystemClock.sleep(1000);
     }
 

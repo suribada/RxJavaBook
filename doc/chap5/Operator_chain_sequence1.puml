@@ -14,5 +14,6 @@ ObservableFromIterable -> ObservableFromIterable:subscribeActual
 create FromIterableDisposable
 ObservableFromIterable -> FromIterableDisposable
 FilterObserver -> FromIterableDisposable:onSubscribe
+MapObserver -> FilterObserver:onSubscribe
 FromIterableDisposable -> FromIterableDisposable : run
 @enduml
