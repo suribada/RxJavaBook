@@ -15,7 +15,7 @@ public class CacheActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_two_buttons);
+        setContentView(R.layout.text_and_three_buttons);
     }
 
     int start = 1;
@@ -24,21 +24,33 @@ public class CacheActivity extends Activity {
     public void onClickButton1(View view) {
         start = 1;
         count = 5;
-        Observable<Integer> obs = Observable.defer(() -> Observable.range(start, count))
-                .doOnNext(System.out::println)
-                .cache();
-        obs.subscribe(value -> System.out.println("value=" + value));
-        obs.subscribe(value -> System.out.println("value=" + value));
+        Observable<Integer> obs = Observable.defer(() -> Observable.range(start, count)) // (1)
+                .doOnNext(value -> System.out.println("doOnNext=" + value));
+        obs.subscribe(value -> System.out.println("value=" + value)); // (3)
+        obs.subscribe(value -> System.out.println("value=" + value)); // (4)
         start = 6;
         count = 10;
-        obs.subscribe(value -> System.out.println("value=" + value));
+        obs.subscribe(value -> System.out.println("value=" + value)); // (5)
     }
 
     public void onClickButton2(View view) {
         start = 1;
         count = 5;
+        Observable<Integer> obs = Observable.defer(() -> Observable.range(start, count)) // (1)
+                .doOnNext(value -> System.out.println("doOnNext=" + value)) // (2)
+                .cache(); // (3)
+        obs.subscribe(value -> System.out.println("value=" + value)); // (4)
+        obs.subscribe(value -> System.out.println("value=" + value)); // (5)
+        start = 6;
+        count = 10;
+        obs.subscribe(value -> System.out.println("value=" + value)); // (6)
+    }
+
+    public void onClickButton3(View view) {
+        start = 1;
+        count = 5;
         CachedObservable<Integer> obs = new CachedObservable(Observable.defer(() -> Observable.range(start, count))
-                .doOnNext(System.out::println));
+                .doOnNext(value -> System.out.println("doOnNext=" + value)));
         obs.subscribe(value -> System.out.println("value=" + value));
         obs.subscribe(value -> System.out.println("value=" + value));
         start = 6;
