@@ -293,6 +293,12 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+        <activity android:name=".chap5.GlideActivity" android:label="chap5/GlideActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
         <activity android:name=".chap5.ObservableCreateActivity" android:label="chap5/ObservableCreateActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
