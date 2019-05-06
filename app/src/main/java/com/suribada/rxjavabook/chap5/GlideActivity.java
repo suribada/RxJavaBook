@@ -1,6 +1,7 @@
 package com.suribada.rxjavabook.chap5;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,15 +35,29 @@ public class GlideActivity extends Activity {
     }
 
     private Observable<Bitmap> getBitmapObservable() {
-        return Observable.fromFuture(Glide.with(this) // (1)
+        return Observable.fromFuture(Glide.with(getContext()) // (1)
                 .asBitmap()
                 .load("http://goo.gl/gEgYUd")
                 .submit()); // (2)
     }
 
+    private Observable<Bitmap> getBitmapObservable2() {
+        return Observable.fromFuture(Glide.with(getContext())
+                .asBitmap()
+                .load("http://goo.gl/gEgYUd")
+                .submit(), Schedulers.io()); // (1)
+    }
+
     public void onClickButton2(View view) {
-        Glide.with(this)
+        Glide.with(getContext())
                 .load("http://goo.gl/gEgYUd")
                 .into(imageView);
+    }
+
+    /**
+     * 예제 때문에 일부러 만든 메서드
+     */
+    private Context getContext() {
+        return this;
     }
 }

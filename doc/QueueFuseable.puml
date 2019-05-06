@@ -1,4 +1,5 @@
 @startuml
+hide members
 
 interface SimpleQueue
 interface QueueFuseable

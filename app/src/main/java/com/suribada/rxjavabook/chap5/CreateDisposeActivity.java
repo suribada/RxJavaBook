@@ -39,6 +39,27 @@ public class CreateDisposeActivity extends Activity {
 
     private Random random = new Random();
 
+    public void onClickGenerate1(View view) {
+        generateDisposable = Observable.<int[]>create(emitter -> { // (2)
+            emitter.setDisposable(elapsedDisposable); // (3)
+            while (!emitter.isDisposed()) {
+                int[] numbers = generateRandom6();
+                emitter.onNext(numbers); // (4)
+                if (!emitter.isDisposed()) { // (4)
+                    SystemClock.sleep(10000); // (5)
+                }
+            }
+        }).map(numbers -> {
+            StringBuilder sb = new StringBuilder();
+            for (int each : numbers) {
+                sb.append(each + " ");
+            }
+            return sb.toString();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(value -> randomNumbers.setText("Selected Numbers: " + value));
+    }
+
     public void onClickGenerate(View view) {
         generateDisposable = Observable.interval(0,10, TimeUnit.SECONDS)
             .doOnDispose(() -> elapsedDisposable.dispose())
@@ -51,28 +72,6 @@ public class CreateDisposeActivity extends Activity {
                 return sb.toString();
             }).observeOn(AndroidSchedulers.mainThread())
             .subscribe(value -> randomNumbers.setText("Selected Numbers: " + value));
-        /*
-        generateDisposable = Observable.<int[]>create(emitter -> { // (2)
-                emitter.setDisposable(elapsedDisposable); // (3)
-                while (!emitter.isDisposed()) {
-                    int[] numbers = generateRandom6();
-                    if (!emitter.isDisposed()) {
-                        emitter.onNext(numbers);
-                    }
-                    if (!emitter.isDisposed()) {
-                       SystemClock.sleep(10000); // (4)
-                    }
-                }
-            }).map(numbers -> {
-                StringBuilder sb = new StringBuilder();
-                for (int each : numbers) {
-                    sb.append(each + " ");
-                }
-                return sb.toString();
-            }).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(value -> randomNumbers.setText("Selected Numbers: " + value));
-            */
     }
 
     private int[] generateRandom6() {

@@ -41,13 +41,13 @@ public class MaybeActivity extends Activity {
         JSONObject jsonObject = new JSONObject(input);
         String book = null;
         JSONObject bestJson = jsonObject.optJSONObject("best");
-        if (bestJson != null) {
+        if (bestJson != null) { // (1)
             book = bestJson.optString("book");
-            if (book == null) {
-                book = getDefaultBook();
+            if (book == null) { // (2)
+                book = getDefaultBook(); // (3)
             }
         } else {
-            book = getDefaultBook();
+            book = getDefaultBook(); // (4)
         }
         System.out.println("book=" + book);
     }
@@ -73,9 +73,9 @@ public class MaybeActivity extends Activity {
 
     private void supposeNotNull(String input) throws JSONException {
         JSONObject jsonObject = new JSONObject(input);
-        String book = Maybe.fromCallable(() -> jsonObject.optJSONObject("best"))
-                .map(json -> json.optString("book"))
-                .blockingGet(getDefaultBook());
+        String book = Maybe.fromCallable(() -> jsonObject.optJSONObject("best")) // (1)
+                .map(json -> json.optString("book")) // (2)
+                .blockingGet(getDefaultBook()); // (3)
         System.out.println("book=" + book);
     }
 
@@ -88,8 +88,14 @@ public class MaybeActivity extends Activity {
         JSONObject jsonObject = new JSONObject(input);
         String book = Maybe.fromCallable(() -> jsonObject.optJSONObject("best"))
                 .map(json -> json.optString("book"))
+                .switchIfEmpty(Maybe.fromCallable(() -> getDefaultBook()))// (1)
+                .blockingGet(); // (2)
+        /*
+        String book = Maybe.fromCallable(() -> jsonObject.optJSONObject("best"))
+                .map(json -> json.optString("book"))
                 .concatWith(Maybe.fromCallable(() -> getDefaultBook()))
                 .firstElement().blockingGet();
+                */
         System.out.println("book=" + book);
     }
 }

@@ -23,13 +23,9 @@ public class RxStreamReader {
                 while ((line = br.readLine()) != null && !emitter.isDisposed()) { // (2)
                     emitter.onNext(line); // (3)
                 }
-                if (!emitter.isDisposed()) {
-                    emitter.onComplete(); // (4)
-                }
+                emitter.onComplete(); // (4)
             } catch (IOException e) {
-                if (!emitter.isDisposed()) {
-                    emitter.onError(e); // (5)
-                }
+                emitter.onError(e); // (5)
             }
         });
     }

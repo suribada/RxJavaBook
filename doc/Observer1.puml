@@ -1,5 +1,5 @@
 @startuml
-
+hide members
 interface Observer<T>
 interface Disposable
 

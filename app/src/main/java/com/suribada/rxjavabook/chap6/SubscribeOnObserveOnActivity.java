@@ -165,8 +165,8 @@ public class SubscribeOnObserveOnActivity extends Activity {
 
     public void saveDb() {
         Observable<Long> obs = Observable.interval(1, TimeUnit.SECONDS).take(10);
-        obs.observeOn(Schedulers.io())
-                .doOnNext(this::saveDb)
+        obs.observeOn(Schedulers.io()) // (1)
+                .doOnNext(this::saveDb) // (2)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(value -> {
                     title.setText("value=" + value);

@@ -1,4 +1,5 @@
 @startuml
+hide members
 abstract class Observable
 abstract class ConnectableObservable
 class ObservablePublish

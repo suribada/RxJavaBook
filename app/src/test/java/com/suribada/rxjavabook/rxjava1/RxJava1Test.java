@@ -59,6 +59,22 @@ public class RxJava1Test {
     }
 
     @Test
+    public void throwError2_2() {
+        rx.Observable.just(1, 2, 3, 4, 0, 5)
+                .map(val -> {
+                    try {
+                        return divideBy(val);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e); // (1)
+                    }
+                })
+                .subscribe(System.out::println,
+                        e -> {
+                            System.out.println("나누기 문제 발생: " + e.getMessage());
+                        });
+    }
+
+    @Test
     public void throwError3() {
         rx.Observable.just(1, 2, 3, 4, 0,5)
                 .flatMap(val -> { // (1)
