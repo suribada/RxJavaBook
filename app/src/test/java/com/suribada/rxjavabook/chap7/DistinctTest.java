@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 
@@ -33,6 +34,22 @@ public class DistinctTest {
         System.out.println(quizHashSet.add(new Quiz("Q1", "A1")));
         System.out.println(quizHashSet.add(new Quiz("Q1", "A1")));
     }
+
+    @Test
+    public void distinctTest() {
+        Observable.just(new Quiz("Q1", "A1"), new Quiz("Q1", "A1"),
+                new Quiz("Q2", "A1"), new Quiz("Q2", "A2"))
+                .distinct()
+                .subscribe(System.out::println);
+    }
+
+    @Test
+    public void distinctKeyTest() {
+        Observable.just(new Quiz("Q1", "A1"), new Quiz("Q1", "A1"),
+                new Quiz("Q2", "A1"), new Quiz("Q2", "A2"))
+                .distinct(quiz -> quiz.answer)
+                .subscribe(System.out::println);
+    }
 }
 
 class Quiz {
@@ -56,6 +73,10 @@ class Quiz {
 
     @Override
     public int hashCode() {
-        return question.hashCode() + 31 * answer.hashCode();
+        //return 31 * question.hashCode() + answer.hashCode();
+        System.out.println("value diff=" + (31 * 31 + question.hashCode() + 31 * answer.hashCode()) + ","
+                + Objects.hash(question, answer));
+        return Objects.hash(question, answer); // (1)
     }
+
 }
