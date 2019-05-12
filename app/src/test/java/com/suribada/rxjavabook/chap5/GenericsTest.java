@@ -1,5 +1,9 @@
 package com.suribada.rxjavabook.chap5;
 
+import com.suribada.rxjavabook.model.Animal;
+import com.suribada.rxjavabook.model.BullDog;
+import com.suribada.rxjavabook.model.Dog;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -143,28 +147,6 @@ public class GenericsTest {
             }
         };
         //Observable<CharSequence> names5 = dogs.map(mapFunction5); // (5) 컴파일 에러
-    }
-
-    class Animal{}
-
-    class Dog extends Animal{
-        String name;
-        Dog(String name) {
-            this.name = name;
-        }
-        int nameLength() {
-            return name.length();
-        }
-
-        String name() {
-            return name;
-        }
-    }
-
-    class BullDog extends Dog{
-        BullDog(String name) {
-            super(name);
-        }
     }
 
     @Test

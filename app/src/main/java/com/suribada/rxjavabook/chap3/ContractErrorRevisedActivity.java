@@ -9,11 +9,14 @@ import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
+import com.suribada.rxjavabook.model.ViewState;
 
 import java.util.Random;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -52,27 +55,23 @@ public class ContractErrorRevisedActivity extends Activity {
         return Observable.fromCallable(() -> "title " + 10 / val);
     }
 
-    interface ViewState {
-        class Error implements ViewState {
-            Throwable e;
-
-            Error(Throwable e) {
-                this.e = e;
-            }
-        }
-
-        class Result implements ViewState {
-            String title;
-
-            Result(String title) {
-                this.title = title;
-            }
-
-            @Override
-            public String toString() {
-                return title;
-            }
-        }
+    private void ofTypeOperator() {
+        ConnectableObservable<ViewState> viewStateObservable = RxView.clicks(button)
+                .flatMap(ignored -> getBestSeller()
+                        .subscribeOn(Schedulers.io())
+                        .map(title -> new ViewState.Result(title))
+                        .cast(ViewState.class)
+                        .onErrorReturn(e -> new ViewState.Error(e)))
+                .publish(); // (1)
+        viewStateObservable.ofType(ViewState.Result.class) // (2)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(state -> title.setText(state.title)); // (3)
+        viewStateObservable.ofType(ViewState.Error.class) // (4)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(error -> {
+                    Toast.makeText(this, "문제 발생", Toast.LENGTH_LONG).show();
+                });
+        Disposable disposable = viewStateObservable.connect(); // (5)
     }
 
 }

@@ -15,11 +15,11 @@ import io.reactivex.Observable;
  */
 public class CustomActivity extends Activity {
 
-    private Observable<State> stateObservable = Observable.create(emitter -> {
-       emitter.onNext(new State.LoadingState());
-       emitter.onNext(new State.DataState("suribada"));
-       emitter.onNext(new State.DataState("horseridingking"));
-       emitter.onNext(new State.ErrorState(new IllegalArgumentException("not allowed")));
+    Observable<State> stateObservable = Observable.create(emitter -> {
+        emitter.onNext(new State.LoadingState());
+        emitter.onNext(new State.DataState("suribada"));
+        emitter.onNext(new State.DataState("horseridingking"));
+        emitter.onNext(new State.ErrorState(new IllegalArgumentException("not allowed")));
     });
 
     private TextView title;
@@ -28,7 +28,7 @@ public class CustomActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_three_buttons);
-        title = (TextView) findViewById(R.id.title);
+        title = findViewById(R.id.title);
     }
 
     public void onClickButton1(View view) {
