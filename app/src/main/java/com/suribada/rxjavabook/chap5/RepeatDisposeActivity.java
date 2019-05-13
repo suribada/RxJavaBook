@@ -26,7 +26,7 @@ public class RepeatDisposeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_button);
-        title = (TextView) findViewById(R.id.title);
+        title = findViewById(R.id.title);
         disposable = Observable.interval(DELAY_TIME, DELAY_TIME, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(next -> {
