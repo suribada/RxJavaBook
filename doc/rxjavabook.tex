@@ -1343,6 +1343,8 @@ Single<Boolean>을 리턴한다.
 \subsubsection{all}
 all(Predicate<? super T> predicate)
 
+https://imnt.tistory.com/84
+http://egloos.zum.com/saveimg/v/6087884
 \subsubsection{any}
 
 \subsubsection{contains}
@@ -1366,6 +1368,8 @@ collect
 collectInto
 toList()
 toMap
+toMap() 메서드는 내부적으로 collect() 메서드를 호출한다.
+
 toMultimap
 toSortedList
 
@@ -1376,6 +1380,9 @@ https://stackoverflow.com/questions/22577197/java-8-streams-collect-vs-reduce/22
 업스트림이 onComplete 이벤트를 보낼 때에 onNext를 보낸다.
 
 \subsubsection{reduce/reduceWith}
+collector.accept(u, t);
+
+this.value = reducer.apply(v, value);
 
 \section{지연}
 \subsection{delay}

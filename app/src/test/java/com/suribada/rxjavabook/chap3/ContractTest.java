@@ -1,7 +1,5 @@
 package com.suribada.rxjavabook.chap3;
 
-import com.thoughtworks.xstream.mapper.Mapper;
-
 import org.json.JSONObject;
 import org.junit.Test;
 

@@ -31,7 +31,7 @@ public class RepeatDisposeActivity extends Activity {
 
     public void onClickButton1(View view) {
         Observable.interval(DELAY_TIME, DELAY_TIME, TimeUnit.SECONDS)
-                .takeUntil(Observable.timer(30, TimeUnit.SECONDS))
+                .takeUntil(Observable.timer(30, TimeUnit.SECONDS)) // (1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(next -> title.setText("currentDate1=" + new Date()),
                         Throwable::printStackTrace,
@@ -39,19 +39,23 @@ public class RepeatDisposeActivity extends Activity {
     }
 
     public void onClickButton2(View view) {
+        showDate();
+    }
+
+    private Subject<String> destroySubject = PublishSubject.create(); // (1)
+
+    private void showDate() {
         Observable.interval(DELAY_TIME, DELAY_TIME, TimeUnit.SECONDS)
-                .takeUntil(destroySubject)
+                .takeUntil(destroySubject) // (2)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(next -> title.setText("currentDate2=" + new Date()),
                         Throwable::printStackTrace,
                         () -> Toast.makeText(this, "onComplete2", Toast.LENGTH_LONG).show());
     }
 
-    private Subject<String> destroySubject = PublishSubject.create();
-
     @Override
     protected void onDestroy() {
-        destroySubject.onNext("onDestroy");
+        destroySubject.onNext("onDestroy"); // (3)
         super.onDestroy();
     }
 }
