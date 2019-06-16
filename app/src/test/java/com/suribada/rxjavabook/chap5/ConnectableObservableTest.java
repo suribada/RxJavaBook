@@ -3,12 +3,12 @@ package com.suribada.rxjavabook.chap5;
 import android.support.v4.util.Pair;
 
 import com.suribada.rxjavabook.SystemClock;
+import com.suribada.rxjavabook.model.Cafe;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +18,6 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.internal.functions.Functions;
 import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -498,17 +497,4 @@ public class ConnectableObservableTest {
         return Observable.just("승마");
     }
 
-    class Cafe {
-        int type; // 카페 타입
-        String name; // 카페명
-        String leader; // 운영자
-        String coleader; // 부운영자
-
-        Cafe(int type, String name, String leader, String coleader) {
-            this.type = type;
-            this.name = name;
-            this.leader = leader;
-            this.coleader = coleader;
-        }
-    }
 }
