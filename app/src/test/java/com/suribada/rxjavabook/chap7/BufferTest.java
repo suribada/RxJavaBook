@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 
 public class BufferTest {
@@ -42,5 +44,29 @@ public class BufferTest {
                 .buffer(500, TimeUnit.MILLISECONDS)
                 .subscribe(value -> System.out.println(Thread.currentThread().getName() + ", " + value));
         SystemClock.sleep(1000);
+    }
+
+    @Test
+    public void testBufferOverlapped() {
+        ConnectableObservable<Integer> connectableObservable = getSpeedObservable().publish();
+        connectableObservable.subscribe(speed -> System.out.println("speed=" + speed));
+        connectableObservable.buffer(2, 1) // (1)
+                .filter(list -> list.size() > 1) // (2)
+                .map(speeds -> speeds.get(1) - speeds.get(0)) // (3)
+                .subscribe(diff -> System.out.println("diff=" + diff));
+        Disposable disposable = connectableObservable.connect();
+    }
+
+    private Observable<Integer> getSpeedObservable() {
+        return Observable.create(emitter -> {
+            emitter.onNext(70);
+            SystemClock.sleep(100);
+            emitter.onNext(80);
+            SystemClock.sleep(100);
+            emitter.onNext(65);
+            SystemClock.sleep(100);
+            emitter.onNext(90);
+            emitter.onComplete();
+        });
     }
 }
