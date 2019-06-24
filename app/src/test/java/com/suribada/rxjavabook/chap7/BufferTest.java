@@ -28,9 +28,9 @@ public class BufferTest {
 
     @Test
     public void testScheduler() {
-        Observable.interval(40, TimeUnit.MILLISECONDS, Schedulers.io())
+        Observable.interval(40, TimeUnit.MILLISECONDS, Schedulers.io()) // (1)
                 .take(8)
-                .buffer(100, TimeUnit.MILLISECONDS)
+                .buffer(100, TimeUnit.MILLISECONDS) // (2)
                 .subscribe(value -> System.out.println(Thread.currentThread().getName() + ", " + value));
         SystemClock.sleep(3000);
     }
