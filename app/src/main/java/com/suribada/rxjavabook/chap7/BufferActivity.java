@@ -19,7 +19,7 @@ public class BufferActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_three_buttons);
+        setContentView(R.layout.four_buttons);
         startInterval();
     }
 
@@ -51,6 +51,14 @@ public class BufferActivity extends Activity {
         Observable.interval(1, TimeUnit.SECONDS)
                 .take(20)
                 .buffer(Observable.interval(5, TimeUnit.SECONDS), // (1)
+                        value -> Observable.timer(value + 2, TimeUnit.SECONDS, Schedulers.single())) // (2)
+                .subscribe(buffer -> System.out.println(Thread.currentThread().getName() + ": " + buffer));
+    }
+
+    public void onClickButton4(View view) {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .take(20)
+                .buffer(Observable.interval(0, 2, TimeUnit.SECONDS), // (1)
                         value -> Observable.timer(value + 2, TimeUnit.SECONDS, Schedulers.single())) // (2)
                 .subscribe(buffer -> System.out.println(Thread.currentThread().getName() + ": " + buffer));
     }
