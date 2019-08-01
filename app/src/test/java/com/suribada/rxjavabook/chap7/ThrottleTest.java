@@ -22,4 +22,26 @@ public class ThrottleTest {
                 .subscribe(value -> System.out.println(Thread.currentThread().getName() + ":" + value));
         SystemClock.sleep(3000);
     }
+
+    /**
+     * 1, 3, 5, 6
+     */
+    @Test
+    public void throttleLast() {
+        Observable.interval(5, TimeUnit.SECONDS) // (1)
+                .take(7) // (2)
+                .sample(10, TimeUnit.SECONDS, Schedulers.single(), true) // (3)
+                .subscribe(value -> System.out.println(Thread.currentThread().getName() + ":" + value));
+        SystemClock.sleep(40000);
+    }
+
+    @Test
+    public void throttleLatest() {
+        Observable.interval(5, TimeUnit.SECONDS)
+                .take(7)
+                .throttleLatest(10, TimeUnit.SECONDS, Schedulers.single(), true) // (1)
+                .subscribe(value -> System.out.println(Thread.currentThread().getName() + ":" + value));
+        SystemClock.sleep(40000);
+    }
+
 }
