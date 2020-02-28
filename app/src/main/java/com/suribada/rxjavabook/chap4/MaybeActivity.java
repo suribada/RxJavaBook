@@ -2,7 +2,7 @@ package com.suribada.rxjavabook.chap4;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import org.json.JSONException;
@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import com.suribada.rxjavabook.R;
 
-import io.reactivex.Maybe;
+import io.reactivex.rxjava3.core.Maybe;
 
 public class MaybeActivity extends Activity {
 

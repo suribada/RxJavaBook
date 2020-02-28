@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.suribada.rxjavabook.SystemClock;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 public class ScanTest {
 

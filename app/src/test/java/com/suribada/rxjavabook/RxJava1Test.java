@@ -6,13 +6,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.internal.operators.observable.ObservableFilter;
 import io.reactivex.internal.operators.observable.ObservableFromIterable;
 import io.reactivex.internal.operators.observable.ObservableMap;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.rxjava3.observers.DisposableObserver;
 
 /**
  * Created by lia on 2017-10-12.

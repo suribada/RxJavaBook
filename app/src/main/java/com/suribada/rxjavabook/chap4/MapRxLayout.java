@@ -1,7 +1,7 @@
 package com.suribada.rxjavabook.chap4;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -9,9 +9,7 @@ import android.widget.FrameLayout;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
 
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * Created by Noh.Jaechun on 2018. 5. 9

@@ -2,9 +2,9 @@ package com.suribada.rxjavabook.chap4.rxlogin;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
-import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 /**
  * Created by lia on 2017-10-14.

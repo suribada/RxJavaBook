@@ -1,9 +1,8 @@
 package com.suribada.rxjavabook.chap6;
 
 import android.app.Activity;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -14,11 +13,10 @@ import com.suribada.rxjavabook.api.BookSampleRepository;
 
 import java.util.ArrayList;
 
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.internal.observers.LambdaObserver;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by lia on 2018-04-09.

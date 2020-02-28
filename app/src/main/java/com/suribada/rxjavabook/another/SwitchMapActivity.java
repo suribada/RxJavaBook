@@ -2,21 +2,17 @@ package com.suribada.rxjavabook.another;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.jakewharton.rxbinding2.view.RxView;
-import com.jakewharton.rxbinding2.widget.RxCompoundButton;
+import com.jakewharton.rxbinding3.widget.RxCompoundButton;
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-
-import static com.jakewharton.rxbinding2.widget.RxCompoundButton.checkedChanges;
-
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 /**
  * Learning RxJava에서 안드로이드 버전으로 변경
  *

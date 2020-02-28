@@ -5,9 +5,9 @@ import org.junit.Test;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.observables.ConnectableObservable;
-import io.reactivex.observers.TestObserver;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.observables.ConnectableObservable;
+import io.reactivex.rxjava3.observers.TestObserver;
 import io.reactivex.schedulers.TestScheduler;
 
 import static org.junit.Assert.assertTrue;

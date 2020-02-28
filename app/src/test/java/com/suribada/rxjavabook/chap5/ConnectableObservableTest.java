@@ -1,6 +1,6 @@
 package com.suribada.rxjavabook.chap5;
 
-import android.support.v4.util.Pair;
+import androidx.core.util.Pair;
 
 import com.suribada.rxjavabook.SystemClock;
 import com.suribada.rxjavabook.model.Cafe;
@@ -14,12 +14,12 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import hu.akarnokd.rxjava2.math.MathObservable;
-import io.reactivex.Observable;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.observables.ConnectableObservable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.observables.ConnectableObservable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by Noh.Jaechun on 2018. 9. 11..

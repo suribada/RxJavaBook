@@ -2,19 +2,19 @@ package com.suribada.rxjavabook.chap5;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
 
-import hu.akarnokd.rxjava2.debug.RxJavaAssemblyTracking;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.SafeObserver;
-import io.reactivex.plugins.RxJavaPlugins;
+import hu.akarnokd.rxjava3.debug.RxJavaAssemblyTracking;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.observers.SafeObserver;
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 
 public class AutoDisposeActivity extends Activity {
 

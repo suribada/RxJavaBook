@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Single;
 
 import static junit.framework.Assert.assertEquals;
 

@@ -2,7 +2,7 @@ package com.suribada.rxjavabook.chap9;
 
 import org.junit.Test;
 
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Single;
 
 public class ErrorTest {
 

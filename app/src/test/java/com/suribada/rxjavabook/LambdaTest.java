@@ -2,7 +2,7 @@ package com.suribada.rxjavabook;
 
 import org.junit.Test;
 
-import io.reactivex.functions.Predicate;
+import io.reactivex.rxjava3.functions.Predicate;
 
 /**
  * Created by lia on 2017-10-16.

@@ -1,14 +1,13 @@
 package com.suribada.rxjavabook.chap7;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Objects;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 public class DistinctTest {
 

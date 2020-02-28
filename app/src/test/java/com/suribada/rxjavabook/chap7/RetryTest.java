@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Function;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.Function;
 
 public class RetryTest {
 
@@ -16,7 +16,7 @@ public class RetryTest {
         Observable.interval(100, TimeUnit.MILLISECONDS)
                 .take(10)
                 .map(i -> 10 / (5 - i))
-                .subscribe(System.out::println);
+                .subscribe(System.out::println, System.err::println);
         SystemClock.sleep(3000);
     }
 
@@ -26,7 +26,7 @@ public class RetryTest {
                 .take(10)
                 .map(i -> 10 / (5 - i))
                 .retry()
-                .subscribe(System.out::println);
+                .subscribe(System.out::println, System.err::println);
         SystemClock.sleep(3000);
     }
 
@@ -37,7 +37,7 @@ public class RetryTest {
                 .take(10)
                 .map(i -> 10 / (5 - i))
                 .retryUntil(() -> System.currentTimeMillis() - start > 5000)
-                .subscribe(System.out::println);
+                .subscribe(System.out::println, System.err::println);
         SystemClock.sleep(10000);
     }
 

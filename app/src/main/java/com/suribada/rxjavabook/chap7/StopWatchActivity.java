@@ -2,24 +2,18 @@ package com.suribada.rxjavabook.chap7;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.jakewharton.rxbinding2.view.RxView;
-import com.jakewharton.rxbinding2.widget.RxAbsListView;
-import com.jakewharton.rxbinding2.widget.RxAdapterView;
-import com.jakewharton.rxbinding2.widget.RxCheckedTextView;
-import com.jakewharton.rxbinding2.widget.RxCompoundButton;
+import com.jakewharton.rxbinding3.widget.RxCompoundButton;
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-
-/**
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;/**
  * from Learnig RxJava
  *
  * Created by lia on 2018-01-04.

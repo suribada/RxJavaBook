@@ -2,7 +2,7 @@ package com.suribada.rxjavabook.seudo;
 
 import android.util.Base64;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * Created by Naver on 2017. 10. 13..

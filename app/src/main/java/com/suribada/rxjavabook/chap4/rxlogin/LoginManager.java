@@ -7,8 +7,8 @@ import android.content.IntentFilter;
 
 import com.suribada.rxjavabook.seudo.LoginMessage;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 /**
  * Created by Naver on 2017. 10. 13..

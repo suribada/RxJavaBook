@@ -2,7 +2,7 @@ package com.suribada.rxjavabook.chap4;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * Created by lia on 2018-05-11.

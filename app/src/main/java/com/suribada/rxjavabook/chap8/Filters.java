@@ -1,7 +1,7 @@
 package com.suribada.rxjavabook.chap8;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Function;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.Function;
 
 /**
  * Created by lia on 2018-05-01.

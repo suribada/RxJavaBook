@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * 클래스로더 캐시 때문에 한꺼번에 테스트 실행할 때와 각각 실행할 때가 속도 차이가 많다.

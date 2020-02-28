@@ -1,10 +1,7 @@
 package com.suribada.rxjavabook.chap2;
 
-import com.suribada.rxjavabook.chap3.ContractErrorRevisedActivity;
-
 import org.junit.Test;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 

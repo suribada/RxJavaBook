@@ -5,8 +5,8 @@ import org.junit.Test;
 import java.util.List;
 
 import edu.emory.mathcs.backport.java.util.Collections;
-import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by Noh.Jaechun on 2018. 8. 3..

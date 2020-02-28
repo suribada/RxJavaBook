@@ -2,7 +2,7 @@ package com.suribada.rxjavabook.rxjava1;
 
 import org.junit.Test;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * Created by lia on 2018-03-03.

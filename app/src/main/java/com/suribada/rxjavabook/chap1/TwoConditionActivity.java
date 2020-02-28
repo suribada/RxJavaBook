@@ -2,12 +2,12 @@ package com.suribada.rxjavabook.chap1;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.Button;
 
 import com.suribada.rxjavabook.R;
 
-import io.reactivex.Completable;
+import io.reactivex.rxjava3.core.Completable;
 
 /**
  * Created by lia on 2018-02-05.

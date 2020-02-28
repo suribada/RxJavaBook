@@ -5,8 +5,8 @@ import com.suribada.rxjavabook.SystemClock;
 import org.junit.Test;
 
 import io.reactivex.Emitter;
-import io.reactivex.Observable;
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 
 public class CreateTest {
 

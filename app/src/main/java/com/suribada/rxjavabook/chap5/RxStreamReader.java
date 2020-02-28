@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 import okio.Buffer;
 
 /**

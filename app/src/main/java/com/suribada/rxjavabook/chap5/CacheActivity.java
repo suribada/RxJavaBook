@@ -2,13 +2,13 @@ package com.suribada.rxjavabook.chap5;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import com.github.davidmoten.rx2.observable.CachedObservable;
 import com.suribada.rxjavabook.R;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 public class CacheActivity extends Activity {
 

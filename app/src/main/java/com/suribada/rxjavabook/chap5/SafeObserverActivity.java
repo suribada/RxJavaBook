@@ -2,15 +2,15 @@ package com.suribada.rxjavabook.chap5;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import com.suribada.rxjavabook.R;
 
-import hu.akarnokd.rxjava2.debug.RxJavaAssemblyTracking;
-import io.reactivex.Observable;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.observers.SafeObserver;
+import hu.akarnokd.rxjava3.debug.RxJavaAssemblyTracking;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.observers.DisposableObserver;
+import io.reactivex.rxjava3.observers.SafeObserver;
 
 /**
  * Created by Noh.Jaechun on 2018. 11. 1..

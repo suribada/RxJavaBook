@@ -2,9 +2,9 @@ package com.suribada.rxjavabook.chap4;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.util.Log;
+
+import androidx.annotation.Nullable;
+
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,9 +14,9 @@ import com.suribada.rxjavabook.R;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 /**
  * Created by Noh.Jaechun on 2018. 4. 2..

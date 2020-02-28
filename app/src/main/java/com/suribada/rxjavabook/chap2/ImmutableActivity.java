@@ -2,16 +2,13 @@ package com.suribada.rxjavabook.chap2;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
 import com.suribada.rxjavabook.R;
-import com.suribada.rxjavabook.seudo.Functional;
 
 import java.util.concurrent.CountDownLatch;
-
-import io.reactivex.functions.Function;
 
 /**
  * Created by Noh.Jaechun on 2018. 3. 26..

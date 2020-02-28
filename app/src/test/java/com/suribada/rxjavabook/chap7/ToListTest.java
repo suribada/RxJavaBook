@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 public class ToListTest {
 

@@ -2,9 +2,8 @@ package com.suribada.rxjavabook.chap4;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
@@ -16,9 +15,9 @@ import com.suribada.rxjavabook.api.model.Book;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static com.suribada.rxjavabook.chap4.MergeActivity.Type.BESTSELLER;
 

@@ -2,7 +2,7 @@ package com.suribada.rxjavabook.chap5;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * Created by Noh.Jaechun on 2018. 7. 29..

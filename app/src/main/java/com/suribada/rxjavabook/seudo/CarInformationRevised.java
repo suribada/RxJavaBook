@@ -4,7 +4,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Pair;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * Created by lia on 2018-01-22.

@@ -4,12 +4,12 @@ import com.suribada.rxjavabook.SystemClock;
 
 import org.junit.Test;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.observers.SafeObserver;
-import io.reactivex.observers.SerializedObserver;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.observers.DisposableObserver;
+import io.reactivex.rxjava3.observers.SafeObserver;
+import io.reactivex.rxjava3.observers.SerializedObserver;
 
 /**
  * Created by lia on 2018-10-18.

@@ -2,9 +2,9 @@ package com.suribada.rxjavabook;
 
 import org.junit.Test;
 
-import io.reactivex.subjects.BehaviorSubject;
-import io.reactivex.subjects.ReplaySubject;
-import io.reactivex.subjects.Subject;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
+import io.reactivex.rxjava3.subjects.Subject;
 
 /**
  * Created by lia on 2017-10-15.

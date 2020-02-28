@@ -3,14 +3,14 @@ package com.suribada.rxjavabook.chap4;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.Button;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
 import com.suribada.rxjavabook.chap1.ObserverActivity;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * Created by Noh.Jaechun on 2018. 3. 29..

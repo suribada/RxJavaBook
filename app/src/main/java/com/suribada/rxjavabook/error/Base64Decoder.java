@@ -2,7 +2,7 @@ package com.suribada.rxjavabook.error;
 
 import android.util.Base64;
 
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Single;
 
 /**
  * Created by lia on 2018-01-13.

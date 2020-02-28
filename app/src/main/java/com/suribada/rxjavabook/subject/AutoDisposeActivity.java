@@ -2,7 +2,7 @@ package com.suribada.rxjavabook.subject;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,8 +11,8 @@ import com.suribada.rxjavabook.R;
 
 import java.util.Random;
 
-import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.Subject;
 
 /**
  * Created by Jaechun.Noh on 2017-10-14.

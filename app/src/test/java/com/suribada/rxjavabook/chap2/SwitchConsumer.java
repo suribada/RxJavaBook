@@ -1,15 +1,13 @@
 package com.suribada.rxjavabook.chap2;
 
-import com.suribada.rxjavabook.chap3.ContractErrorRevisedActivity;
-
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Emitter;
-import io.reactivex.Observable;
-import io.reactivex.functions.BiConsumer;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Predicate;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.BiConsumer;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.internal.functions.ObjectHelper;
 import io.reactivex.internal.operators.observable.ObservableInternalHelper;
 

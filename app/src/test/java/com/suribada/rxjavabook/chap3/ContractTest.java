@@ -3,8 +3,8 @@ package com.suribada.rxjavabook.chap3;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import io.reactivex.Maybe;
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.core.Observable;
 
 import static com.facebook.stetho.inspector.network.PrettyPrinterDisplayType.JSON;
 
@@ -31,7 +31,7 @@ public class ContractTest {
     }
 
     @Test
-    public void nullEventPossible() {
+    public void errorEventPossible() {
         Observable.just(1, 2, -1, 1, 2)
                 .map(dollar -> getCurrentPrice(dollar))
                 .subscribe(System.out::println,
@@ -56,38 +56,39 @@ public class ContractTest {
                 );
     }
 
+    private String getCurrentPrice3(int dollar) {
+        if (dollar < 0) { // (1) 시작
+            throw new IllegalArgumentException("dollar should be bigger than 0");
+        } // (1) 끝
+        return (dollar * 1000) + " won";
+    }
+
     @Test
-    public void nullEventPossible3() {
+    public void testOnErrorReturnItem() {
         Observable.just(1, 2, -1, 1, 2)
                 .map(dollar -> getCurrentPrice3(dollar))
-                .onErrorReturnItem("0 won")
+                .onErrorReturnItem("0 won") // (2)
                 .subscribe(System.out::println,
                         System.err::println,
                         () -> System.out.println("onComplete"));
     }
 
-    private String getCurrentPrice3(int dollar) {
+    private Observable<String> getCurrentPrice4(int dollar) {
         if (dollar < 0) {
-            throw new IllegalArgumentException("dollar should be bigger than 0");
+            return Observable.error( // (1) 시작
+                    new IllegalArgumentException("dollar should be bigger than 0")); // (1) 끝
         }
-        return (dollar * 1000) + " won";
+        return Observable.just((dollar * 1000) + " won"); // (2)
     }
 
     @Test
-    public void nullEventPossible4() {
+    public void testOnErrorReturnItemContinued() {
         Observable.just(1, 2, -1, 1, 2)
                 .flatMap(dollar -> getCurrentPrice4(dollar)
-                        .onErrorReturnItem("0 won")) // (1)
+                        .onErrorReturnItem("0 won")) // (3)
                 .subscribe(System.out::println,
-                        System.err::println);
-    }
-
-    private Observable<String> getCurrentPrice4(int dollar) {
-        if (dollar < 0) {
-            return Observable.error(
-                    new IllegalArgumentException("dollar should be bigger than 0")); // (2)
-        }
-        return Observable.just((dollar * 1000) + " won"); // (3)
+                        System.err::println,
+                        () -> System.out.println("onComplete"));
     }
 
     @Test(expected = NullPointerException.class)

@@ -1,6 +1,6 @@
 package com.suribada.rxjavabook.chap8;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.suribada.rxjavabook.SystemClock;
 
@@ -9,9 +9,9 @@ import org.reactivestreams.Publisher;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Completable;
-import io.reactivex.Flowable;
-import io.reactivex.functions.Function;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.functions.Function;
 
 public class RxTest {
 
