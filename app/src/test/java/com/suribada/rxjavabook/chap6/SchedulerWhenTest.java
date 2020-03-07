@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.functions.Function;
-import io.reactivex.internal.schedulers.ComputationScheduler;
+import io.reactivex.rxjava3.internal.schedulers.ComputationScheduler;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static java.util.concurrent.TimeUnit.SECONDS;

@@ -7,9 +7,11 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+/* TODO
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxCompoundButton;
 import com.jakewharton.rxbinding2.widget.RxTextView;
+ */
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
@@ -29,21 +31,24 @@ public class RxBindingActivity extends Activity {
     private View area;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-     private Consumer<? super CharSequence> textChange = RxTextView.text(title); // (1)
+    // TODO
+//     private Consumer<? super CharSequence> textChange = RxTextView.text(title); // (1)
      //private Consumer<? super CharSequence> textChange;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rxbinding_layout);
-        title = (TextView) findViewById(R.id.title);
-        textChange = RxTextView.text(title); // (3)
-        checkBox = (CheckBox) findViewById(R.id.check);
+        title = findViewById(R.id.title);
+        // TODO
+        //textChange = RxTextView.text(title); // (3)
+        checkBox = findViewById(R.id.check);
         area = findViewById(R.id.area);
         checkBox.setOnCheckedChangeListener((buttonView, isChecked)
                 -> area.setVisibility(isChecked ? View.VISIBLE : View.GONE));
-        RxCompoundButton.checkedChanges(checkBox).subscribe(isChecked -> area.setVisibility(isChecked ? View.VISIBLE : View.GONE)); // (1)
-        RxCompoundButton.checkedChanges(checkBox).subscribe(RxView.visibility(area)); // (2)
+        //TODO
+//        RxCompoundButton.checkedChanges(checkBox).subscribe(isChecked -> area.setVisibility(isChecked ? View.VISIBLE : View.GONE)); // (1)
+//        RxCompoundButton.checkedChanges(checkBox).subscribe(RxView.visibility(area)); // (2)
     }
 
     public void onClickButton(View view) {
@@ -51,6 +56,7 @@ public class RxBindingActivity extends Activity {
                 .map(value -> ("current value1=" + value))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(title::setText)); // (2)
+        /* TODO
         compositeDisposable.add(Observable.interval(7, TimeUnit.SECONDS)
                 .map(value -> ("current value2=" + value))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -59,6 +65,7 @@ public class RxBindingActivity extends Activity {
                 .map(value -> ("current value3=" + value))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textChange)); // (7)
+         */
     }
 
     @Override

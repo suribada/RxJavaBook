@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.observers.TestObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import io.reactivex.schedulers.TestScheduler;
+import io.reactivex.rxjava3.schedulers.TestScheduler;
 
 /**
  * Created by Noh.Jaechun on 2017. 3. 9..

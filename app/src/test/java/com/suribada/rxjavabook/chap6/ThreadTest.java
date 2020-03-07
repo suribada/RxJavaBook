@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.internal.schedulers.ScheduledDirectPeriodicTask;
+import io.reactivex.rxjava3.internal.schedulers.ScheduledDirectPeriodicTask;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ThreadTest {

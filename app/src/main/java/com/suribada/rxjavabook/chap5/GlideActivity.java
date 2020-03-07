@@ -42,10 +42,13 @@ public class GlideActivity extends Activity {
     }
 
     private Observable<Bitmap> getBitmapObservable2() {
+        /*  RxJava3에서는 특정 스케줄러가 안 됨
         return Observable.fromFuture(Glide.with(getContext())
                 .asBitmap()
                 .load("http://goo.gl/gEgYUd")
                 .submit(), Schedulers.io()); // (1)
+         */
+        return null;
     }
 
     public void onClickButton2(View view) {

@@ -17,7 +17,7 @@ public class LambdaTest {
         try {
             isEven = even.test(50);
             System.out.println("isEven=" + isEven);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }

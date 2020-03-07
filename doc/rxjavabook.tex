@@ -527,11 +527,11 @@ cast는 Observable에만 있다.
 Observable.fromArray(1, 2, 3, null).subscribe(System.out::println);
 \begin{verbatim}
 Exception in thread "main" io.reactivex.exceptions.OnErrorNotImplementedException: The 3th element is null
-	at io.reactivex.internal.functions.Functions$OnErrorMissingConsumer.accept(Functions.java:704)
-	at io.reactivex.internal.functions.Functions$OnErrorMissingConsumer.accept(Functions.java:701)
-	at io.reactivex.internal.observers.LambdaObserver.onError(LambdaObserver.java:74)
-	at io.reactivex.internal.operators.observable.ObservableFromArray$FromArrayDisposable.run(ObservableFromArray.java:104)
-	at io.reactivex.internal.operators.observable.ObservableFromArray.subscribeActual(ObservableFromArray.java:36)
+	at io.reactivex.rxjava3.internal.functions.Functions$OnErrorMissingConsumer.accept(Functions.java:704)
+	at io.reactivex.rxjava3.internal.functions.Functions$OnErrorMissingConsumer.accept(Functions.java:701)
+	at io.reactivex.rxjava3.internal.observers.LambdaObserver.onError(LambdaObserver.java:74)
+	at io.reactivex.rxjava3.internal.operators.observable.ObservableFromArray$FromArrayDisposable.run(ObservableFromArray.java:104)
+	at io.reactivex.rxjava3.internal.operators.observable.ObservableFromArray.subscribeActual(ObservableFromArray.java:36)
 	...
 \end{verbatim}
 
@@ -605,7 +605,7 @@ Maniuplate emissions in some way.
 문서에 따라 Observable을 생성하는 메서드라 구독 메서드도 연산자에 포함시키기도 한다.
 http://reactivex.io/documentation/operators.html
 여기서는 구분을 하도록 하겠다.
-io.reactivex.internal.operators에는 생성과 변환을 모두 포함한다.
+io.reactivex.rxjava3.internal.operators에는 생성과 변환을 모두 포함한다.
 어차피 만드는 것이다!!
 
 Observable 생성
@@ -1121,7 +1121,7 @@ rx2.computation-threads 시스템 프로퍼티로 더 적게 세팅할 수는 �
 % 권한 문제 체크 필요
 
 
-io.reactivex.internal.schedulers.ComputationScheduler 클래스에 지정
+io.reactivex.rxjava3.internal.schedulers.ComputationScheduler 클래스에 지정
 
 디폴트로 computation 스케줄러로 되어 있는 것들은 아래와 같다.  오버로딩된 
 메서드가 있어서 다른 스케줄러를 사용할 수도 있다.

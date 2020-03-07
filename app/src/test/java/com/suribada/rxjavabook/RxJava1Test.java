@@ -8,10 +8,10 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.SingleOnSubscribe;
-import io.reactivex.internal.operators.observable.ObservableFilter;
-import io.reactivex.internal.operators.observable.ObservableFromIterable;
-import io.reactivex.internal.operators.observable.ObservableMap;
+import io.reactivex.rxjava3.core.SingleOnSubscribe;
+import io.reactivex.rxjava3.internal.operators.observable.ObservableFilter;
+import io.reactivex.rxjava3.internal.operators.observable.ObservableFromIterable;
+import io.reactivex.rxjava3.internal.operators.observable.ObservableMap;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 
 /**

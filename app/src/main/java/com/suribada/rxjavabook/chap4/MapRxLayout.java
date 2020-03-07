@@ -6,7 +6,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.jakewharton.rxbinding2.view.RxView;
+//TODO
+//import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -27,15 +28,20 @@ public class MapRxLayout extends FrameLayout {
     }
 
     public Observable<Object> getGpsActivationObservable() { // (1) 시작
-        return RxView.clicks(gpsActivation);
+        //TODO
+        //return RxView.clicks(gpsActivation);
+        return null;
     } // (1) 끝
 
     public Observable<Integer> getZoomObservable() { // (2) 시작
+        /* TODO
         Observable<Integer> zoomInObservable = RxView.clicks(zoomIn)
                 .map(Void -> Integer.valueOf(1));
         Observable<Integer> zoomOutObservable = RxView.clicks(zoomOut)
                 .map(Void -> Integer.valueOf(-1));
         return zoomInObservable.mergeWith(zoomOutObservable);
+         */
+        return null;
     } // (2) 끝
 
 }

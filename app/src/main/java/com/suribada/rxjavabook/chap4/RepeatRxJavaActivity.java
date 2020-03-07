@@ -7,8 +7,8 @@ import androidx.annotation.Nullable;
 
 import android.view.View;
 import android.widget.TextView;
-
-import com.jakewharton.rxbinding2.view.RxView;
+//TODO
+//import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
 
 import java.util.Date;
@@ -32,7 +32,7 @@ public class RepeatRxJavaActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_button);
-        title = (TextView) findViewById(R.id.title);
+        title = findViewById(R.id.title);
     }
 
     private static final int DELAY_TIME = 2000;

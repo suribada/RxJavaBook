@@ -11,7 +11,7 @@ import java.util.List;
 public class SwitchConsumerTest {
 
     @Test
-    public void testSwitchLambda() throws Exception {
+    public void testSwitchLambda() throws Throwable {
         List<SwitchConsumer.TypePredicate> typePredicateList = Arrays.asList(
                 new SwitchConsumer.TypePredicate(ViewState.Error.class, value -> {
                     System.out.println(String.valueOf(value));

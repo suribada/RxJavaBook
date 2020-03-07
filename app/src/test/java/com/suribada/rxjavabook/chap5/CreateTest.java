@@ -4,7 +4,7 @@ import com.suribada.rxjavabook.SystemClock;
 
 import org.junit.Test;
 
-import io.reactivex.Emitter;
+import io.reactivex.rxjava3.core.Emitter;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 

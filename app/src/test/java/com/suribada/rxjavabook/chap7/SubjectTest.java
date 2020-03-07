@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableConverter;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.functions.Function;
@@ -55,13 +56,13 @@ public class SubjectTest {
     }
 
     class MessageBinder {
-        Function<Observable<Integer>, Disposable> bind(Consumer<Integer> consumer) {
+        ObservableConverter<Integer, Disposable> bind(Consumer<Integer> consumer) {
             return source -> source.subscribeWith(new DisposableObserver<Integer>() {
                 @Override
                 public void onNext(Integer integer) {
                     try {
                         consumer.accept(integer);
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         e.printStackTrace();
                     }
                 }

@@ -7,8 +7,8 @@ import androidx.annotation.Nullable;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.jakewharton.rxbinding2.view.RxView;
+//TODO
+//import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -30,12 +30,14 @@ public class SearchActivity2 extends Activity {
         weatherKeyword = findViewById(R.id.weather);
         carKeyword = findViewById(R.id.car);
         rxjavaKeyword = findViewById(R.id.rxjava);
+        /* TODO
         Observable.merge(
             RxView.clicks(search).map(ignored -> searchText.getText().toString()),
             RxView.clicks(weatherKeyword).map(ignored -> "날씨"),
             RxView.clicks(carKeyword).map(ignored -> "자동차"),
             RxView.clicks(rxjavaKeyword).map(ignored -> "RxJava")
         ).subscribe(keyword -> searchKeyword(keyword));
+         */
     }
 
     private void searchKeyword(String keyword) {

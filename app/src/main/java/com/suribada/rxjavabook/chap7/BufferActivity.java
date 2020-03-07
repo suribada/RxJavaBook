@@ -41,10 +41,12 @@ public class BufferActivity extends Activity {
     }
 
     public void onClickButton2(View view) {
+        /* RxJava3에서 제거
         Observable.interval(1, TimeUnit.SECONDS)
                 .take(20)
                 .buffer(() -> Observable.timer(5, TimeUnit.SECONDS, Schedulers.single())) // (1)
                 .subscribe(buffer -> System.out.println(Thread.currentThread().getName() + ": " + buffer));
+         */
     }
 
     public void onClickButton3(View view) {

@@ -1,6 +1,7 @@
 package com.suribada.rxjavabook.chap8;
 
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableConverter;
 import io.reactivex.rxjava3.functions.Function;
 
 /**
@@ -15,8 +16,8 @@ public class Filters {
      *
      * ex) stateObservable.to(Filters.cast(State.LoadingState.class)).subscribe(state -> showText(state.toString()));
      */
-    public static <T> Function<Observable<T>, Observable<? extends T>> cast(Class<? extends T> clazz) {
-        return source -> source.filter(value -> clazz.isInstance(value))
+    public static <T> ObservableConverter<T, Observable<? extends T>> cast(Class<? extends T> clazz) {
+        return source -> source.filter(clazz::isInstance)
                 .cast(clazz);
     }
 

@@ -1,4 +1,4 @@
-package io.reactivex.internal.operators.observable;
+package io.reactivex.rxjava3.internal.operators.observable;
 
 import org.junit.After;
 import org.junit.Before;
@@ -7,14 +7,13 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import hu.akarnokd.rxjava2.debug.RxJavaAssemblyTracking;
+import hu.akarnokd.rxjava3.debug.RxJavaAssemblyTracking;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.internal.disposables.ArrayCompositeDisposable;
-import io.reactivex.internal.functions.Functions;
-import io.reactivex.internal.observers.LambdaObserver;
+import io.reactivex.rxjava3.internal.disposables.ArrayCompositeDisposable;
+import io.reactivex.rxjava3.internal.functions.Functions;
+import io.reactivex.rxjava3.internal.observers.LambdaObserver;
 
 /**
  * Created by Naver on 2017. 10. 13..

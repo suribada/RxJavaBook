@@ -1,15 +1,16 @@
 package com.suribada.rxjavabook.chap2;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
-import io.reactivex.Emitter;
+import io.reactivex.rxjava3.core.Emitter;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.functions.BiConsumer;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.functions.Predicate;
-import io.reactivex.internal.functions.ObjectHelper;
-import io.reactivex.internal.operators.observable.ObservableInternalHelper;
+import io.reactivex.rxjava3.internal.functions.ObjectHelper;
+import io.reactivex.rxjava3.internal.operators.observable.ObservableInternalHelper;
 
 /**
  * Created by Noh.Jaechun on 2018-04-10.
@@ -24,7 +25,7 @@ public class SwitchConsumer<T> implements Consumer<T> {
     }
 
     @Override
-    public void accept(T t) throws Exception {
+    public void accept(T t) throws Throwable {
         for (TypePredicate each : typeConsumers) {
             if (each.test(t)) {
                 return;
@@ -44,7 +45,7 @@ public class SwitchConsumer<T> implements Consumer<T> {
         }
 
         @Override
-        public boolean test(T t) throws Exception {
+        public boolean test(T t) throws Throwable {
             if (clazz.isInstance(t)) {
                 consumer.accept(clazz.cast(t));
                 return true;
@@ -58,7 +59,7 @@ public class SwitchConsumer<T> implements Consumer<T> {
             final Callable<S> initialState,
             final BiConsumer<S, Emitter<S>> generator,
             Consumer<? super M> disposeState) {
-        ObjectHelper.requireNonNull(generator, "generator  is null");
+        Objects.requireNonNull(generator, "generator  is null");
         return null;
     }
 

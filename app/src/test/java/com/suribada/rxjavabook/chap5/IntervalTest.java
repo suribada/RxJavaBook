@@ -14,7 +14,7 @@ public class IntervalTest {
     public void testSwalow() {
         Observable.interval(1, TimeUnit.SECONDS)
                 .flatMap(value -> mappedValue(value)
-                        .onErrorResumeNext(Observable.empty()))
+                        .onErrorResumeWith(Observable.empty()))
                 .subscribe(System.out::println);
         SystemClock.sleep(20000);
     }

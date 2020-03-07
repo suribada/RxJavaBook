@@ -5,7 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import android.view.View;
 
-import com.github.davidmoten.rx2.observable.CachedObservable;
+//TODO
+//import com.github.davidmoten.rx2.observable.CachedObservable;
 import com.suribada.rxjavabook.R;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -49,6 +50,7 @@ public class CacheActivity extends Activity {
     public void onClickButton3(View view) {
         start = 1;
         count = 5;
+        /* TODO
         CachedObservable<Integer> obs = new CachedObservable(Observable.defer(() -> Observable.range(start, count))
                 .doOnNext(value -> System.out.println("doOnNext=" + value)));
         obs.subscribe(value -> System.out.println("value=" + value));
@@ -57,6 +59,7 @@ public class CacheActivity extends Activity {
         count = 10;
         obs.reset();
         obs.subscribe(value -> System.out.println("value=" + value));
+         */
     }
 
 }

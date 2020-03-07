@@ -64,7 +64,9 @@ public class GithubRxJavaTest {
             }
 
         }).subscribe(to);
-        to.awaitTerminalEvent();
+        //RxJava3에서 제거
+        // https://github.com/ReactiveX/RxJava/issues/6153
+        //to.awaitTerminalEvent();
         to.assertNoErrors();
         to.assertValues(0, 1, 2, 3);
         assertEquals(5, emitted.get());

@@ -8,7 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jakewharton.rxbinding2.view.RxView;
+//TODO
+//import com.jakewharton.rxbinding2.view.RxView;
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
@@ -35,10 +36,13 @@ public class MapRxFragment extends Fragment {
 
 
     public Observable<Object> getGpsActivationObservable() { // (1) 시작
-        return RxView.clicks(gpsActivation);
+        // TODO
+        //return RxView.clicks(gpsActivation);
+        return null;
     } // (1) 끝
 
     public Observable<Integer> getZoomObservable() { // (2) 시작
+        /* TODO
         Observable<Integer> zoomInObservable = RxView.clicks(zoomIn)
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .map(Void -> Integer.valueOf(1));
@@ -46,6 +50,8 @@ public class MapRxFragment extends Fragment {
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .map(Void -> Integer.valueOf(-1));
         return zoomInObservable.mergeWith(zoomOutObservable);
+         */
+        return null;
     } // (2) 끝
 
 }

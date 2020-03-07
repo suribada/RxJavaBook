@@ -6,8 +6,8 @@ import androidx.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
-import com.jakewharton.rxbinding3.widget.RxCompoundButton;
+//TODO
+//import com.jakewharton.rxbinding3.widget.RxCompoundButton;
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
@@ -34,6 +34,7 @@ public class StopWatchActivity extends Activity {
         start = findViewById(R.id.start);
         init = findViewById(R.id.init);
         time.setText(String.valueOf(0));
+        /* TODO
         RxCompoundButton.checkedChanges(start).switchMap(checked -> {
                 if (checked) {
                     return Observable.interval(100, TimeUnit.MILLISECONDS);
@@ -45,6 +46,7 @@ public class StopWatchActivity extends Activity {
             .subscribe(value -> {
                 time.setText(String.valueOf(value));
             });
+         */
     }
 
 }
