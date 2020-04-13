@@ -22,7 +22,7 @@ public class TwoConditionActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_button);
-        button = (Button) findViewById(R.id.button);
+        button = findViewById(R.id.button);
         button.setEnabled(false);
 
         initializeA(new Callback() {

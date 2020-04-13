@@ -53,7 +53,7 @@ public class DistinctTest {
     }
 
     @Test
-    public void testDistinctUntiChanged_basic() {
+    public void testDistinctUntilChanged_basic() {
         Observable.just(new Quiz("Q1", "A1"), new Quiz("Q1", "A1"),
                 new Quiz("Q2", "A1"), new Quiz("Q2", "A2"))
                 .distinctUntilChanged(quiz -> quiz.answer)
@@ -66,13 +66,63 @@ public class DistinctTest {
     }
 
     @Test
-    public void testDistinctUntiChanged() {
+    public void testDistinctUntilChanged() {
         Observable.just( new Profile("강", "사룡"), new Profile("권", "태환"),
                 new Profile("태환", "권"), new Profile("신", "중섭"))
                 .distinctUntilChanged((previous, current) -> previous.equals(current) ||
                         (previous.firstName.equals(current.lastName)
                         && previous.lastName.equals(current.firstName)))
                 .subscribe(System.out::println);
+    }
+
+    @Test
+    public void testDistinctUntilChanged_problem() {
+        Observable<String> obs = Observable.create(emitter -> {
+            String value = "0123";
+            value.replace('0', 'A');
+            emitter.onNext(value);
+            value.replace('1', 'B');
+            emitter.onNext(value);
+            value.replace('2', 'C');
+            emitter.onNext(value);
+            emitter.onComplete();
+        });
+        obs.distinctUntilChanged()
+            .subscribe(System.out::println);
+    }
+
+    @Test
+    public void testDistinctUntilChanged_problem2() {
+        Observable<StringBuilder> obs = Observable.create(emitter -> {
+            StringBuilder value = new StringBuilder("0123");
+            value.append("4");
+            emitter.onNext(value); // (1)
+            value.append("5");
+            emitter.onNext(value); // (2)
+            value.append("6");
+            emitter.onNext(value); // (3)
+            emitter.onComplete();
+        });
+        obs.distinctUntilChanged() // (4)
+            .subscribe(System.out::println); // (5)
+        //obs.subscribe(System.out::println);
+    }
+
+    @Test
+    public void testDistinctUntilChanged_problem2_fixed() {
+        Observable<StringBuilder> obs = Observable.create(emitter -> {
+            StringBuilder value = new StringBuilder("0123");
+            value.append("4");
+            emitter.onNext(value);
+            value.append("5");
+            emitter.onNext(value);
+            value.append("6");
+            emitter.onNext(value);
+            emitter.onComplete();
+        });
+        obs.map(StringBuilder::toString) // (1)
+            .distinctUntilChanged()
+            .subscribe(System.out::println);
     }
 }
 

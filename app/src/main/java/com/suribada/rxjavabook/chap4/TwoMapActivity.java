@@ -26,8 +26,8 @@ public class TwoMapActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.two_map_layout);
-        mapNonRxLayout = (MapNonRxLayout) findViewById(R.id.map);
-        mapRxLayout = (MapRxLayout) findViewById(R.id.map_rx);
+        mapNonRxLayout = findViewById(R.id.map);
+        mapRxLayout = findViewById(R.id.map_rx);
     }
 
     public void onClickSet1(View view) {

@@ -44,4 +44,21 @@ public class ThrottleTest {
         SystemClock.sleep(40000);
     }
 
+    @Test
+    public void debounce() {
+        Observable<String> obs1 = Observable.interval(100, TimeUnit.MILLISECONDS) // (1) 시작
+                .map(value -> "obs1: " + value)
+                .take(3); // (1) 끝
+        Observable<String> obs2 = Observable.interval(200, TimeUnit.MILLISECONDS) // (2) 시작
+                .map(value -> "obs2: " + value)
+                .take(3); // (2) 시작
+        Observable<String> obs3 = Observable.interval(400, TimeUnit.MILLISECONDS) // (3) 시작
+                .map(value -> "obs3: " + value)
+                .take(3); // (3) 시작
+        Observable.concat(obs1, obs2, obs3) // (4)
+                .debounce(300, TimeUnit.MILLISECONDS) // (5)
+                .subscribe(System.out::println);
+        SystemClock.sleep(5000);
+    }
+
 }

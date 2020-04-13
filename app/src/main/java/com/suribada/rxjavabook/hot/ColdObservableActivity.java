@@ -26,7 +26,7 @@ public class ColdObservableActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_two_buttons);
-        title = (TextView) findViewById(R.id.title);
+        title = findViewById(R.id.title);
     }
 
     public void onClickButton1(View view) {

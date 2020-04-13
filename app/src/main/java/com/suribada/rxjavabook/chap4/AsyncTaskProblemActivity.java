@@ -39,8 +39,8 @@ public class AsyncTaskProblemActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_three_buttons);
-        title = (TextView) findViewById(R.id.title);
-        image = (ImageView) findViewById(R.id.image);
+        title = findViewById(R.id.title);
+        image = findViewById(R.id.image);
     }
 
     public void onClickButton1(View view) {

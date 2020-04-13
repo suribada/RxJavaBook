@@ -40,9 +40,9 @@ public class CompletableFutureActivity extends Activity {
         bestsellerLayout = findViewById(R.id.bestseller_layout);
         recommendLayout = findViewById(R.id.recommend_layout);
         categoryLayout = findViewById(R.id.category_layout);
-        bestseller = (TextView) findViewById(R.id.bestseller);
-        recommend = (TextView) findViewById(R.id.recommend);
-        category = (TextView) findViewById(R.id.category);
+        bestseller = findViewById(R.id.bestseller);
+        recommend = findViewById(R.id.recommend);
+        category = findViewById(R.id.category);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

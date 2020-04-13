@@ -1,4 +1,4 @@
-package com.suribada.rxjavabook.rxjava1;
+package com.suribada.rxjavabook.chap2;
 
 import org.junit.Test;
 
@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.core.Observable;
 /**
  * Created by lia on 2018-03-03.
  */
-public class RxJava1Test {
+public class DivideByTest {
 
     private int divideBy(int val) throws Exception {
         try {
@@ -69,9 +69,7 @@ public class RxJava1Test {
                     }
                 })
                 .subscribe(System.out::println,
-                        e -> {
-                            System.out.println("나누기 문제 발생: " + e.getMessage());
-                        });
+                        e -> System.out.println("나누기 문제 발생: " + e.getMessage()));
     }
 
     @Test
@@ -85,9 +83,7 @@ public class RxJava1Test {
                     }
                 })
                 .subscribe(System.out::println,
-                        e -> {
-                            System.out.println("나누기 문제 발생: " + e.getMessage());
-                        });
+                        e -> System.out.println("나누기 문제 발생: " + e.getMessage()));
     }
 
     @Test
@@ -95,9 +91,17 @@ public class RxJava1Test {
         Observable.just(1, 2, 3, 4, 0,5)
                 .map(val -> divideBy(val))
                 .subscribe(System.out::println,
-                        e -> {
-                            System.out.println("나누기 문제 발생: " + e.getMessage());
-                        });
+                        e -> System.out.println("나누기 문제 발생: " + e.getMessage()));
+    }
+
+    @Test
+    public void onErrorCompleteRxJava3() {
+        Observable.just(1, 2, 3, 4, 0, 5)
+                .map(val -> divideBy(val))
+                .onErrorComplete() // (1)
+                .subscribe(System.out::println,
+                        e -> System.out.println("나누기 문제 발생: " + e.getMessage()), // (2)
+                        () -> System.out.println("onComplete")); // (3)
     }
 
 }

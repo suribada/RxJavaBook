@@ -26,7 +26,7 @@ public class HandlerRepeatActivity extends Activity {
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.text_and_button);
-		title = (TextView) findViewById(R.id.title);
+		title = findViewById(R.id.title);
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {

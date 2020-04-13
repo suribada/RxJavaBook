@@ -34,13 +34,13 @@ public class CountDownLatchActivitiy extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.books_main);
-        title = (TextView) findViewById(R.id.title);
+        title = findViewById(R.id.title);
         bestsellerLayout = findViewById(R.id.bestseller_layout);
         recommendLayout = findViewById(R.id.recommend_layout);
         categoryLayout = findViewById(R.id.category_layout);
-        bestseller = (TextView) findViewById(R.id.bestseller);
-        recommend = (TextView) findViewById(R.id.recommend);
-        category = (TextView) findViewById(R.id.category);
+        bestseller = findViewById(R.id.bestseller);
+        recommend = findViewById(R.id.recommend);
+        category = findViewById(R.id.category);
     }
 
     private CountDownLatch latch;

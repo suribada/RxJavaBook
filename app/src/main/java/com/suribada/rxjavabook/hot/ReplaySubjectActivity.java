@@ -31,8 +31,8 @@ public class ReplaySubjectActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.two_title_and_two_button);
-        title = (TextView) findViewById(R.id.title);
-        title2 = (TextView) findViewById(R.id.title2);
+        title = findViewById(R.id.title);
+        title2 = findViewById(R.id.title2);
         repeatObservable.subscribe(replaySubject);
     }
 
