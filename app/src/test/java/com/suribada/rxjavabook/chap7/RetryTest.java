@@ -4,6 +4,7 @@ import com.suribada.rxjavabook.SystemClock;
 
 import org.junit.Test;
 
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -47,7 +48,7 @@ public class RetryTest {
                 .take(10)
                 .map(i -> 10 / (5 - i))
                 .retry(e -> e instanceof ArithmeticException)
-                .subscribe(System.out::println);
+                .subscribe(System.out::println, System.err::println);
         SystemClock.sleep(3000);
     }
 
@@ -57,7 +58,7 @@ public class RetryTest {
                 .take(10)
                 .map(i -> 10 / (5 - i))
                 .retry(3, e -> e instanceof ArithmeticException)
-                .subscribe(System.out::println);
+                .subscribe(System.out::println, System.err::println);
         SystemClock.sleep(3000);
     }
 
@@ -67,7 +68,7 @@ public class RetryTest {
                 .take(10)
                 .map(i -> 10 / (5 - i))
                 .retry((times, e) -> times < 3 && e instanceof ArithmeticException)
-                .subscribe(System.out::println);
+                .subscribe(System.out::println, System.err::println);
         SystemClock.sleep(3000);
     }
 
