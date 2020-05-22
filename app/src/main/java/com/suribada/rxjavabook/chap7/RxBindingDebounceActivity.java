@@ -6,16 +6,15 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 
-import com.jakewharton.rxbinding3.widget.RxTextView;
+import com.jakewharton.rxbinding4.widget.RxTextView;
 import com.suribada.rxjavabook.R;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
-//TODO rxjava3 버전으로 변경
 public class RxBindingDebounceActivity extends Activity {
 
     private EditText searchText;

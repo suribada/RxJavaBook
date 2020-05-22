@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-/* TODO
-import com.jakewharton.rxbinding2.view.RxView;
-import com.jakewharton.rxbinding2.widget.RxCompoundButton;
-import com.jakewharton.rxbinding2.widget.RxTextView;
- */
+import com.jakewharton.rxbinding4.view.RxView;
+import com.jakewharton.rxbinding4.widget.RxAutoCompleteTextView;
+import com.jakewharton.rxbinding4.widget.RxCompoundButton;
+import com.jakewharton.rxbinding4.widget.RxRadioGroup;
+import com.jakewharton.rxbinding4.widget.RxTextView;
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.functions.Consumer;
 
 /**
  * Created by lia on 2018-06-21.
@@ -31,24 +30,23 @@ public class RxBindingActivity extends Activity {
     private View area;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    // TODO
+    // RxBindg4에서는 제거됨
+    // https://github.com/JakeWharton/RxBinding/pull/425
 //     private Consumer<? super CharSequence> textChange = RxTextView.text(title); // (1)
-     //private Consumer<? super CharSequence> textChange;
+//     private Consumer<? super CharSequence> textChange;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rxbinding_layout);
         title = findViewById(R.id.title);
-        // TODO
         //textChange = RxTextView.text(title); // (3)
         checkBox = findViewById(R.id.check);
         area = findViewById(R.id.area);
         checkBox.setOnCheckedChangeListener((buttonView, isChecked)
                 -> area.setVisibility(isChecked ? View.VISIBLE : View.GONE));
-        //TODO
-//        RxCompoundButton.checkedChanges(checkBox).subscribe(isChecked -> area.setVisibility(isChecked ? View.VISIBLE : View.GONE)); // (1)
-//        RxCompoundButton.checkedChanges(checkBox).subscribe(RxView.visibility(area)); // (2)
+        RxCompoundButton.checkedChanges(checkBox).subscribe(isChecked -> area.setVisibility(isChecked ? View.VISIBLE : View.GONE)); // (1)
+        RxCompoundButton.checkedChanges(checkBox).subscribe(RxView.visibility(area)); // (2)
     }
 
     public void onClickButton(View view) {
@@ -56,16 +54,6 @@ public class RxBindingActivity extends Activity {
                 .map(value -> ("current value1=" + value))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(title::setText)); // (2)
-        /* TODO
-        compositeDisposable.add(Observable.interval(7, TimeUnit.SECONDS)
-                .map(value -> ("current value2=" + value))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(RxTextView.text(title))); // (3)
-        compositeDisposable.add(Observable.interval(9, TimeUnit.SECONDS)
-                .map(value -> ("current value3=" + value))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(textChange)); // (7)
-         */
     }
 
     @Override

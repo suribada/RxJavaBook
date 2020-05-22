@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-//TODO
-//import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding4.view.RxView;
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
+import kotlin.Unit;
 
 /**
  * Created by Noh.Jaechun on 2018. 5. 9
@@ -35,14 +35,11 @@ public class MapRxFragment extends Fragment {
     }
 
 
-    public Observable<Object> getGpsActivationObservable() { // (1) 시작
-        // TODO
-        //return RxView.clicks(gpsActivation);
-        return null;
+    public Observable<Unit> getGpsActivationObservable() { // (1) 시작
+        return RxView.clicks(gpsActivation);
     } // (1) 끝
 
     public Observable<Integer> getZoomObservable() { // (2) 시작
-        /* TODO
         Observable<Integer> zoomInObservable = RxView.clicks(zoomIn)
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .map(Void -> Integer.valueOf(1));
@@ -50,8 +47,6 @@ public class MapRxFragment extends Fragment {
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .map(Void -> Integer.valueOf(-1));
         return zoomInObservable.mergeWith(zoomOutObservable);
-         */
-        return null;
     } // (2) 끝
 
 }

@@ -7,8 +7,7 @@ import androidx.annotation.Nullable;
 
 import android.view.View;
 import android.widget.TextView;
-//TODO
-//import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding4.view.RxView;
 import com.suribada.rxjavabook.R;
 
 import java.util.Date;

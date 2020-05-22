@@ -6,8 +6,7 @@ import androidx.annotation.Nullable;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-//TODO
-//import com.jakewharton.rxbinding3.widget.RxCompoundButton;
+import com.jakewharton.rxbinding4.widget.RxCompoundButton;
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
@@ -30,7 +29,6 @@ public class SwitchMapActivity extends Activity {
         setContentView(R.layout.switch_map);
         title = findViewById(R.id.title);
         toggleButton = findViewById(R.id.toggle);
-        /* TODO
         RxCompoundButton.checkedChanges(toggleButton).switchMap(selected -> {
                 if (selected) {
                     return Observable.interval(1, TimeUnit.SECONDS);
@@ -62,6 +60,5 @@ public class SwitchMapActivity extends Activity {
                         // title.setText("reset");
                     }
             );
-         */
     }
 }

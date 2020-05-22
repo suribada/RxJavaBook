@@ -6,14 +6,15 @@ import androidx.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-//TODO
-//import com.jakewharton.rxbinding3.widget.RxCompoundButton;
+import com.jakewharton.rxbinding4.widget.RxCompoundButton;
 import com.suribada.rxjavabook.R;
 
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;/**
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+
+/**
  * from Learnig RxJava
  *
  * Created by lia on 2018-01-04.
@@ -34,7 +35,6 @@ public class StopWatchActivity extends Activity {
         start = findViewById(R.id.start);
         init = findViewById(R.id.init);
         time.setText(String.valueOf(0));
-        /* TODO
         RxCompoundButton.checkedChanges(start).switchMap(checked -> {
                 if (checked) {
                     return Observable.interval(100, TimeUnit.MILLISECONDS);
@@ -46,7 +46,6 @@ public class StopWatchActivity extends Activity {
             .subscribe(value -> {
                 time.setText(String.valueOf(value));
             });
-         */
     }
 
 }

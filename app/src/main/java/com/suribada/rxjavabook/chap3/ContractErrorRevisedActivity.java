@@ -7,8 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//TODO
-//import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding4.view.RxView;
 import com.suribada.rxjavabook.R;
 import com.suribada.rxjavabook.model.ViewState;
 
@@ -34,7 +33,6 @@ public class ContractErrorRevisedActivity extends Activity {
         setContentView(R.layout.text_and_button);
         title = findViewById(R.id.title);
         button = findViewById(R.id.button);
-        /* TODO
         RxView.clicks(button)
                 .flatMap(ignored -> getBestSeller()
                         .subscribeOn(Schedulers.io())
@@ -49,7 +47,6 @@ public class ContractErrorRevisedActivity extends Activity {
                         Toast.makeText(this, "문제 발생", Toast.LENGTH_LONG).show();
                     }
                 });
-         */
     }
 
     private Observable<String> getBestSeller() {
@@ -59,7 +56,6 @@ public class ContractErrorRevisedActivity extends Activity {
     }
 
     private void ofTypeOperator() {
-        /* TODO
         ConnectableObservable<ViewState> viewStateObservable = RxView.clicks(button)
                 .flatMap(ignored -> getBestSeller()
                         .subscribeOn(Schedulers.io())
@@ -76,7 +72,6 @@ public class ContractErrorRevisedActivity extends Activity {
                     Toast.makeText(this, "문제 발생", Toast.LENGTH_LONG).show();
                 });
         Disposable disposable = viewStateObservable.connect(); // (5)
-         */
     }
 
 }

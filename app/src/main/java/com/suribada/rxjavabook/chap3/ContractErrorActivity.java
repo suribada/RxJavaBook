@@ -6,8 +6,7 @@ import androidx.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-//TODO
-//import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding4.view.RxView;
 import com.suribada.rxjavabook.R;
 
 import java.util.Random;
@@ -30,7 +29,6 @@ public class ContractErrorActivity extends Activity {
         setContentView(R.layout.text_and_button);
         title = findViewById(R.id.title);
         button = findViewById(R.id.button);
-        /* TODO
         RxView.clicks(button)
                 .flatMap(ignored -> getBestSeller()
                         .subscribeOn(Schedulers.io()))
@@ -38,7 +36,6 @@ public class ContractErrorActivity extends Activity {
                 .subscribe(bookTitle -> title.setText(bookTitle),
                         e -> Toast.makeText(this, "문제 발생", Toast.LENGTH_LONG).show()
                 );
-         */
     }
 
     private Observable<String> getBestSeller() {
