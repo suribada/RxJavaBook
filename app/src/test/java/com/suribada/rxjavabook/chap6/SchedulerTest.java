@@ -38,9 +38,9 @@ public class SchedulerTest {
     @Test
     public void testDirect() {
         Scheduler scheduler = Schedulers.io();
-        scheduler.scheduleDirect(() -> print("first")); // (1)
-        scheduler.scheduleDirect(() -> print("second"), 1, TimeUnit.SECONDS); // (2)
-        scheduler.schedulePeriodicallyDirect(() -> print("third"), 0, 1, TimeUnit.SECONDS); // (3)
+        scheduler.scheduleDirect(() -> print(Thread.currentThread().getName() + ":first")); // (1)
+        scheduler.scheduleDirect(() -> print(Thread.currentThread().getName() + ":second"), 1, TimeUnit.SECONDS); // (2)
+        scheduler.schedulePeriodicallyDirect(() -> print(Thread.currentThread().getName() + ":third"), 0, 1, TimeUnit.SECONDS); // (3)
         SystemClock.sleep(5000);
     }
 

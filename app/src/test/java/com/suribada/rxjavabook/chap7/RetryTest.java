@@ -7,10 +7,12 @@ import org.junit.Test;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.internal.schedulers.ComputationScheduler;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -18,6 +20,7 @@ public class RetryTest {
 
     @Test
     public void normal() {
+        io.reactivex.Observable<Integer> obs;
         Observable.interval(100, TimeUnit.MILLISECONDS)
                 .take(10)
                 .map(i -> 10 / (5 - i))
@@ -30,7 +33,7 @@ public class RetryTest {
         Observable.interval(100, TimeUnit.MILLISECONDS)
                 .take(10)
                 .map(i -> 10 / (5 - i))
-                .retry()
+                .retry(3)
                 .subscribe(System.out::println, System.err::println);
         SystemClock.sleep(3000);
     }
@@ -200,7 +203,77 @@ public class RetryTest {
     }
 
     @Test
+    public void retryWhenDelayed2() {
+        Observable.interval(100, TimeUnit.MILLISECONDS)
+                .take(10)
+                .map(i -> 10 / (5 - i))
+                .doOnSubscribe(disposable -> System.out.println("upstream subscribed"))
+                .doOnDispose(() -> System.out.println("upstream disposed"))
+                .doOnNext(value -> System.out.println("upstream value=" + value))
+                .retryWhen(errors -> errors.delay(1, TimeUnit.SECONDS)) // (1)
+                .subscribe(System.out::println, System.err::println);
+        SystemClock.sleep(10000);
+    }
+
+    @Test
     public void retryWhenWithTake() {
+        Observable.interval(100, TimeUnit.MILLISECONDS)
+                .doOnNext(value -> System.out.println("Thread interval=" + Thread.currentThread().getName()))
+                .doOnSubscribe(disposable -> System.out.println("Thread=" + Thread.currentThread().getName()))
+                .take(10)
+                .map(i -> 10 / (5 - i))
+                .doOnDispose(() -> System.out.println("upstream disposed")) // (1)
+                .retryWhen(errors -> errors.doOnNext(error -> System.out.println("handler onNext=" + error)) // (2)
+                        .take(3) // (3)
+                        .doOnComplete(() -> System.out.println("handler completed")) // (4)
+                        .flatMap(e -> Observable.timer(1, TimeUnit.SECONDS).doOnNext(value -> System.out.println("Thread timer=" + Thread.currentThread().getName())))
+                        .doOnComplete(() -> System.out.println("handler completed2:" + Thread.currentThread().getName())) // (4)
+                )
+                .subscribe(System.out::println, System.err::println);
+        SystemClock.sleep(10000);
+    }
+
+    /**
+     * 이것도 어쩔 수 없이 2회만 재시도한다.
+     */
+    @Test
+    public void retryWhenWithTake_withSingleThread() {
+        Scheduler scheduler = Schedulers.from(Executors.newSingleThreadScheduledExecutor()); // (1)
+        Observable.interval(100, TimeUnit.MILLISECONDS, scheduler) // (2)
+                .doOnNext(value -> System.out.println("Thread interval=" + Thread.currentThread().getName()))
+                .doOnSubscribe(disposable -> System.out.println("Thread=" + Thread.currentThread().getName()))
+                .take(10)
+                .map(i -> 10 / (5 - i))
+                .doOnDispose(() -> System.out.println("upstream disposed"))
+                .retryWhen(errors -> errors.doOnNext(error -> System.out.println("handler onNext=" + error))
+                        .take(3)
+                        .doOnComplete(() -> System.out.println("handler completed"))
+                        .flatMap(e -> Observable.timer(1, TimeUnit.SECONDS, scheduler).doOnNext(value -> System.out.println("Thread timer=" + Thread.currentThread().getName()))) // (3)
+                        .doOnComplete(() -> System.out.println("handler completed2:" + Thread.currentThread().getName()))
+                )
+                .subscribe(System.out::println, System.err::println);
+        SystemClock.sleep(10000);
+    }
+
+
+    @Test
+    public void retryWhenWithTake_rangeObservable() {
+        Observable.range(0, 10)
+                .map(i -> 10 / (5 - i))
+                .doOnSubscribe(disposable -> System.out.println("Thread=" + Thread.currentThread().getName()))
+                .doOnDispose(() -> System.out.println("upstream disposed")) // (1)
+                .retryWhen(errors -> errors.doOnNext(error -> System.out.println("handler onNext=" + error)) // (2)
+                        .take(4) // (3)
+                        .doOnComplete(() -> System.out.println("handler completed")) // (4)
+                        .flatMap(e -> Observable.timer(1, TimeUnit.SECONDS).doOnNext(value -> System.out.println("Thread timer=" + Thread.currentThread().getName())))
+                        .doOnComplete(() -> System.out.println("handler completed2: " + Thread.currentThread().getName())) // (4)
+                )
+                .subscribe(System.out::println, System.err::println);
+        SystemClock.sleep(10000);
+    }
+
+    @Test
+    public void retryWhenWithTake2() {
         Observable.interval(100, TimeUnit.MILLISECONDS)
                 .take(10)
                 .map(i -> 10 / (5 - i))
@@ -208,9 +281,24 @@ public class RetryTest {
                 .retryWhen(errors -> errors.doOnNext(error -> System.out.println("handler onNext=" + error)) // (2)
                         .take(4) // (3)
                         .doOnComplete(() -> System.out.println("handler completed")) // (4)
-                        .flatMap(e -> Observable.timer(1, TimeUnit.SECONDS)))
+                        .delay(3, TimeUnit.SECONDS)
+                        .doOnComplete(() -> System.out.println("handler completed2"))) // (4)
                 .subscribe(System.out::println, System.err::println);
-        SystemClock.sleep(10000);
+        SystemClock.sleep(20000);
+    }
+
+    @Test
+    public void retryWhenWithTake3() {
+        Observable.range(1, 10)
+                .map(i -> 10 / (5 - i))
+                .doOnDispose(() -> System.out.println("upstream disposed")) // (1)
+                .retryWhen(errors -> errors.doOnNext(error -> System.out.println("handler onNext=" + error)) // (2)
+                        .take(4) // (3)
+                        .doOnComplete(() -> System.out.println("handler completed")) // (4)
+                        .delay(3, TimeUnit.SECONDS)
+                        .doOnComplete(() -> System.out.println("handler completed2")) // (4)
+                ).subscribe(System.out::println, System.err::println);
+        SystemClock.sleep(20000);
     }
 
     @Test
@@ -240,7 +328,6 @@ public class RetryTest {
         SystemClock.sleep(  20000);
     }
 
-    // https://github.com/nurkiewicz/rxjava-book-examples/blob/master/src/test/java/com/oreilly/rxjava/ch7/RetryTimeouts.java 참고
     private Function<? super Observable<Throwable>, ? extends Observable<?>> backOffDelay2(
             int retry, int delayMillis) {
         return errors -> errors.zipWith(Observable.range(1, retry + 1),
@@ -252,6 +339,30 @@ public class RetryTest {
                     }
                 }
             ).flatMap(x -> x); // (2)
+    }
+
+    @Test
+    public void retryWhenWithRetryAndError2() {
+        Observable.range(1, 10)
+                .take(10)
+                .map(i -> 10 / (5 - i))
+                .retryWhen(backOffDelay2(3, 1000)) // (1)
+                .subscribe(System.out::println, System.err::println);
+        SystemClock.sleep(  20000);
+    }
+
+    // https://github.com/nurkiewicz/rxjava-book-examples/blob/master/src/test/java/com/oreilly/rxjava/ch7/RetryTimeouts.java 참고
+    private Function<? super Observable<Throwable>, ? extends Observable<?>> backOffDelay_power2(
+            int retry, int delayMillis) {
+        return errors -> errors.zipWith(Observable.range(1, retry + 1),
+                (e, attempt) -> {
+                    if (attempt == retry + 1) { // (1) 시작
+                        return Observable.error(e);
+                    } else { // (1) 끝
+                        return Observable.timer((long) Math.pow(2, attempt - 1), TimeUnit.MILLISECONDS);
+                    }
+                }
+        ).flatMap(x -> x); // (2)
     }
 
 }
