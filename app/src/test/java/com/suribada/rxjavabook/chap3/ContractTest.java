@@ -81,16 +81,6 @@ public class ContractTest {
         return Observable.just((dollar * 1000) + " won"); // (2)
     }
 
-    @Test
-    public void testOnErrorReturnItemContinued() {
-        Observable.just(1, 2, -1, 1, 2)
-                .flatMap(dollar -> getCurrentPrice4(dollar)
-                        .onErrorReturnItem("0 won")) // (3)
-                .subscribe(System.out::println,
-                        System.err::println,
-                        () -> System.out.println("onComplete"));
-    }
-
     @Test(expected = NullPointerException.class)
     public void nullEvent_Maybe() {
         Maybe.just(null)

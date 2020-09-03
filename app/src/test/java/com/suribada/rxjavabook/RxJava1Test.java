@@ -8,10 +8,6 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.SingleOnSubscribe;
-import io.reactivex.rxjava3.internal.operators.observable.ObservableFilter;
-import io.reactivex.rxjava3.internal.operators.observable.ObservableFromIterable;
-import io.reactivex.rxjava3.internal.operators.observable.ObservableMap;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 
 /**
@@ -68,23 +64,6 @@ public class RxJava1Test {
                     }
                 });
         observer.dispose();
-    }
-
-    @Test
-    public void testGugudan() {
-        Observable.range(2, 8)
-                .flatMap(row -> Observable.range(1, 9)
-                        .map(col -> String.format("%d x %d = %d", row, col, row * col)))
-                .subscribe(System.out::println);
-
-    }
-
-    @Test
-    public void testGugudan2() {
-        Observable.range(2, 8)
-            .flatMap(row -> Observable.range(1, 9),
-                    (row, col) -> String.format("%d x %d = %d",  row, col, row * col))
-            .subscribe(System.out::println);
     }
 
     @Test

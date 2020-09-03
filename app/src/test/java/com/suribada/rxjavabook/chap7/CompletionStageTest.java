@@ -9,6 +9,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class CompletionStageTest {
 
@@ -54,6 +55,9 @@ public class CompletionStageTest {
                 });
     }
 
+    /**
+     * startStage와 endStage는 병렬 실행
+     */
     @Test
     public void execute() {
         CompletionStage<Void> startStage = CompletableFuture.runAsync(() -> logStart("RxJavaSample"));
@@ -75,5 +79,43 @@ public class CompletionStageTest {
 
     private void logEnd(String tag) {
         System.out.println(tag + ":end=" + System.currentTimeMillis() + ", thread=" + Thread.currentThread().getName());
+    }
+
+    @Test
+    public void sendGiftToFirstPerson() {
+        CompletionStage<Gift> giftCompletionStage = CompletableFuture.supplyAsync(() -> { // (1)
+            System.out.println("gift thread=" + Thread.currentThread().getName()); // (2)
+            return new Gift();
+        }); // (1) 끝
+
+        getPersons().firstStage(new Person("노재춘")) // (3)
+                .thenAcceptBothAsync(giftCompletionStage, (person, gift) -> { // (4) 시작
+                    System.out.println("combined thread=" + Thread.currentThread().getName()); // (5)
+                    sendGift(person, gift);
+                }); // (4) 끝
+        SystemClock.sleep(2000);
+    }
+
+    private Observable<Person> getPersons() {
+        return Observable.just(new Person("노재춘"), new Person("김성수"), new Person("강사룡"))
+                .subscribeOn(Schedulers.io()) // (6)
+                .doOnNext(person -> System.out.println("person thread=" + Thread.currentThread().getName())); // (7)
+    }
+
+    private void sendGift(Person person, Gift gift) {
+        System.out.println("sendGift");
+    }
+
+    class Person {
+        String name;
+
+        Person(String name) {
+            this.name = name;
+        }
+
+    }
+
+    class Gift {
+
     }
 }

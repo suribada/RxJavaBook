@@ -35,12 +35,14 @@ public class OnErrorTest {
         return Observable.just(Arrays.asList(new Book(1234, "노재춘", "RxJava")));
     }
 
-    private Observable<String> getCurrentPrice4(int dollar) {
-        if (dollar < 0) {
-            return Observable.error( // (1) 시작
-                    new IllegalArgumentException("dollar should be bigger than 0")); // (1) 끝
-        }
-        return Observable.just((dollar * 1000) + " won"); // (2)
+    @Test
+    public void convertKRW() {
+        Observable.just(1, 2, -1, 1, 2)
+                .flatMap(dollar -> getCurrentPrice4(dollar)
+                        .onErrorReturnItem("0 won")) // (1)
+                .subscribe(System.out::println,
+                        System.err::println,
+                        () -> System.out.println("onComplete"));
     }
 
     @Test
@@ -53,5 +55,12 @@ public class OnErrorTest {
                         () -> System.out.println("onComplete"));
     }
 
+    private Observable<String> getCurrentPrice4(int dollar) {
+        if (dollar < 0) {
+            return Observable.error( // (1) 시작
+                    new IllegalArgumentException("dollar should be bigger than 0")); // (1) 끝
+        }
+        return Observable.just((dollar * 1000) + " won"); // (2)
+    }
 
 }
