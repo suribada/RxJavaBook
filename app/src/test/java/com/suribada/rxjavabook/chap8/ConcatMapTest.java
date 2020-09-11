@@ -24,8 +24,8 @@ public class ConcatMapTest {
     }
 
     private Observable<Department> getDepartments() {
-        return Observable.just(new Department("안드로이드팀"), new Department("iOS팀"),
-                new Department("FE팀"), new Department("서버팀"));
+        return Observable.just(new Department("iOS팀"),
+                new Department("안드로이드팀"), new Department("FE팀"), new Department("서버팀"));
     }
 
     int i = 0;
@@ -70,7 +70,7 @@ public class ConcatMapTest {
     }
 
     /**
-     * onComplete를 하지 않은 Observalbe이 있음
+     * onComplete를 하지 않은 Observable이 있음
      */
     private Observable<OutGoing> getOutGoings4(Department department) {
         switch (department.getName()) {
@@ -117,13 +117,34 @@ public class ConcatMapTest {
                 Observable.just(new Department("서버팀")));
     }
 
+    /**
+     * 매핑된 Observable에서 에러. 동일한 스레드 에러 즉시 보여준다.
+     */
     @Test
     public void delayError_tillTheEndFalse() {
         getDepartments()
-                .concatMapDelayError(this::getOutGoings3, false, Flowable.bufferSize())
+                .doOnNext(department -> System.out.println("upstream=" + department.toString()))
+                .concatMapDelayError(department -> getOutGoings3(department)
+                        .doOnError(e -> System.err.println(e.toString())), false, Flowable.bufferSize())
                 .subscribe(System.out::println, System.err::println);
     }
 
+    /**
+     * 별도 스레드에서는 에러가 바로 통지되지 않는다.
+     */
+    @Test
+    public void delayError_tillTheEndFalse_withThread() {
+        getDepartments()
+                .doOnNext(department -> System.out.println("upstream=" + department.toString()))
+                .concatMapDelayError(department -> getOutGoings3(department).subscribeOn(Schedulers.io())
+                        .doOnError(e -> System.err.println(e.toString())), false, Flowable.bufferSize())
+                .subscribe(System.out::println, System.err::println);
+        SystemClock.sleep(2000);
+    }
+
+    /**
+     * 에러를 미룸
+     */
     @Test
     public void delayError_tillTheEndTrue() {
         getDepartments()
@@ -161,6 +182,9 @@ public class ConcatMapTest {
         throw new IllegalArgumentException();
     }
 
+    /**
+     * 업스트림 에러. tillTheEnd는 기본값 true
+     */
     @Test
     public void concatMapDelayWithThread() {
         Observable.interval(300, TimeUnit.MILLISECONDS).take(4)
@@ -172,6 +196,9 @@ public class ConcatMapTest {
         SystemClock.sleep(5000);
     }
 
+    /**
+     * 업스트림 에러. tillTheEnd는 기본값 true
+     */
     @Test
     public void concatMapDelayWithThread_tillTheEndFalse() {
         Observable.interval(300, TimeUnit.MILLISECONDS).take(4)
