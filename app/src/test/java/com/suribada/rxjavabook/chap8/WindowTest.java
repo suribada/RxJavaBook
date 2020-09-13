@@ -1,0 +1,110 @@
+package com.suribada.rxjavabook.chap8;
+
+import org.junit.Test;
+
+import hu.akarnokd.rxjava3.math.MathObservable;
+import io.reactivex.rxjava3.core.Observable;
+
+public class WindowTest {
+
+    /**
+     * 비교를 위한 테스트
+     */
+    @Test
+    public void buffer() {
+        getSales().buffer(4).subscribe(System.out::println);
+    }
+
+    @Test
+    public void window() {
+        Observable.range(1, 11).window(4) // (1)
+                .flatMapSingle(obs -> obs.reduce(0, (total, next) -> total + next)) // (2)
+                .subscribe(System.out::println);
+    }
+
+    @Test
+    public void window2() {
+        getSales().map(sale -> sale.getPrice()).window(4) // (1)
+                .flatMapSingle(price -> price.reduce(0, (total, next) -> total + next)) // (2)
+                .subscribe(System.out::println);
+    }
+
+    /**
+     * Caused by: java.lang.IllegalStateException: Only a single observer allowed.
+     * https://stackoverflow.com/questions/30491785/rxjava-java-lang-illegalstateexception-only-one-subscriber-allowed
+     * https://stackoverflow.com/questions/42181065/could-someone-understand-the-java-lang-illegalstateexception-only-one-observer
+     */
+    @Test
+    public void window_autoConnect() {
+        Observable<Observable<Integer>> priceObservable = getSales()
+                .map(sale -> sale.getPrice()).window(4) // (1)
+                .publish().autoConnect(3); // (2)
+        System.out.println("구간 합계");
+        priceObservable.flatMapSingle(price -> // (3) 시작
+                price.reduce(0, (total, next) -> total + next))
+                .subscribe(System.out::println, System.err::println); // (3) 끝
+        System.out.println("구간 최다판매");
+        priceObservable.flatMapSingle(price -> // (4) 시작
+                price.reduce(0, (max, next) -> (next > max) ? next : max))
+                .subscribe(System.out::println, System.err::println); // (4) 끝
+        System.out.println("구간 최소판매");
+        priceObservable.flatMapSingle(price -> // (5) 시작
+                price.reduce(Integer.MAX_VALUE, (min, next) -> (next < min) ? next : min))
+                .subscribe(System.out::println, System.err::println); // (5) 끝
+    }
+
+    /**
+     * 위와 동일한 문제..
+     */
+    @Test
+    public void window_withMathObservable() {
+        Observable<Observable<Integer>> priceObservable = getSales().map(sale -> sale.getPrice()).window(4)
+                .publish().autoConnect(3);
+        System.out.println("구간 합계");
+        priceObservable.flatMap(price -> MathObservable.sumInt(price))
+                .subscribe(System.out::println);
+        System.out.println("구간 최다판매");
+        priceObservable.flatMap(price -> MathObservable.max(price))
+                .subscribe(System.out::println);
+        System.out.println("구간 최소판매");
+        priceObservable.flatMap(price -> MathObservable.min(price))
+                .subscribe(System.out::println);
+    }
+
+    /**
+     * 순서가 썪이는 문제는 있다.
+     */
+    @Test
+    public void window_autoConnect2() {
+        Observable<Integer> priceObservable = getSales()
+                .map(sale -> sale.getPrice()) // (1)
+                .publish().autoConnect(3); // (2)
+        priceObservable.window(4).flatMapSingle(price -> // (3) 시작
+                price.reduce(0, (total, next) -> total + next))
+                .subscribe(System.out::println, System.err::println); // (3) 끝
+        priceObservable.window(4).flatMapSingle(price -> // (4) 시작
+                price.reduce(0, (max, next) -> (next > max) ? next : max))
+                .subscribe(System.out::println, System.err::println); // (4) 끝
+        priceObservable.window(4).flatMapSingle(price -> // (5) 시작
+                price.reduce(Integer.MAX_VALUE, (min, next) -> (next < min) ? next : min))
+                .subscribe(System.out::println, System.err::println); // (5) 끝
+    }
+
+    private Observable<Sale> getSales() {
+        return Observable.fromArray(Sale.create(1000),
+                Sale.create(1500),
+                Sale.create(2500),
+                Sale.create(2000),
+                Sale.create(3000),
+                Sale.create(3500),
+                Sale.create(4500),
+                Sale.create(4000),
+                Sale.create(5000),
+                Sale.create(6500),
+                Sale.create(6000),
+                Sale.create(5500),
+                Sale.create(7000),
+                Sale.create(7500),
+                Sale.create(8000));
+    }
+}
