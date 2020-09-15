@@ -169,7 +169,7 @@ public class BackPressureTest {
     }
 
     /**
-     * interval, intervalRange는
+     * PublishProcessor, interval, intervalRange는
      * request() 메서드를 처리하지 않는다.
      */
     @Test

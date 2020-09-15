@@ -72,22 +72,22 @@ public class WindowTest {
     }
 
     /**
-     * 순서가 썪이는 문제는 있다.
+     * 구간마다 sum, max, min이 순차적으로 나온다.
      */
     @Test
     public void window_autoConnect2() {
-        Observable<Integer> priceObservable = getSales()
-                .map(sale -> sale.getPrice()) // (1)
-                .publish().autoConnect(3); // (2)
-        priceObservable.window(4).flatMapSingle(price -> // (3) 시작
+        Observable<Integer> priceObservable = getSales() // (1) 시작
+                .map(sale -> sale.getPrice())
+                .publish().autoConnect(3); // (1) 끝
+        priceObservable.window(4).flatMapSingle(price -> // (2) 시작
                 price.reduce(0, (total, next) -> total + next))
-                .subscribe(System.out::println, System.err::println); // (3) 끝
-        priceObservable.window(4).flatMapSingle(price -> // (4) 시작
+                .subscribe(sum -> System.out.println("sum=" + sum)); // (2) 끝
+        priceObservable.window(4).flatMapSingle(price -> // (3) 시작
                 price.reduce(0, (max, next) -> (next > max) ? next : max))
-                .subscribe(System.out::println, System.err::println); // (4) 끝
-        priceObservable.window(4).flatMapSingle(price -> // (5) 시작
+                .subscribe(max -> System.out.println("max=" + max)); // (3) 끝
+        priceObservable.window(4).flatMapSingle(price -> // (4) 시작
                 price.reduce(Integer.MAX_VALUE, (min, next) -> (next < min) ? next : min))
-                .subscribe(System.out::println, System.err::println); // (5) 끝
+                .subscribe(min -> System.out.println("min=" + min)); // (4) 끝
     }
 
     private Observable<Sale> getSales() {

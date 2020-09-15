@@ -18,16 +18,12 @@ public class JoinTest {
      */
     @Test
     public void join() {
-        Observable<Long> left = Observable
-                .interval(100, TimeUnit.MILLISECONDS).take(4);
-
-        Observable<Long> right = Observable
-                .interval(150, TimeUnit.MILLISECONDS).take(5);
-
+        Observable<Long> left = Observable.interval(100, TimeUnit.MILLISECONDS).take(4); // (1)
+        Observable<Long> right = Observable.interval(150, TimeUnit.MILLISECONDS).take(5); // (2)
         left.join(right,
-                    i -> Observable.timer(200, TimeUnit.MILLISECONDS),
-                    i -> Observable.timer(250, TimeUnit.MILLISECONDS),
-                    (l, r) -> Arrays.asList(l.intValue(), r.intValue()))
+                    l -> Observable.timer(200, TimeUnit.MILLISECONDS), // (3)
+                    r -> Observable.timer(250, TimeUnit.MILLISECONDS), // (4)
+                    (l, r) -> Arrays.asList(l, r)) // (5)
         .subscribe(System.out::println);
         SystemClock.sleep(5000);
     }
