@@ -51,10 +51,21 @@ public class SecuredUser {
     public static SecuredUser create(User user) {
         SecuredUser securedUser = new SecuredUser();
         securedUser.setName(user.getName());
-        securedUser.setSecurityNumber("secured=" + user.getSecurityNumber());
+        securedUser.setSecurityNumber("secured+" + user.getSecurityNumber());
         securedUser.setAge(user.getAge());
         securedUser.setTel(user.getTel());
-        securedUser.setAddress("secured=" + user.getAddress());
+        securedUser.setAddress("secured+" + user.getAddress());
         return securedUser;
+    }
+
+    @Override
+    public String toString() {
+        return "SecuredUser{" +
+                "name='" + name + '\'' +
+                ", securityNumber='" + securityNumber + '\'' +
+                ", tel='" + tel + '\'' +
+                ", age=" + age +
+                ", address='" + address + '\'' +
+                '}';
     }
 }

@@ -55,4 +55,19 @@ public class User {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public boolean isInvalid() {
+        return (age == 24);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", securityNumber='" + securityNumber + '\'' +
+                ", tel='" + tel + '\'' +
+                ", age=" + age +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }
