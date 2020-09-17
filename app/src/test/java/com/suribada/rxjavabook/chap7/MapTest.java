@@ -15,6 +15,13 @@ import io.reactivex.rxjava3.core.Observable;
 
 public class MapTest {
 
+    @Test
+    public void map() {
+        Observable.just("Java", "Kotlin", "C++", "Go", "Python")
+                .map(String::length) // (1)
+                .subscribe(System.out::println);
+
+    }
     /**
      * ClassCastException 발생
      */

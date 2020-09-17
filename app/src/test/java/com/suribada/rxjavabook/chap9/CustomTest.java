@@ -180,7 +180,7 @@ public class CustomTest {
         @Override
         public void onSubscribe(@NonNull Disposable d) {
             upstream = d; // (2)
-            downstream.onSubscribe(this);
+            downstream.onSubscribe(this); // (3)
         }
 
         @Override
@@ -206,20 +206,30 @@ public class CustomTest {
         }
 
         @Override
-        public void dispose() { // (3) 시작
+        public void dispose() { // (4) 시작
             upstream.dispose();
-        } // (3) 끝
+        } // (4) 끝
 
         @Override
-        public boolean isDisposed() { // (4) 시작
+        public boolean isDisposed() { // (5) 시작
             return upstream.isDisposed();
-        } // (4) 끝
+        } // (5) 끝
 
     }
 
     @Test
     public void lift_withCustomOperator() {
-        Disposable disposable = getUsers().lift(downstream -> new CustomObserver<>(downstream))
+        Disposable disposable = getUsers().lift(downstream -> new CustomObserver<>(downstream)) // (1)
+                .subscribe(System.out::println);
+        SystemClock.sleep(3500);
+        disposable.dispose();
+        SystemClock.sleep(8000);
+
+    }
+
+    @Test
+    public void lift_withCustomOperator_lambda() {
+        Disposable disposable = getUsers().lift(CustomObserver::new)
                 .subscribe(System.out::println);
         SystemClock.sleep(3500);
         disposable.dispose();
@@ -229,11 +239,12 @@ public class CustomTest {
 
     private Observable<User> getUsers() {
         return Observable.just(
-                new User("노재춘", "888888-1234567", "010-2257-1234", 22, "경기 용인시 기흥구 보정로 87"),
-                new User("이효근", "888881-1234567", "010-3257-1234", 23, "경기 용인시 기흥구 보정로 88"),
-                new User("강사룡", "888882-1234567", "010-4257-1234", 24, "경기 용인시 기흥구 보정로 89"),
-                new User("권태환", "888883-1234567", "010-5257-1234", 25, "경기 용인시 기흥구 보정로 90")
-        ).zipWith(Observable.interval(1, TimeUnit.SECONDS).take(5), (user, i) -> user);
+                new User("노재춘", "888888-1234567", "010-2257-1234", 22, "용인시 기흥구 보정로 87"),
+                new User("이효근", "888881-1234567", "010-3257-1234", 23, "용인시 수지구 떡볶로 88"),
+                new User("강사룡", "888882-1234567", "010-4257-1234", 24, "성남시 분당구 불정로 89"),
+                new User("권태환", "888883-1234567", "010-5257-1234", 25, "수원시 권선구 철길 90")
+        ).zipWith(Observable.interval(1, TimeUnit.SECONDS).take(5), // (1)
+                (user, i) -> user); // (2)
     }
 
     private void reportUser(User user) {
