@@ -14,6 +14,7 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableTransformer;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.internal.operators.observable.ObservableMap;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -258,7 +259,13 @@ public class CustomTest {
         SystemClock.sleep(3500);
         disposable.dispose();
         SystemClock.sleep(8000);
+    }
 
+    @Test
+    public void mapOperator_to() {
+        Observable.just("Java", "Kotlin", "C++", "Go", "Python")
+                .to(obs -> new ObservableMap<>(obs, v -> v.length())) // (1)
+                .subscribe(System.out::println);
     }
 
 }
