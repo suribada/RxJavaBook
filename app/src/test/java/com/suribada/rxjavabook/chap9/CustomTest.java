@@ -251,5 +251,14 @@ public class CustomTest {
         System.out.println("report User=" + user);
     }
 
+    @Test
+    public void lift_alternative() {
+        Disposable disposable = getUsers().to(ConvertSecuredObservable::new)
+                .subscribe(System.out::println);
+        SystemClock.sleep(3500);
+        disposable.dispose();
+        SystemClock.sleep(8000);
+
+    }
 
 }
