@@ -254,7 +254,7 @@ public class CustomTest {
 
     @Test
     public void lift_alternative() {
-        Disposable disposable = getUsers().to(ConvertSecuredObservable::new)
+        Disposable disposable = getUsers().to(ConvertSecuredObservable::new) // (1)
                 .subscribe(System.out::println);
         SystemClock.sleep(3500);
         disposable.dispose();

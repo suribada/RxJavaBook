@@ -6,27 +6,27 @@ import io.reactivex.rxjava3.core.ObservableSource;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 
-public class ConvertSecuredObservable<T extends SecuredUser> extends Observable<T> {
+public class ConvertSecuredObservable<T extends SecuredUser> extends Observable<T> { // (1)
 
     private final ObservableSource<? super User> source;
 
-    public ConvertSecuredObservable(ObservableSource<User> source) {
+    public ConvertSecuredObservable(ObservableSource<User> source) { // (2) 시작
         this.source = source;
-    }
+    } // (2) 끋
 
     @Override
-    protected void subscribeActual(@NonNull Observer<? super T> observer) {
+    protected void subscribeActual(@NonNull Observer<? super T> observer) { // (3) 시작
         source.subscribe(new SecuredObserver(observer));
-    }
+    } // (3) 끋
 
-    static final class SecuredObserver<T extends User> implements Observer<T>, Disposable {
+    private static class SecuredObserver<T extends User> implements Observer<T>, Disposable { // (4)
 
         private Disposable upstream;
         private Observer<SecuredUser> downstream;
 
-        SecuredObserver(Observer<SecuredUser> downstream) {
+        SecuredObserver(Observer<SecuredUser> downstream) { // (4) 시작
             this.downstream = downstream;
-        }
+        } // (4) 시작
 
         @Override
         public void onSubscribe(@NonNull Disposable d) {
@@ -37,11 +37,11 @@ public class ConvertSecuredObservable<T extends SecuredUser> extends Observable<
         @Override
         public void onNext(User user) {
             System.out.println("onNext user=" + user);
-            if (user.isInvalid()) { // (2) 시작
+            if (user.isInvalid()) {
                 reportUser(user);
                 return;
-            } // (2) 끝
-            downstream.onNext(SecuredUser.create(user)); // (3)
+            }
+            downstream.onNext(SecuredUser.create(user));
         }
 
         @Override
@@ -63,9 +63,10 @@ public class ConvertSecuredObservable<T extends SecuredUser> extends Observable<
         public boolean isDisposed() {
             return upstream.isDisposed();
         }
+
+        private void reportUser(User user) {
+            System.out.println("report User=" + user);
+        }
     }
 
-    public static void reportUser(User user) {
-        System.out.println("report User=" + user);
-    }
 }
