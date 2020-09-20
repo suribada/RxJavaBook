@@ -6,11 +6,11 @@ import io.reactivex.rxjava3.core.ObservableSource;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 
-public class ConvertSecuredObservable<T extends SecuredUser> extends Observable<T> { // (1)
+public class SecuredObservable<T extends SecuredUser> extends Observable<T> { // (1)
 
     private final ObservableSource<? super User> source;
 
-    public ConvertSecuredObservable(ObservableSource<User> source) { // (2) 시작
+    public SecuredObservable(ObservableSource<User> source) { // (2) 시작
         this.source = source;
     } // (2) 끋
 
@@ -41,7 +41,9 @@ public class ConvertSecuredObservable<T extends SecuredUser> extends Observable<
                 reportUser(user);
                 return;
             }
-            downstream.onNext(SecuredUser.create(user));
+            if (!isDisposed()) {
+                downstream.onNext(SecuredUser.create(user));
+            }
         }
 
         @Override
