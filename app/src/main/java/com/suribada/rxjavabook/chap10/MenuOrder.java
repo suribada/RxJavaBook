@@ -8,6 +8,7 @@ public class MenuOrder {
     private Bitmap image;
 
     public MenuOrder(int num) {
+        System.out.println("MenuOrder constructor #" + num);
         this.num = num;
         this.image = Bitmap.createBitmap(400, 400, Bitmap.Config.ARGB_8888);
     }
@@ -18,8 +19,8 @@ public class MenuOrder {
 
     @Override
     public String toString() {
-        return "Profile{" +
-                "num=" + num +
+        return "MenuOrder {" +
+                "num=#" + num +
                 '}';
     }
 }
