@@ -98,4 +98,32 @@ public class SubscriberTest {
                 });
         SystemClock.sleep(3000);
     }
+
+    @Test
+    public void subscribe_interval_backPressure() {
+        Flowable.interval(10, TimeUnit.MILLISECONDS).take(25)
+                .onBackpressureBuffer()
+                .subscribe(new Subscriber<Long>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        s.request(10); // (1)
+                    }
+
+                    @Override
+                    public void onNext(Long next) {
+                        System.out.println("next=" + next); // (2)
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        System.err.println(t); // (3)
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("onComplete"); // (4)
+                    }
+                });
+        SystemClock.sleep(3000);
+    }
 }
