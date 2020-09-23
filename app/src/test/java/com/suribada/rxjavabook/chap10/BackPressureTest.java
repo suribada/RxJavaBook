@@ -3,9 +3,12 @@ package com.suribada.rxjavabook.chap10;
 import com.suribada.rxjavabook.SystemClock;
 
 import org.junit.Test;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.core.BackpressureOverflowStrategy;
 import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -20,17 +23,18 @@ public class BackPressureTest {
     @Test
     public void create_missing() {
         Flowable.<Integer>create(emitter -> {
-                for (int i = 0; i < 1_000_000; i++) {
+                for (int i = 0; i < 1_000_000; i++) { // (1) 시작
                     if (emitter.isCancelled()) {
                         return;
                     }
                     emitter.onNext(i);
-                }
-            }, BackpressureStrategy.MISSING)
-            .observeOn(Schedulers.io())
+                } // (1) 끝
+            }, BackpressureStrategy.MISSING) // (2)
+                .onBackpressureBuffer()
+            .observeOn(Schedulers.io()) // (3)
             .subscribe(v -> {
-                SystemClock.sleep(5);
-                System.out.println(v);
+                SystemClock.sleep(5); // (4) 시작
+                System.out.println("value= " + v); // (4) 끝
             }, Throwable::printStackTrace);
         SystemClock.sleep(5000);
     }
@@ -53,8 +57,27 @@ public class BackPressureTest {
             .observeOn(Schedulers.io())
             .subscribe(v -> {
                 SystemClock.sleep(5);
-                System.out.println(v);
+                System.out.println("value=" + v);
             }, Throwable::printStackTrace);
+        SystemClock.sleep(5000);
+    }
+
+    @Test
+    public void create_error_buffer() {
+        Flowable.<Integer>create(emitter -> {
+            for (int i = 0; i < 1_000_000; i++) {
+                if (emitter.isCancelled()) {
+                    return;
+                }
+                emitter.onNext(i);
+            }
+        }, BackpressureStrategy.ERROR)
+                .onBackpressureBuffer()
+                .observeOn(Schedulers.io())
+                .subscribe(v -> {
+                    SystemClock.sleep(5);
+                    System.out.println("value=" + v);
+                }, Throwable::printStackTrace);
         SystemClock.sleep(5000);
     }
 
@@ -188,13 +211,131 @@ public class BackPressureTest {
      */
     @Test
     public void problem_onBackPressureBuffer() {
-        Flowable.interval(1, TimeUnit.MILLISECONDS)
-                .onBackpressureBuffer()
+        Flowable.interval(1, TimeUnit.MILLISECONDS) // (1)
+                .onBackpressureBuffer(64, false, false, // (2)
+                        () -> System.out.println("overflowed")) // (3)
                 .observeOn(Schedulers.io())
                 .subscribe(v -> {
-                    SystemClock.sleep(5);
-                    System.out.println(v);
+                    SystemClock.sleep(5); // (4) 시작
+                    System.out.println(v); // (4) 끝
+                }, Throwable::printStackTrace);
+        SystemClock.sleep(5000);
+    }
+
+    @Test
+    public void problem_onBackPressureBuffer_nonFusion() {
+        Flowable.interval(1, TimeUnit.MILLISECONDS) // (1)
+                .onBackpressureBuffer(64, false, false, // (2)
+                        () -> System.out.println("overflowed")) // (3)
+                .hide()
+                .observeOn(Schedulers.io())
+                .subscribe(v -> {
+                    SystemClock.sleep(5); // (4) 시작
+                    System.out.println(v); // (4) 끝
+                }, Throwable::printStackTrace);
+        SystemClock.sleep(5000);
+    }
+
+    @Test
+    public void problem_onBackPressureBuffer_withSubscriber() {
+        Flowable.interval(1, TimeUnit.MILLISECONDS) // (1)
+                .onBackpressureBuffer(64, false, false, // (2)
+                        () -> System.out.println("overflowed")) // (3)
+                .subscribe(new Subscriber<Long>() {
+
+                                private Subscription subscription;
+
+                               @Override
+                               public void onSubscribe(Subscription s) {
+                                   this.subscription = s;
+                                   s.request(128);
+                               }
+
+                               @Override
+                               public void onNext(Long next) {
+                                   SystemClock.sleep(300); // (4) 시작
+                                   System.out.println(next);
+                                   if (next % 128 == 0) {
+                                       subscription.request(128);
+                                   }
+                               }
+
+                               @Override
+                               public void onError(Throwable t) {
+                                   t.printStackTrace();
+                               }
+
+                               @Override
+                               public void onComplete() {
+                                   System.out.println("onComplete");
+                               }
+                           });
+                        SystemClock.sleep(5000);
+    }
+
+    @Test
+    public void problem_onBackPressureBuffer_withSubscriber2() {
+        Flowable.interval(1, TimeUnit.MILLISECONDS) // (1)
+                .map(v -> 10 / (5-v))
+                .onBackpressureBuffer(64, false, false, // (2)
+                        () -> System.out.println("overflowed")) // (3)
+                .subscribe(new Subscriber<Long>() {
+
+                    private Subscription subscription;
+
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        this.subscription = s;
+                        s.request(128);
+                    }
+
+                    @Override
+                    public void onNext(Long next) {
+                        SystemClock.sleep(5); // (4) 시작
+                        System.out.println(next);
+                        if (next % 128 == 0) {
+                            subscription.request(128);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        t.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("onComplete");
+                    }
                 });
+        SystemClock.sleep(5000);
+    }
+
+
+    @Test
+    public void problem_onBackPressureBuffer_delayError() {
+        Flowable.interval(1, TimeUnit.MILLISECONDS) // (1)
+                .map(v -> v / (5 - v))
+                .onBackpressureBuffer(64, true, false, // (2)
+                        () -> System.out.println("overflowed")) // (3)
+                .observeOn(Schedulers.io())
+                .subscribe(v -> {
+                    SystemClock.sleep(5); // (4) 시작
+                    System.out.println(v); // (4) 끝
+                }, Throwable::printStackTrace);
+        SystemClock.sleep(5000);
+    }
+
+    @Test
+    public void problem_onBackPressureBuffer_dropLatest() {
+        Flowable.interval(1, TimeUnit.MILLISECONDS) // (1)
+                .onBackpressureBuffer(8, () -> System.out.println("overflowed"),
+                        BackpressureOverflowStrategy.DROP_OLDEST) // (3)
+                .observeOn(Schedulers.io())
+                .subscribe(v -> {
+                    SystemClock.sleep(5); // (4) 시작
+                    System.out.println(v); // (4) 끝
+                }, Throwable::printStackTrace);
         SystemClock.sleep(5000);
     }
 
