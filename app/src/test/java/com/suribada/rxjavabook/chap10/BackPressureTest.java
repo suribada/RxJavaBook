@@ -213,11 +213,11 @@ public class BackPressureTest {
     public void problem_onBackPressureBuffer() {
         Flowable.interval(1, TimeUnit.MILLISECONDS) // (1)
                 .onBackpressureBuffer(64, false, false, // (2)
-                        () -> System.out.println("overflowed")) // (3)
+                        () -> System.out.println(System.currentTimeMillis() + ":overflowed")) // (3)
                 .observeOn(Schedulers.io())
                 .subscribe(v -> {
                     SystemClock.sleep(5); // (4) 시작
-                    System.out.println(v); // (4) 끝
+                    System.out.println(System.currentTimeMillis() + ":" + v); // (4) 끝
                 }, Throwable::printStackTrace);
         SystemClock.sleep(5000);
     }
@@ -226,12 +226,12 @@ public class BackPressureTest {
     public void problem_onBackPressureBuffer_nonFusion() {
         Flowable.interval(1, TimeUnit.MILLISECONDS) // (1)
                 .onBackpressureBuffer(64, false, false, // (2)
-                        () -> System.out.println("overflowed")) // (3)
+                        () -> System.out.println(System.currentTimeMillis() + ":overflowed")) // (3)
                 .hide()
                 .observeOn(Schedulers.io())
                 .subscribe(v -> {
                     SystemClock.sleep(5); // (4) 시작
-                    System.out.println(v); // (4) 끝
+                    System.out.println(System.currentTimeMillis() + ":" + v); // (4) 끝
                 }, Throwable::printStackTrace);
         SystemClock.sleep(5000);
     }
@@ -327,14 +327,14 @@ public class BackPressureTest {
     }
 
     @Test
-    public void problem_onBackPressureBuffer_dropLatest() {
-        Flowable.interval(1, TimeUnit.MILLISECONDS) // (1)
-                .onBackpressureBuffer(8, () -> System.out.println("overflowed"),
-                        BackpressureOverflowStrategy.DROP_OLDEST) // (3)
+    public void problem_onBackPressureBuffer_dropOldest() {
+        Flowable.interval(1, TimeUnit.MILLISECONDS)
+                .onBackpressureBuffer(64, () -> System.out.println(System.currentTimeMillis() + ":overflowed"), // (1)
+                        BackpressureOverflowStrategy.DROP_OLDEST) // (2)
                 .observeOn(Schedulers.io())
                 .subscribe(v -> {
-                    SystemClock.sleep(5); // (4) 시작
-                    System.out.println(v); // (4) 끝
+                    SystemClock.sleep(5);
+                    System.out.println(System.currentTimeMillis() + ": " + v);
                 }, Throwable::printStackTrace);
         SystemClock.sleep(5000);
     }
@@ -346,7 +346,7 @@ public class BackPressureTest {
     @Test
     public void problem_onBackPressureDrop() {
         Flowable.interval(1, TimeUnit.MILLISECONDS)
-                .onBackpressureDrop()
+                .onBackpressureDrop(v -> System.out.println("dropped " + v)) // (1)
                 .observeOn(Schedulers.io())
                 .subscribe(v -> {
                     SystemClock.sleep(5);
@@ -358,7 +358,7 @@ public class BackPressureTest {
     @Test
     public void problem_onBackPressureLatest() {
         Flowable.interval(1, TimeUnit.MILLISECONDS)
-                .onBackpressureLatest()
+                .onBackpressureLatest() // (1)
                 .observeOn(Schedulers.io())
                 .subscribe(v -> {
                     SystemClock.sleep(5);

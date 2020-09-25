@@ -13,8 +13,10 @@ public class ParallelTest {
     //@Test
     public void reduce() {
         final long start = System.nanoTime();
-        Flowable.range(1, 1000).reduce((total, next) -> total + next)
-                .subscribe(v -> System.out.println("reduce simple elapsed=" + (System.nanoTime() - start) + ", value=" + v));
+        Flowable.range(1, 10000)
+                .reduce((total, next) -> total + next) // (1)
+                .subscribe(v -> System.out.println("simple elapsed="
+                        + (System.nanoTime() - start) + ", sum=" + v));
     }
 
     /**
@@ -23,32 +25,39 @@ public class ParallelTest {
     //@Test
     public void parallel_reduce() {
         final long start = System.nanoTime();
-        Flowable.range(1, 1000).parallel().reduce((total, next) -> total + next)
-                .subscribe(v -> System.out.println("parallel_reduce elapsed=" + (System.nanoTime() - start) + ", value=" + v));
+        Flowable.range(1, 10000).parallel() // (1)
+                .reduce((total, next) -> total + next) // (2)
+                .subscribe(v -> System.out.println("parallel elapsed="
+                        + (System.nanoTime() - start) + ", sum=" + v));
     }
 
     /**
-     * 첫 밴쩌 것보다 속도가 나아진다.
+     * 첫 밴째 것보다 속도가 나아진다.
      */
     //@Test
     public void parallel_reduce_runOn() {
         final long start = System.nanoTime();
-        Flowable.range(1, 1000).parallel().runOn(Schedulers.computation()).reduce((total, next) -> total + next)
-                .subscribe(v -> System.out.println("parallel_reduce_runOn elapsed=" + (System.nanoTime() - start) + ", value=" + v));
+        Flowable.range(1, 10000).parallel()
+                .runOn(Schedulers.computation()) // (1)
+                .reduce((total, next) -> total + next)
+                .subscribe(v -> System.out.println("parallel_runOn elapsed="
+                        + (System.nanoTime() - start) + ", sum=" + v));
         SystemClock.sleep(3000);
     }
 
     @Test
     public void parallel_multiThread() {
         final long start = System.nanoTime();
-        Flowable.range(1, 1000).parallel().runOn(Schedulers.io())
-                .flatMap(v -> complextOperation(v))
-                .sequential()
-                .subscribe(System.out::println, Functions.emptyConsumer(), () -> System.out.println("parallel elapsed=" + (System.nanoTime() - start)));
+        Flowable.range(1, 1000).parallel()
+                .runOn(Schedulers.io()) // (1)
+                .flatMap(v -> complexOperation(v)) // (2)
+                .sequential() // (3)
+                .subscribe(System.out::println, Functions.emptyConsumer(),
+                        () -> System.out.println("parallel elapsed=" + (System.nanoTime() - start)));
         SystemClock.sleep(10000);
     }
 
-    private Flowable<String> complextOperation(Integer v) {
+    private Flowable<String> complexOperation(Integer v) {
         SystemClock.sleep(20);
         return Flowable.just("value=" + v + 100);
     }
@@ -57,8 +66,9 @@ public class ParallelTest {
     public void parallel_multiThread_flatMap() {
         final long start = System.nanoTime();
         Flowable.range(1, 1000)
-                .flatMap(v -> complextOperation(v).subscribeOn(Schedulers.io()), 4)
-                .subscribe(System.out::println, Functions.emptyConsumer(), () -> System.out.println("flatMap elapsed=" + (System.nanoTime() - start)));
+                .flatMap(v -> complexOperation(v).subscribeOn(Schedulers.io()), 4) // (1)
+                .subscribe(System.out::println, Functions.emptyConsumer(),
+                        () -> System.out.println("flatMap elapsed=" + (System.nanoTime() - start)));
         SystemClock.sleep(10000);
     }
 }

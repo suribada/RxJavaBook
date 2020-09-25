@@ -25,14 +25,7 @@ public class GithubRxJavaTest {
         Observable<Integer> xs = Observable.range(0, Flowable.bufferSize() * 2);
         TestObserver<Integer> to = new TestObserver<Integer>();
         ConnectableObservable<Integer> xsp = xs.publish();
-        xsp.takeUntil(xsp.skipWhile(new Predicate<Integer>() {
-
-            @Override
-            public boolean test(Integer i) {
-                return i <= 3;
-            }
-
-        })).subscribe(to);
+        xsp.takeUntil(xsp.skipWhile(i -> i <= 3)).subscribe(to);
         xsp.connect();
         System.out.println(to.values());
     }
@@ -40,30 +33,16 @@ public class GithubRxJavaTest {
     @Test
     public void testTakeUntilWithPublishedStreamUsingSelector() {
         final AtomicInteger emitted = new AtomicInteger();
-        Observable<Integer> xs = Observable.range(0, Flowable.bufferSize() * 2).doOnNext(new Consumer<Integer>() {
-
-            @Override
-            public void accept(Integer t1) {
-                emitted.incrementAndGet();
-            }
-
-        });
+        Observable<Integer> xs = Observable.range(0, Flowable.bufferSize() * 2).doOnNext(t1 -> emitted.incrementAndGet());
         TestObserver<Integer> to = new TestObserver<Integer>();
-        xs.publish(new Function<Observable<Integer>, Observable<Integer>>() {
+        xs.publish((Function<Observable<Integer>, Observable<Integer>>) xs1 -> xs1.takeUntil(xs1.skipWhile(new Predicate<Integer>() {
 
             @Override
-            public Observable<Integer> apply(Observable<Integer> xs) {
-                return xs.takeUntil(xs.skipWhile(new Predicate<Integer>() {
-
-                    @Override
-                    public boolean test(Integer i) {
-                        return i <= 3;
-                    }
-
-                }));
+            public boolean test(Integer i) {
+                return i <= 3;
             }
 
-        }).subscribe(to);
+        }))).subscribe(to);
         //RxJava3에서 제거
         // https://github.com/ReactiveX/RxJava/issues/6153
         //to.awaitTerminalEvent();
