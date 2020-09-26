@@ -1,4 +1,4 @@
-package com.suribada.rxjavabook.chap7;
+package com.suribada.rxjavabook.chap11;
 
 import com.suribada.rxjavabook.api.model.Weather;
 

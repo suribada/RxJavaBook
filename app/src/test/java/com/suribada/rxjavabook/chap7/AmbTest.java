@@ -9,7 +9,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableSource;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AmbTest {
@@ -27,6 +26,15 @@ public class AmbTest {
                 .doOnDispose(() -> System.out.println("kweatherObs disposed"));
 
         Observable.ambArray(kmaObs, kweatherObs)
+                .subscribe(System.out::println);
+        SystemClock.sleep(5000);
+    }
+
+    @Test
+    public void amb_bad() {
+        Observable.interval(100, TimeUnit.MILLISECONDS, Schedulers.io())
+                .flatMap(ignored -> Observable.ambArray(getWeatherFromKma().subscribeOn(Schedulers.io()),
+                        getWeatherFromKweather().subscribeOn(Schedulers.io())))
                 .subscribe(System.out::println);
         SystemClock.sleep(5000);
     }

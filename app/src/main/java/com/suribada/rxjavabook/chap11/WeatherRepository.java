@@ -1,4 +1,4 @@
-package com.suribada.rxjavabook.chap7;
+package com.suribada.rxjavabook.chap11;
 
 import com.suribada.rxjavabook.api.model.Weather;
 
@@ -9,9 +9,15 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WeatherRepository {
 
+    KmaDataSource kmaDataSource;
+    KweatherDataSource kweatherDataSource;
+
+    WeatherRepository(KmaDataSource kmaDataSource, KweatherDataSource kweatherDataSource) {
+        this.kmaDataSource = kmaDataSource;
+        this.kweatherDataSource = kweatherDataSource;
+    }
+
     public Observable<Weather> getWeather() {
-        KmaDataSource kmaDataSource = new KmaDataSource();
-        KweatherDataSource kweatherDataSource = new KweatherDataSource();
         Observable<Weather> kmaObs = Observable.interval(1, TimeUnit.MINUTES, Schedulers.io())
                 .flatMap(ignored -> kmaDataSource.getWeather());
 
