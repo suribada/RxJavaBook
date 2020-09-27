@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import hu.akarnokd.rxjava3.math.MathObservable;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WindowTest {
 
@@ -121,5 +122,16 @@ public class WindowTest {
                 .flatMapSingle(obs -> obs.reduce(0L, (total, next) -> total + next)) // (4)
                 .subscribe(System.out::println);
         SystemClock.sleep(5000);
+    }
+
+    @Test
+    public void window_indicator() {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .take(20)
+                .window(Observable.interval(5, TimeUnit.SECONDS), // (1)
+                        opening -> Observable.timer(opening + 2, TimeUnit.SECONDS, Schedulers.single())) // (2)
+                .flatMapSingle(obs -> obs.reduce(0L, (total, next) -> total + next)) // (4)
+                .subscribe(buffer -> System.out.println(Thread.currentThread().getName() + ": " + buffer));
+        SystemClock.sleep(20000);
     }
 }

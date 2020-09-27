@@ -21,4 +21,13 @@ public class Weather {
                 ", currentTemperature=" + currentTemperature +
                 '}';
     }
+
+    public static Weather create(int weatherCode, String weatherText, float currentTemperature) {
+        Weather weather = new Weather();
+        weather.weatherCode = weatherCode;
+        weather.weatherText = weatherText;
+        weather.currentTemperature = currentTemperature;
+        return weather;
+    }
+
 }
