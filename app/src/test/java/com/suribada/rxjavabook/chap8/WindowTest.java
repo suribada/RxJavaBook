@@ -1,6 +1,11 @@
 package com.suribada.rxjavabook.chap8;
 
+import com.suribada.rxjavabook.SystemClock;
+
 import org.junit.Test;
+
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 import hu.akarnokd.rxjava3.math.MathObservable;
 import io.reactivex.rxjava3.core.Observable;
@@ -106,5 +111,15 @@ public class WindowTest {
                 Sale.create(7000),
                 Sale.create(7500),
                 Sale.create(8000));
+    }
+
+    @Test
+    public void window_timed() {
+        Observable.interval(0, 10,  TimeUnit.MILLISECONDS) // (1)
+                .map(v -> v * 10) // (2)
+                .window(100, 50, TimeUnit.MILLISECONDS) // (3)
+                .flatMapSingle(obs -> obs.reduce(0L, (total, next) -> total + next)) // (4)
+                .subscribe(System.out::println);
+        SystemClock.sleep(5000);
     }
 }
