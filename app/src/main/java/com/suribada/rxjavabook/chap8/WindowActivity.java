@@ -14,10 +14,13 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
+import hu.akarnokd.rxjava3.math.MathObservable;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class WindowActivity extends Activity {
 
+    private Disposable disposable;
     private Button button;
 
     @Override
@@ -25,12 +28,12 @@ public class WindowActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_and_button);
         button = findViewById(R.id.button);
-        Observable.interval(5, TimeUnit.SECONDS)
+        disposable = Observable.interval(5, TimeUnit.SECONDS)
                 .map(ignored -> ThreadLocalRandom.current().nextInt(10, 20)) // (1)
-                .doOnNext(v -> System.out.println(System.currentTimeMillis() + " next= " + v)) // (2)
+                .doOnNext(System.out::println) // (2)
                 .window(RxView.clicks(button)) // (3)
-                .flatMapSingle(obs -> obs.reduce(0L, (total, next) -> total + next)) // (4)
-                .subscribe(System.out::println);
+                .flatMap(obs -> MathObservable.averageFloat(obs)) // (4)
+                .subscribe(average -> System.out.println("average=" + average));
     }
 
     /**
@@ -61,4 +64,9 @@ public class WindowActivity extends Activity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        disposable.dispose();
+        super.onDestroy();
+    }
 }

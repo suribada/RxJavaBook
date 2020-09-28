@@ -126,12 +126,38 @@ public class WindowTest {
 
     @Test
     public void window_indicator() {
-        Observable.interval(1, TimeUnit.SECONDS)
-                .take(20)
+        Observable.interval(1, TimeUnit.SECONDS).take(20)
                 .window(Observable.interval(5, TimeUnit.SECONDS), // (1)
                         opening -> Observable.timer(opening + 2, TimeUnit.SECONDS, Schedulers.single())) // (2)
-                .flatMapSingle(obs -> obs.reduce(0L, (total, next) -> total + next)) // (4)
-                .subscribe(buffer -> System.out.println(Thread.currentThread().getName() + ": " + buffer));
+                .flatMapSingle(obs -> obs.doOnNext(System.out::println) // (3)
+                        .reduce(0L, (total, next) -> total + next)) // (4)
+                .subscribe(sum -> System.out.println(Thread.currentThread().getName() + ": sum = " + sum)); // (5)
+        SystemClock.sleep(20000);
+    }
+
+    /**
+     * 반례) 중간에 로그를 남기기위해 blockingGet을 하면 안 된다
+     */
+    @Test
+    public void window_indicator_fault() {
+        Observable.interval(1, TimeUnit.SECONDS).take(20)
+                .window(Observable.interval(5, TimeUnit.SECONDS), // (1)
+                        opening -> Observable.timer(opening + 2, TimeUnit.SECONDS, Schedulers.single())) // (2)
+                .doOnNext(obs -> System.out.println(obs.toList().blockingGet()))
+                .flatMapSingle(obs -> obs.doOnNext(System.out::println)
+                        .reduce(0L, (total, next) -> total + next)) // (4)
+                .subscribe(sum -> System.out.println(Thread.currentThread().getName() + " sum = " + sum));
+        SystemClock.sleep(20000);
+    }
+
+    @Test
+    public void window_overlapped() {
+        Observable.interval(1, TimeUnit.SECONDS).take(20)
+                .window(Observable.interval(0, 2, TimeUnit.SECONDS), // (1)
+                        value -> Observable.timer(value + 2, TimeUnit.SECONDS, Schedulers.single())) // (2)
+                .flatMapSingle(obs -> obs.doOnNext(System.out::println)
+                        .reduce(0L, (total, next) -> total + next)) // (4)
+                .subscribe(sum -> System.out.println(Thread.currentThread().getName() + ": sum = " + sum));
         SystemClock.sleep(20000);
     }
 }
