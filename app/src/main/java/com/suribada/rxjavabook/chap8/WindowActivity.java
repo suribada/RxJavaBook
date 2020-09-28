@@ -9,8 +9,6 @@ import androidx.annotation.Nullable;
 import com.jakewharton.rxbinding4.view.RxView;
 import com.suribada.rxjavabook.R;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 

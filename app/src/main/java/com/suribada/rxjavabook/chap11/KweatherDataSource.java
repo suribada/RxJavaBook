@@ -10,9 +10,9 @@ public class KweatherDataSource implements WeatherDataSource {
     public Observable<Weather> getWeather() {
         return Observable.create(emitter -> {
             Weather weather = new Weather();
-            weather.currentTemperature = 12.0f;
-            weather.weatherCode = 11;
-            weather.weatherText = "맑음";
+            weather.setCurrentTemperature(12.0f);
+            weather.setWeatherCode(11);
+            weather.setWeatherText("맑음");
         });
     }
 
