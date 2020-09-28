@@ -5,6 +5,7 @@ import com.suribada.rxjavabook.api.model.Weather;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WeatherRepository {
@@ -23,24 +24,38 @@ public class WeatherRepository {
     }
 
     public Observable<Weather> getWeatherKweather() {
-        return kmaDataSource.getWeather()
+        return kweatherDataSource.getWeather()
                 .filter(weather -> weather.getWeatherCode() > 0);
     }
 
     public Observable<Weather> getWeatherKmaPeriodically() {
-        return Observable.interval(1, TimeUnit.MINUTES, Schedulers.io())
+        return Observable.interval(0L, 1, TimeUnit.MINUTES, Schedulers.io())
                 .flatMap(ignored -> getWeatherKma())
                 .distinctUntilChanged();
     }
 
+
+
     public Observable<Weather> getWeatherKweatherPeriodically() {
-        return Observable.interval(1, TimeUnit.MINUTES, Schedulers.io())
-                .flatMap(ignored -> getWeatherKma())
+        return Observable.interval(0L, 1, TimeUnit.MINUTES, Schedulers.io())
+                .flatMap(ignored -> getWeatherKweather())
                 .distinctUntilChanged();
     }
 
     public Observable<Weather> getFastWeatherPeriodically() {
         return Observable.ambArray(getWeatherKmaPeriodically(), getWeatherKweatherPeriodically());
+    }
+
+    public Observable<Weather> getWeatherKmaPeriodically(Scheduler scheduler) {
+        return Observable.interval(0L, 1, TimeUnit.MINUTES, scheduler)
+                .flatMap(ignored -> getWeatherKma())
+                .distinctUntilChanged();
+    }
+
+    public Observable<Weather> getWeatherKweatherPeriodically(Scheduler scheduler) {
+        return Observable.interval(0L, 1, TimeUnit.MINUTES, scheduler)
+                .flatMap(ignored -> getWeatherKweather())
+                .distinctUntilChanged();
     }
 
 }
