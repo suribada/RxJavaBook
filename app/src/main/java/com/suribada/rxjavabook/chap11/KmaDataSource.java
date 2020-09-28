@@ -10,9 +10,9 @@ public class KmaDataSource implements WeatherDataSource {
     public Observable<Weather> getWeather() {
         return Observable.create(emitter -> {
             Weather weather = new Weather();
-            weather.currentTemperature = 10.0f;
-            weather.weatherCode = 10;
-            weather.weatherText = "비";
+            weather.setCurrentTemperature(10.0f);
+            weather.setWeatherCode(10);
+            weather.setWeatherText("비");
         });
     }
 }

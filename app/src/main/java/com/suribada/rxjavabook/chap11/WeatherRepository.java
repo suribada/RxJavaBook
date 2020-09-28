@@ -9,22 +9,38 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WeatherRepository {
 
-    KmaDataSource kmaDataSource;
-    KweatherDataSource kweatherDataSource;
+    private KmaDataSource kmaDataSource;
+    private KweatherDataSource kweatherDataSource;
 
-    WeatherRepository(KmaDataSource kmaDataSource, KweatherDataSource kweatherDataSource) {
+    public WeatherRepository(KmaDataSource kmaDataSource, KweatherDataSource kweatherDataSource) {
         this.kmaDataSource = kmaDataSource;
         this.kweatherDataSource = kweatherDataSource;
     }
 
-    public Observable<Weather> getWeather() {
-        Observable<Weather> kmaObs = Observable.interval(1, TimeUnit.MINUTES, Schedulers.io())
-                .flatMap(ignored -> kmaDataSource.getWeather());
+    public Observable<Weather> getWeatherKma() {
+        return kmaDataSource.getWeather()
+                .filter(weather -> weather.getWeatherCode() > 0);
+    }
 
-        Observable<Weather> kweatherObs = Observable.interval(1, TimeUnit.MINUTES, Schedulers.io())
-                .flatMap(ignored -> kweatherDataSource.getWeather());
+    public Observable<Weather> getWeatherKweather() {
+        return kmaDataSource.getWeather()
+                .filter(weather -> weather.getWeatherCode() > 0);
+    }
 
-        return Observable.ambArray(kmaObs, kweatherObs);
+    public Observable<Weather> getWeatherKmaPeriodically() {
+        return Observable.interval(1, TimeUnit.MINUTES, Schedulers.io())
+                .flatMap(ignored -> getWeatherKma())
+                .distinctUntilChanged();
+    }
+
+    public Observable<Weather> getWeatherKweatherPeriodically() {
+        return Observable.interval(1, TimeUnit.MINUTES, Schedulers.io())
+                .flatMap(ignored -> getWeatherKma())
+                .distinctUntilChanged();
+    }
+
+    public Observable<Weather> getFastWeatherPeriodically() {
+        return Observable.ambArray(getWeatherKmaPeriodically(), getWeatherKweatherPeriodically());
     }
 
 }

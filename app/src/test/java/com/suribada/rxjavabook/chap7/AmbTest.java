@@ -43,7 +43,7 @@ public class AmbTest {
         return Observable.create(emitter -> {
             ThreadLocalRandom.current().nextInt(100, 500);
             Weather weather = new Weather();
-            weather.currentTemperature  = 10.0f;
+            weather.setCurrentTemperature(10.0f);
             emitter.onNext(weather);
         });
     }
@@ -52,7 +52,7 @@ public class AmbTest {
         return Observable.create(emitter -> {
             ThreadLocalRandom.current().nextInt(100, 500);
             Weather weather = new Weather();
-            weather.currentTemperature  = 20.0f;
+            weather.setCurrentTemperature(20.0f);
             emitter.onNext(weather);
         });
     }
