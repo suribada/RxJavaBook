@@ -1,5 +1,7 @@
 package com.suribada.rxjavabook.api.model;
 
+import java.util.Objects;
+
 /**
  {
  "weatherCode" : 10,
@@ -43,6 +45,21 @@ public class Weather {
 
     public void setCurrentTemperature(float currentTemperature) {
         this.currentTemperature = currentTemperature;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Weather weather = (Weather) o;
+        return weatherCode == weather.weatherCode &&
+                Float.compare(weather.currentTemperature, currentTemperature) == 0 &&
+                weatherText.equals(weather.weatherText);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(weatherCode, weatherText, currentTemperature);
     }
 
     @Override

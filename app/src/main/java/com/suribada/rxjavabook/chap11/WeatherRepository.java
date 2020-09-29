@@ -13,12 +13,13 @@ public class WeatherRepository {
     private KmaDataSource kmaDataSource;
     private KweatherDataSource kweatherDataSource;
 
-    public WeatherRepository(KmaDataSource kmaDataSource, KweatherDataSource kweatherDataSource) {
+    public WeatherRepository(KmaDataSource kmaDataSource,
+                             KweatherDataSource kweatherDataSource) { // (1) 시작
         this.kmaDataSource = kmaDataSource;
         this.kweatherDataSource = kweatherDataSource;
-    }
+    } // (1) 끝
 
-    public Observable<Weather> getWeatherKma() {
+    public Observable<Weather> getWeatherKma() { // (2) 시작
         return kmaDataSource.getWeather()
                 .filter(weather -> weather.getWeatherCode() > 0);
     }
@@ -26,36 +27,6 @@ public class WeatherRepository {
     public Observable<Weather> getWeatherKweather() {
         return kweatherDataSource.getWeather()
                 .filter(weather -> weather.getWeatherCode() > 0);
-    }
-
-    public Observable<Weather> getWeatherKmaPeriodically() {
-        return Observable.interval(0L, 1, TimeUnit.MINUTES, Schedulers.io())
-                .flatMap(ignored -> getWeatherKma())
-                .distinctUntilChanged();
-    }
-
-
-
-    public Observable<Weather> getWeatherKweatherPeriodically() {
-        return Observable.interval(0L, 1, TimeUnit.MINUTES, Schedulers.io())
-                .flatMap(ignored -> getWeatherKweather())
-                .distinctUntilChanged();
-    }
-
-    public Observable<Weather> getFastWeatherPeriodically() {
-        return Observable.ambArray(getWeatherKmaPeriodically(), getWeatherKweatherPeriodically());
-    }
-
-    public Observable<Weather> getWeatherKmaPeriodically(Scheduler scheduler) {
-        return Observable.interval(0L, 1, TimeUnit.MINUTES, scheduler)
-                .flatMap(ignored -> getWeatherKma())
-                .distinctUntilChanged();
-    }
-
-    public Observable<Weather> getWeatherKweatherPeriodically(Scheduler scheduler) {
-        return Observable.interval(0L, 1, TimeUnit.MINUTES, scheduler)
-                .flatMap(ignored -> getWeatherKweather())
-                .distinctUntilChanged();
-    }
+    } // (2) 끝
 
 }

@@ -43,8 +43,7 @@ public class WeatherRepositoryTest {
     @Test
     public void getWeatherKma_blocking_normal() {
         Weather response = Weather.create(10, "흐리고 비", 11.0f);
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.just(response));
+        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
         Weather result = weatherRepository.getWeatherKma().blockingFirst();
         assertEquals(response, result);
     }
@@ -56,8 +55,7 @@ public class WeatherRepositoryTest {
     @Test
     public void getWeatherKma_blocking_empty() {
         Weather response = Weather.create(-1, "what's problem", 11.0f);
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.just(response));
+        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
         Weather result = weatherRepository.getWeatherKma().blockingFirst();
         assertNull(result);
     }
@@ -65,8 +63,7 @@ public class WeatherRepositoryTest {
     @Test(expected = NoSuchElementException.class)
     public void getWeatherKma_blocking_empty_error() {
         Weather response = Weather.create(-1, "what's problem", 11.0f);
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.just(response));
+        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
         Weather result = weatherRepository.getWeatherKma().blockingFirst();
         assertNull(result);
     }
@@ -77,16 +74,14 @@ public class WeatherRepositoryTest {
      */
     @Test(expected = TimeoutException.class)
     public void getWeatherKma_blocking_error() {
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.error(new TimeoutException()));
+        when(kmaDataSource.getWeather()).thenReturn(Observable.error(new TimeoutException()));
         Weather result = weatherRepository.getWeatherKma().blockingFirst();
         assertNull(result);
     }
 
     @Test(expected = RuntimeException.class)
     public void getWeatherKma_blocking_error2() {
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.error(new TimeoutException()));
+        when(kmaDataSource.getWeather()).thenReturn(Observable.error(new TimeoutException()));
         Weather result = weatherRepository.getWeatherKma().blockingFirst();
         assertNull(result);
     }
@@ -94,8 +89,7 @@ public class WeatherRepositoryTest {
     @Test
     public void getWeatherKma_normal() {
         Weather response = Weather.create(10, "흐리고 비", 11.0f);
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.just(response));
+        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
         weatherRepository.getWeatherKma().test()
                 .assertValue(response)
                 .assertComplete();
@@ -110,53 +104,16 @@ public class WeatherRepositoryTest {
     @Test
     public void getWeatherKma_empty() {
         Weather response = Weather.create(-1, "what's problem", 11.0f);
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.just(response));
+        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
         weatherRepository.getWeatherKma().test()
                 .assertNoValues();
     }
 
     @Test
     public void getWeatherKma_error() {
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.error(new TimeoutException()));
+        when(kmaDataSource.getWeather()).thenReturn(Observable.error(new TimeoutException()));
         weatherRepository.getWeatherKma().test()
                 .assertError(TimeoutException.class);
-    }
-
-    @Test
-    public void getWeatherKmaPeriodically_problem() throws InterruptedException {
-        Weather response = Weather.create(10, "흐리고 비", 11.0f);
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.just(response));
-        // await()는 onComplete나 onError가 호출돼야 하기 때문에 여기서는 사실상 무한대기
-        weatherRepository.getWeatherKmaPeriodically().test()
-                .await()
-                .assertNotComplete();
-    }
-
-    @Test
-    public void getWeatherKmaPeriodically() throws InterruptedException {
-        Weather response = Weather.create(10, "흐리고 비", 11.0f);
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.just(response));
-        TestObserver testObserver = weatherRepository.getWeatherKmaPeriodically().test();
-        testObserver.await(50, TimeUnit.SECONDS);
-        testObserver.assertValueCount(1);
-        testObserver.await(50, TimeUnit.SECONDS); // 2번 await를 할 수는 없다.
-        testObserver.assertValueCount(2);
-        testObserver.dispose();
-    }
-
-    @Test
-    public void getWeatherKmaPeriodically_await() throws InterruptedException {
-        Weather response = Weather.create(10, "흐리고 비", 11.0f);
-        when(kmaDataSource.getWeather())
-                .thenReturn(Observable.just(response));
-        TestObserver testObserver = weatherRepository.getWeatherKmaPeriodically().test();
-        testObserver.awaitCount(2) // timeout이 5초라서 문제
-                .assertValues(response, response)
-                .assertNotComplete();
     }
 
 }
