@@ -1,0 +1,13 @@
+@startuml
+
+abstract class BaseTestConsumer<T, U extends BaseTestConsumer<T, U>>
+
+class TestObserver<T>
+
+BaseTestConsumer <|-- TestObserver
+
+class TestSubscriber<T>
+
+BaseTestConsumer <|-- TestSubscriber
+
+@enduml

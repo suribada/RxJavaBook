@@ -28,24 +28,24 @@ import static org.mockito.Mockito.when;
 
 public class WeatherRepositoryTest {
 
-    @Rule
-    public MockitoRule mockito = MockitoJUnit.rule();
+    @Rule // (1) 시작
+    public MockitoRule mockito = MockitoJUnit.rule(); // (1) 끝
+
+    @Mock // (2) 시작
+            KmaDataSource kmaDataSource;
 
     @Mock
-    KmaDataSource kmaDataSource;
+    KweatherDataSource kweatherDataSource; // (2) 끝
 
-    @Mock
-    KweatherDataSource kweatherDataSource;
-
-    @InjectMocks
-    WeatherRepository weatherRepository;
+    @InjectMocks // (3) 시작
+            WeatherRepository weatherRepository; // (3) 끝
 
     @Test
     public void getWeatherKma_blocking_normal() {
-        Weather response = Weather.create(10, "흐리고 비", 11.0f);
-        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
-        Weather result = weatherRepository.getWeatherKma().blockingFirst();
-        assertEquals(response, result);
+        Weather response = Weather.create(10, "흐리고 비", 11.0f); // (1)
+        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response)); // (2)
+        Weather result = weatherRepository.getWeatherKma().blockingFirst(); // (3)
+        assertEquals(response, result); // (4)
     }
 
     /**
@@ -54,13 +54,13 @@ public class WeatherRepositoryTest {
      */
     @Test
     public void getWeatherKma_blocking_empty() {
-        Weather response = Weather.create(-1, "what's problem", 11.0f);
+        Weather response = Weather.create(-1, "what's problem", 11.0f); // (1)
         when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
-        Weather result = weatherRepository.getWeatherKma().blockingFirst();
-        assertNull(result);
+        Weather result = weatherRepository.getWeatherKma().blockingFirst(); // (2)
+        assertNull(result); // (3)
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test(expected = NoSuchElementException.class) // (1)
     public void getWeatherKma_blocking_empty_error() {
         Weather response = Weather.create(-1, "what's problem", 11.0f);
         when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
@@ -72,14 +72,14 @@ public class WeatherRepositoryTest {
      * 테스트 실패
      * java.lang.Exception: Unexpected exception, expected<java.util.concurrent.TimeoutException> but was<java.lang.RuntimeException>
      */
-    @Test(expected = TimeoutException.class)
+    @Test(expected = TimeoutException.class) // (1)
     public void getWeatherKma_blocking_error() {
-        when(kmaDataSource.getWeather()).thenReturn(Observable.error(new TimeoutException()));
+        when(kmaDataSource.getWeather()).thenReturn(Observable.error(new TimeoutException())); // (2)
         Weather result = weatherRepository.getWeatherKma().blockingFirst();
-        assertNull(result);
+        assertNull(result); // (3)
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = RuntimeException.class) // (1)
     public void getWeatherKma_blocking_error2() {
         when(kmaDataSource.getWeather()).thenReturn(Observable.error(new TimeoutException()));
         Weather result = weatherRepository.getWeatherKma().blockingFirst();

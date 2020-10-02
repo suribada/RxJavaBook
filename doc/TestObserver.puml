@@ -1,0 +1,17 @@
+@startuml
+
+interface Disposable
+interface Observer<T>
+interface MaybeObserver<T>
+interface SingleObserver<T>
+interface CompletableObserver
+
+class TestObserver<T>
+
+Disposable <|.. TestObserver
+Observer <|.. TestObserver
+MaybeObserver <|.. TestObserver
+SingleObserver <|.. TestObserver
+CompletableObserver <|.. TestObserver
+
+@enduml
