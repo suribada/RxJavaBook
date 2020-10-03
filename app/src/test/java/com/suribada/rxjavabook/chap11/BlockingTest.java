@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import io.reactivex.rxjava3.core.Observable;
 
@@ -117,5 +118,65 @@ public class BlockingTest {
             SystemClock.sleep(2000);
             System.out.println(each);
         } // (2) 끝
+    }
+
+    @Test
+    public void blockingMostRecent() {
+        Observable<String> obs = Observable.interval(5, TimeUnit.SECONDS).take(12)
+                .map(v -> (v + 1) * 5 + "초 경과");
+        Iterable<String> iterable = obs.blockingMostRecent("시작"); // (1)
+        for (String each : iterable) { // (2) 시작
+            System.out.println(each);
+        } // (2) 끝
+    }
+
+    @Test
+    public void blockingNext() {
+        System.out.println(System.currentTimeMillis());
+        Observable<String> obs = Observable.interval(5, TimeUnit.SECONDS).take(12)
+                .map(v -> (v + 1) * 5 + "초 경과");
+        Iterable<String> iterable = obs.blockingNext(); // (1)
+        for (String each : iterable) { // (2) 시작
+            System.out.println(System.currentTimeMillis() + ": " + each);
+        } // (2) 끝
+    }
+
+    @Test
+    public void blockingNext_fastProducer() {
+        System.out.println(System.currentTimeMillis());
+        Observable<String> fastObs = Observable.interval(1, TimeUnit.SECONDS).take(60)
+                .map(v -> (v + 1) + "초 경과");
+        Iterable<String> iterable = fastObs.blockingNext(); // (1)
+        for (String each : iterable) { // (2) 시작
+            SystemClock.sleep(2000);
+            System.out.println(System.currentTimeMillis() + ": " + each);
+        } // (2) 끝
+    }
+
+    /**
+     * Learning RxJava
+     */
+    @Test
+    public void testBlockingNext() {
+        Observable<Long> source = Observable.interval(1, TimeUnit.MICROSECONDS).take(1000);
+        Iterable<Long> iterable = source.blockingNext();
+        for (Long i : iterable) {
+            System.out.println(i);
+        }
+    }
+
+    @Test
+    public void blockingStream() {
+        Observable<String> obs = Observable.interval(5, TimeUnit.SECONDS).take(12)
+                .map(v -> (v + 1) * 5 + "초 경과");
+        obs.blockingStream()// (1)
+                .forEach(System.out::println); // (2)
+    }
+
+    @Test
+    public void blockingForEach() {
+        Observable<String> obs = Observable.interval(5, TimeUnit.SECONDS).take(12)
+                .map(v -> (v + 1) * 5 + "초 경과");
+        obs.blockingForEach(System.out::println); // (1)
     }
 }

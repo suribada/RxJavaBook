@@ -2,11 +2,7 @@ package com.suribada.rxjavabook.chap11;
 
 import com.suribada.rxjavabook.api.model.Weather;
 
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WeatherRepository {
 
