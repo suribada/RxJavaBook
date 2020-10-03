@@ -54,8 +54,8 @@ public class WeatherRepositoryTest {
      */
     @Test
     public void getWeatherKma_blocking_empty() {
-        Weather response = Weather.create(-1, "what's problem", 11.0f); // (1)
-        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
+        Weather response = Weather.create(-1, "what's problem", 11.0f); // (1) 시작
+        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response)); // (1) 끝
         Weather result = weatherRepository.getWeatherKma().blockingFirst(); // (2)
         assertNull(result); // (3)
     }
@@ -84,6 +84,17 @@ public class WeatherRepositoryTest {
         when(kmaDataSource.getWeather()).thenReturn(Observable.error(new TimeoutException()));
         Weather result = weatherRepository.getWeatherKma().blockingFirst();
         assertNull(result);
+    }
+
+    @Test
+    public void getWeatherKma_blocking_error3() {
+        TimeoutException timeoutException = new TimeoutException(); // (1) 시작
+        when(kmaDataSource.getWeather()).thenReturn(Observable.error(timeoutException)); // (1) 끝
+        try {
+            Weather result = weatherRepository.getWeatherKma().blockingFirst();
+        } catch (RuntimeException e) {
+            assertEquals(e.getCause(), timeoutException); // (2)
+        }
     }
 
     @Test

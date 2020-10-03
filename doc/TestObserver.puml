@@ -1,17 +1,18 @@
 @startuml
 
-interface Disposable
 interface Observer<T>
 interface MaybeObserver<T>
 interface SingleObserver<T>
 interface CompletableObserver
+interface Disposable
 
 class TestObserver<T>
 
-Disposable <|.. TestObserver
 Observer <|.. TestObserver
 MaybeObserver <|.. TestObserver
 SingleObserver <|.. TestObserver
 CompletableObserver <|.. TestObserver
+Disposable <|.. TestObserver
+
 
 @enduml
