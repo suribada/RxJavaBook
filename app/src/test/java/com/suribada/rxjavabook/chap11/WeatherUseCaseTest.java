@@ -35,8 +35,8 @@ public class WeatherUseCaseTest {
 
     @Before
     public void before() {
-        RxJavaPlugins.setIoSchedulerHandler(scheduler -> testScheduler); // (1)
-        RxJavaPlugins.setComputationSchedulerHandler(scheduler -> testScheduler); // (1)
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> testScheduler); // (1) 시작
+        RxJavaPlugins.setComputationSchedulerHandler(scheduler -> testScheduler); // (1) 끝
     }
 
     @After
@@ -47,12 +47,14 @@ public class WeatherUseCaseTest {
     @Test
     public void getWeatherKmaPeriodically_sameResponse() throws InterruptedException {
         Weather response = Weather.create(10, "흐리고 비", 11.0f);
+        Weather response2 = Weather.create(10, "흐리고 비", 11.0f);
 
         when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response));
         TestObserver testObserver = weatherUseCase.getWeatherKmaPeriodically().test();
         testScheduler.advanceTimeBy(1, TimeUnit.MINUTES); // (1)
         testObserver.assertValue(response); // (2)
 
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2));
         testScheduler.advanceTimeBy(1, TimeUnit.MINUTES); // (3)
         testObserver.assertValueCount(1); // (4)
     }

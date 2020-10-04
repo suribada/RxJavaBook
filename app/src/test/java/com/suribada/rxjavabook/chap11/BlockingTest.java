@@ -87,9 +87,9 @@ public class BlockingTest {
      */
     @Test
     public void blockingIterable_fastProducer() {
-        Observable<String> obs = Observable.interval(1, TimeUnit.SECONDS).take(60)
+        Observable<String> fastObs = Observable.interval(1, TimeUnit.SECONDS).take(60)
                 .map(v -> (v + 1) + "초 경과");
-        Iterable<String> iterable = obs.blockingIterable(); // (1)
+        Iterable<String> iterable = fastObs.blockingIterable(); // (1)
         for (String each : iterable) { // (2) 시작
             SystemClock.sleep(2000);
             System.out.println(each);
