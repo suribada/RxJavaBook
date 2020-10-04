@@ -99,12 +99,11 @@ public class WeatherRepositoryTest {
 
     @Test
     public void getWeatherKma_normal() {
-        Weather response = Weather.create(10, "흐리고 비", 11.0f);
-        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
+        Weather response = Weather.create(10, "흐리고 비", 11.0f); // (1) 시작
+        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response)); // (1) 끝
         weatherRepository.getWeatherKma().test()
-                .assertValue(response)
-                .assertComplete();
-
+                .assertValue(v -> v.getWeatherCode() > 10)
+                .assertValue(response); // (2)
     }
 
     /**
@@ -114,17 +113,17 @@ public class WeatherRepositoryTest {
      */
     @Test
     public void getWeatherKma_empty() {
-        Weather response = Weather.create(-1, "what's problem", 11.0f);
-        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response));
+        Weather response = Weather.create(-1, "what's problem", 11.0f); // (1) 시작
+        when(kmaDataSource.getWeather()).thenReturn(Observable.just(response)); // (1) 끝
         weatherRepository.getWeatherKma().test()
-                .assertNoValues();
+                .assertNoValues(); // (2)
     }
 
     @Test
     public void getWeatherKma_error() {
-        when(kmaDataSource.getWeather()).thenReturn(Observable.error(new TimeoutException()));
+        when(kmaDataSource.getWeather()).thenReturn(Observable.error(new TimeoutException())); // (1)
         weatherRepository.getWeatherKma().test()
-                .assertError(TimeoutException.class);
+                .assertError(TimeoutException.class); // (2)
     }
 
 }
