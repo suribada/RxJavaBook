@@ -22,14 +22,14 @@ import static org.mockito.Mockito.when;
 
 public class WeatherUseCaseTest {
 
-    @Rule
-    public MockitoRule mockito = MockitoJUnit.rule();
+    @Rule // (1) 시작
+    public MockitoRule mockito = MockitoJUnit.rule(); // (1) 끝
 
-    @Mock
-    WeatherRepository weatherRepository;
+    @Mock // (2) 시작
+    WeatherRepository weatherRepository; // (2) 끝
 
-    @InjectMocks
-    WeatherUseCase weatherUseCase;
+    @InjectMocks // (3) 시작
+    WeatherUseCase weatherUseCase; // (3) 끝
 
     private TestScheduler testScheduler = new TestScheduler();
 

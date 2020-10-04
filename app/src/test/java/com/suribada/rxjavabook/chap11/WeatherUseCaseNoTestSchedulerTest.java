@@ -39,17 +39,17 @@ public class WeatherUseCaseNoTestSchedulerTest {
 
     @Test
     public void getWeatherKmaPeriodically_sameResponse() throws InterruptedException {
-        Weather response = Weather.create(10, "흐리고 비", 11.0f);
-        Weather response2 = Weather.create(10, "흐리고 비", 11.0f);
+        Weather response = Weather.create(10, "흐리고 비", 11.0f); // (1) 시작
+        Weather response2 = Weather.create(10, "흐리고 비", 11.0f); // (1) 끝
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response));
-        TestObserver testObserver = weatherUseCase.getWeatherKmaPeriodically().test();
-        testObserver.await(20, TimeUnit.SECONDS);
-        testObserver.assertValueCount(1);
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response)); // (2)
+        TestObserver testObserver = weatherUseCase.getWeatherKmaPeriodically().test(); // (3)
+        testObserver.await(10, TimeUnit.SECONDS); // (4)
+        testObserver.assertValueCount(1); // (5)
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2));
-        testObserver.await(50, TimeUnit.SECONDS);
-        testObserver.assertValueCount(1);
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2)); // (6)
+        testObserver.await(60, TimeUnit.SECONDS); // (7)
+        testObserver.assertValueCount(1); // (8)
     }
 
     @Test
