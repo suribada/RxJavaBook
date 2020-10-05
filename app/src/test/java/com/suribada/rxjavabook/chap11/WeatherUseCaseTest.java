@@ -45,61 +45,80 @@ public class WeatherUseCaseTest {
     }
 
     @Test
-    public void getWeatherKmaPeriodically_sameResponse() throws InterruptedException {
-        Weather response = Weather.create(10, "흐리고 비", 11.0f);
+    public void getWeatherKmaPeriodically_sameResponse() {
+        Weather response = Weather.create(10, "흐리고 비", 11.0f); // (1) 시작
+        Weather response2 = Weather.create(10, "흐리고 비", 11.0f); // (1) 끝
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response));
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response)); // (2) 시작
         TestObserver testObserver = weatherUseCase.getWeatherKmaPeriodically().test();
-        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES); // (1)
-        testObserver.assertValue(response); // (2)
+        testScheduler.advanceTimeBy(0, TimeUnit.MINUTES);
+        testObserver.assertValue(response); // (2) 끝
 
-        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES); // (3)
-        testObserver.assertValueCount(1); // (4)
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2)); // (3) 시작
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES);
+        testObserver.assertValueCount(1); // (3) 끝
     }
 
     @Test
-    public void getWeatherKmaPeriodically_differentResponse() throws InterruptedException {
+    public void getWeatherKmaPeriodically_differentResponse() {
         Weather response = Weather.create(10, "흐리고 비", 11.0f); // (1) 시작
         Weather response2 = Weather.create(12, "흐림", 11.0f);
         Weather response3 = Weather.create(13, "흐림", 11.0f); // (1) 끝
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response)); // (2)
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response)); // (2) 시작
         TestObserver testObserver = weatherUseCase.getWeatherKmaPeriodically().test();
-        testScheduler.advanceTimeBy(30, TimeUnit.SECONDS); // (3)
-        testObserver.assertValue(response);
+        testScheduler.advanceTimeBy(0, TimeUnit.SECONDS);
+        testObserver.assertValue(response); // (2) 끝
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2)); // (4)
-        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES); // (5)
-        testObserver.assertValues(response, response2); // (6)
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2)); // (3) 시작
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES);
+        testObserver.assertValues(response, response2); // (3) 끝
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response3)); // (7)
-        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES); // (8)
-        testObserver.assertValues(response, response2, response3); // (9)
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response3)); // (4) 시작
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES);
+        testObserver.assertValues(response, response2, response3); // (4) 끝
+    }
+
+    @Test
+    public void getWeatherKmaPeriodically_sameResponse_separateTestScheduler() {
+        Weather response = Weather.create(10, "흐리고 비", 11.0f); // (1) 시작
+        Weather response2 = Weather.create(10, "흐리고 비", 11.0f); // (1) 끝
+
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response)); // (2) 시작
+        TestScheduler testScheduler = new TestScheduler();
+        TestObserver testObserver = weatherUseCase.getWeatherKmaPeriodically(testScheduler).test();
+        testScheduler.advanceTimeBy(0, TimeUnit.MINUTES);
+        testObserver.assertValue(response); // (2) 끝
+
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2)); // (3) 시작
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES);
+        testObserver.assertValueCount(1); // (3) 끝
     }
 
     @Test
     public void getFastWeatherPeriodically() {
-        Weather response = Weather.create(10, "흐리고 비", 11.0f); // (1) 시작
-        Weather response2 = Weather.create(12, "흐림", 11.0f);
+        Weather responseKma = Weather.create(10, "흐리고 비", 11.0f); // (1) 시작
+        Weather responseKweather = Weather.create(12, "흐림", 11.0f);
 
         when(weatherRepository.getWeatherKma())
-                .thenReturn(Observable.just(response).delay(20, TimeUnit.SECONDS)); // (2)
+                .thenReturn(Observable.just(responseKma).delay(20, TimeUnit.SECONDS)); // (2)
         when(weatherRepository.getWeatherKweather())
-                .thenReturn(Observable.just(response2).delay(15, TimeUnit.SECONDS)); // (2)
-        TestObserver testObserver = weatherUseCase.getFastWeatherPeriodically().test();
-        testScheduler.advanceTimeBy(10, TimeUnit.SECONDS); // (3)
-        testObserver.assertNoValues();
+                .thenReturn(Observable.just(responseKweather).delay(15, TimeUnit.SECONDS)); // (2)
 
-        testScheduler.advanceTimeBy(20, TimeUnit.SECONDS); // (3)
-        testObserver.assertValue(response2);
+        TestObserver testObserver = weatherUseCase.getFastWeatherPeriodically().test(); // (3) 시작
+        testScheduler.advanceTimeBy(10, TimeUnit.SECONDS);
+        testObserver.assertNoValues(); // (3) 끝
 
-        testScheduler.advanceTimeTo(1, TimeUnit.MINUTES); // (3)
-        testObserver.assertValue(response2);
+        testScheduler.advanceTimeBy(20, TimeUnit.SECONDS); // (4) 시작
+        testObserver.assertValue(responseKweather); // (4) 끝
 
-        when(weatherRepository.getWeatherKweather())
-                .thenReturn(Observable.just(response).delay(25, TimeUnit.SECONDS)); // (2)
+        testScheduler.advanceTimeTo(1, TimeUnit.MINUTES); // (5) 시작
+        testObserver.assertValue(responseKweather); // (5)끝
+
+       when(weatherRepository.getWeatherKweather())
+                .thenReturn(Observable.just(responseKma).delay(25, TimeUnit.SECONDS)); // (2)
         testScheduler.advanceTimeBy(1, TimeUnit.MINUTES); // (5)
-        testObserver.assertValue(response2)
+        testObserver.assertValue(responseKweather)
                 .assertNotComplete()
                 .assertNoErrors();
     }
