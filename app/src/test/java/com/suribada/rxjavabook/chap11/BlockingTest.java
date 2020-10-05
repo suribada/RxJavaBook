@@ -6,6 +6,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -82,14 +83,25 @@ public class BlockingTest {
         } // (2) 끝
     }
 
+    @Test
+    public void blockingIterable_directItarable() {
+        Observable<String> obs = Observable.interval(5, TimeUnit.SECONDS).take(12)
+                .map(v -> (v + 1) * 5 + "초 경과");
+        Iterable<String> iterable = obs.blockingIterable();
+        for (Iterator<String> iterator = iterable.iterator(); iterator.hasNext(); ) {
+            String each = iterator.next();
+            System.out.println(each);
+        }
+    }
+
     /**
      * blockingLatest와 비교하기 위해서 생산 속도를 빨리한 버전
      */
     @Test
     public void blockingIterable_fastProducer() {
-        Observable<String> obs = Observable.interval(1, TimeUnit.SECONDS).take(60)
+        Observable<String> fastObs = Observable.interval(1, TimeUnit.SECONDS).take(60)
                 .map(v -> (v + 1) + "초 경과");
-        Iterable<String> iterable = obs.blockingIterable(); // (1)
+        Iterable<String> iterable = fastObs.blockingIterable(); // (1)
         for (String each : iterable) { // (2) 시작
             SystemClock.sleep(2000);
             System.out.println(each);

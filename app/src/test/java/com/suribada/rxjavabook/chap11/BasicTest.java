@@ -38,7 +38,7 @@ public class BasicTest {
     @Test
     public void testObserver3() {
         Observable.range(1, 5).test()
-                .assertValues(1, 2, 3, 4, 5)
-                .assertComplete();
+                .assertValues(1, 2, 3, 4, 5) // (1) 시작
+                .assertComplete(); // (1) 끝
     }
 }

@@ -35,8 +35,8 @@ public class WeatherUseCaseTest {
 
     @Before
     public void before() {
-        RxJavaPlugins.setIoSchedulerHandler(scheduler -> testScheduler); // (1)
-        RxJavaPlugins.setComputationSchedulerHandler(scheduler -> testScheduler); // (1)
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> testScheduler); // (1) 시작
+        RxJavaPlugins.setComputationSchedulerHandler(scheduler -> testScheduler); // (1) 끝
     }
 
     @After
