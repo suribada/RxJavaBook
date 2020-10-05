@@ -34,7 +34,7 @@ public class WeatherUseCase {
     }
 
     public Observable<Weather> getWeatherKmaPeriodically(Scheduler scheduler) {
-        return Observable.interval(0L, 1, TimeUnit.MINUTES, scheduler)
+        return Observable.interval(0L, 1, TimeUnit.MINUTES, scheduler) // (1)
                 .flatMap(ignored -> weatherRepository.getWeatherKma())
                 .distinctUntilChanged();
     }
