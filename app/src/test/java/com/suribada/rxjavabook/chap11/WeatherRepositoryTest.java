@@ -32,13 +32,13 @@ public class WeatherRepositoryTest {
     public MockitoRule mockito = MockitoJUnit.rule(); // (1) 끝
 
     @Mock // (2) 시작
-            KmaDataSource kmaDataSource;
+    KmaDataSource kmaDataSource;
 
     @Mock
     KweatherDataSource kweatherDataSource; // (2) 끝
 
     @InjectMocks // (3) 시작
-            WeatherRepository weatherRepository; // (3) 끝
+    WeatherRepository weatherRepository; // (3) 끝
 
     @Test
     public void getWeatherKma_blocking_normal() {

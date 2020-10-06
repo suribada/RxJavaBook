@@ -42,14 +42,16 @@ public class WeatherUseCaseNoTestSchedulerTest {
         Weather response = Weather.create(10, "흐리고 비", 11.0f); // (1) 시작
         Weather response2 = Weather.create(10, "흐리고 비", 11.0f); // (1) 끝
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response)); // (2)
+        when(weatherRepository.getWeatherKma()) // (2) 시작
+                .thenReturn(Observable.just(response))
+                .thenReturn(Observable.just(response2)); // (2) 끝
+
         TestObserver testObserver = weatherUseCase.getWeatherKmaPeriodically().test(); // (3)
         testObserver.await(10, TimeUnit.SECONDS); // (4)
         testObserver.assertValueCount(1); // (5)
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2)); // (6)
-        testObserver.await(60, TimeUnit.SECONDS); // (7)
-        testObserver.assertValueCount(1); // (8)
+        testObserver.await(60, TimeUnit.SECONDS); // (6)
+        testObserver.assertValueCount(1); // (7)
     }
 
     @Test
@@ -57,15 +59,17 @@ public class WeatherUseCaseNoTestSchedulerTest {
         Weather response = Weather.create(10, "흐리고 비", 11.0f); // (1) 시작
         Weather response2 = Weather.create(12, "흐림", 11.0f); // (1) 끝
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response)); // (2) 시작
-        TestObserver testObserver = weatherUseCase.getWeatherKmaPeriodically().test();
-        testObserver.await(10, TimeUnit.SECONDS);
-        testObserver.assertValueCount(1); // (2) 끝
+        when(weatherRepository.getWeatherKma()) // (2) 시작
+                .thenReturn(Observable.just(response))
+                .thenReturn(Observable.just(response2)); ; // (2) 끝
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2)); // (3) 시작
-        testObserver.await(60, TimeUnit.SECONDS);
+        TestObserver testObserver = weatherUseCase.getWeatherKmaPeriodically().test(); // (3) 시작
+        testObserver.await(10, TimeUnit.SECONDS);
+        testObserver.assertValueCount(1); // (3) 끝
+
+        testObserver.await(60, TimeUnit.SECONDS); // (4) 시작
         testObserver.assertValueCount(2)
-                .assertValueAt(1, response2); // (3) 끝
+                .assertValueAt(1, response2); // (4) 끝
     }
 
     @Test

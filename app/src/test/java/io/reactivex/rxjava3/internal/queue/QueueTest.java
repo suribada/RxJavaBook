@@ -1,6 +1,9 @@
-package io.reactivex.rxjava3.internal.queue;
+package io.reactivex.rxjava3.internal2.queue;
 
 import org.junit.Test;
+
+import io.reactivex.rxjava3.internal.queue.SpscArrayQueue;
+import io.reactivex.rxjava3.internal.queue.SpscLinkedArrayQueue;
 
 public class QueueTest {
 

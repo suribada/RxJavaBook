@@ -19,31 +19,31 @@ import static org.mockito.Mockito.when;
 
 public class WeatherUseCaseRuleTest {
 
-    @Rule // (1) 시작
-    public MockitoRule mockito = MockitoJUnit.rule(); // (1) 끝
+    @Rule
+    public MockitoRule mockito = MockitoJUnit.rule();
 
     @Rule
-    public TestSchedulerRule testSchedulerRule = new TestSchedulerRule();
+    public TestSchedulerRule testSchedulerRule = new TestSchedulerRule(); // (1)
 
-    @Mock // (2) 시작
-    WeatherRepository weatherRepository; // (2) 끝
+    @Mock
+    WeatherRepository weatherRepository;
 
-    @InjectMocks // (3) 시작
-    WeatherUseCase weatherUseCase; // (3) 끝
+    @InjectMocks
+    WeatherUseCase weatherUseCase;
 
     @Test
     public void getWeatherKmaPeriodically_sameResponse() {
-        TestScheduler testScheduler = testSchedulerRule.getTestScheduler();
-        Weather response = Weather.create(10, "흐리고 비", 11.0f); // (1) 시작
-        Weather response2 = Weather.create(10, "흐리고 비", 11.0f); // (1) 끝
+        TestScheduler testScheduler = testSchedulerRule.getTestScheduler(); // (2)
+        Weather response = Weather.create(10, "흐리고 비", 11.0f);
+        Weather response2 = Weather.create(10, "흐리고 비", 11.0f);
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response)); // (2) 시작
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response));
         TestObserver testObserver = weatherUseCase.getWeatherKmaPeriodically().test();
         testScheduler.advanceTimeBy(0, TimeUnit.MINUTES);
         testObserver.assertValue(response); // (2) 끝
 
-        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2)); // (3) 시작
+        when(weatherRepository.getWeatherKma()).thenReturn(Observable.just(response2));
         testScheduler.advanceTimeBy(1, TimeUnit.MINUTES);
-        testObserver.assertValueCount(1); // (3) 끝
+        testObserver.assertValueCount(1);
     }
 }
