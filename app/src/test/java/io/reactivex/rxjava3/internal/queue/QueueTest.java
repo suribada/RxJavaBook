@@ -1,4 +1,4 @@
-package io.reactivex.rxjava3.internal2.queue;
+package io.reactivex.rxjava3.internal.queue;
 
 import org.junit.Test;
 

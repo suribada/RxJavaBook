@@ -30,17 +30,13 @@ public class JoinTest {
 
     @Test
     public void groupJoin() {
-        Observable<Long> left = Observable
-                .interval(100, TimeUnit.MILLISECONDS).take(4);
-
-        Observable<Long> right = Observable
-                .interval(150, TimeUnit.MILLISECONDS).take(5);
-
+        Observable<Long> left = Observable.interval(100, TimeUnit.MILLISECONDS).take(4);
+        Observable<Long> right = Observable.interval(150, TimeUnit.MILLISECONDS).take(5);
         left.groupJoin(right,
                 i -> Observable.timer(200, TimeUnit.MILLISECONDS),
                 i -> Observable.timer(250, TimeUnit.MILLISECONDS),
-                (l, r) -> Pair.create(l, r.toList()))
-                .flatMapSingle(x -> x.second)
+                (l, r) -> r.toList().map(list -> Pair.create(l, list))) // (1)
+                .flatMapSingle(x -> x) // (2)
                 .subscribe(System.out::println);
         SystemClock.sleep(5000);
     }
