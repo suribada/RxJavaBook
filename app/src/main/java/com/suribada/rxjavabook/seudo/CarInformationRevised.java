@@ -55,7 +55,7 @@ public class CarInformationRevised {
                 .filter(velocity -> velocity >= 5 && velocity <= 10);
         Observable filteredFuelPercent = getFuelPercentObservable()
                 .filter(fuelPercent -> fuelPercent <= 5.0f);
-        Observable.zip(filteredVelocity, filteredFuelPercent, Pair::new)
+        Observable.combineLatest(filteredVelocity, filteredFuelPercent, Pair::new)
                 .subscribe(pair -> {
                     // 주유 메시지
                 });
@@ -66,7 +66,7 @@ public class CarInformationRevised {
                 .filter(velocity -> velocity <= 5);
         Observable filteredLocation = getLocationObservable()
                 .filter(location -> nearDestination(location));
-        Observable.zip(filteredVelocity, filteredLocation, Pair::new)
+        Observable.combineLatest(filteredVelocity, filteredLocation, Pair::new)
                 .subscribe(pair -> {
                     // 주차장 메시지
                 });
