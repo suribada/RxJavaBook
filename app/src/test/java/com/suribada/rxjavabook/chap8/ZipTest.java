@@ -12,7 +12,23 @@ public class ZipTest {
 
     @Test
     public void zip() {
-        Observable.zip(Observable.range(1, 4), Observable.just("A", "B", "C"), (x, y) -> (x + y))
+        Observable.zip(Observable.interval(0, 5, TimeUnit.SECONDS)
+                .doOnNext(System.out::println)
+                        .doOnDispose(() -> System.out.println("disposed"))
+                , Observable.just("A", "B", "C"), (x, y) -> (x + y))
+                .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
+        SystemClock.sleep(200000);
+    }
+
+    /**
+     * 여기서 disposed가 출력 안 되는 이유는 메인 스레드에서 1~4까지 이미 소비했기 때문이다.
+     */
+    @Test
+    public void zip2() {
+        Observable.zip(Observable.range(1, 4)
+                        .doOnNext(System.out::println)
+                        .doOnDispose(() -> System.out.println("disposed"))
+                , Observable.just("A", "B", "C"), (x, y) -> (x + y))
                 .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
     }
 
