@@ -25,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class BookSampleRepository {
 
-    private static String BASE_URL = "https://raw.githubusercontent.com/suribada/rxjavaSample/master/app/server/";
+    private static String BASE_URL = "https://raw.githubusercontent.com/suribada/RxJavaBook/master/app/server/";
 
     private final OkHttpClient client;
 

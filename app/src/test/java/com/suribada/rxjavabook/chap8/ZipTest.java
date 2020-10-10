@@ -1,6 +1,9 @@
 package com.suribada.rxjavabook.chap8;
 
+import androidx.core.util.Pair;
+
 import com.suribada.rxjavabook.SystemClock;
+import com.suribada.rxjavabook.api.BookSampleRepository;
 
 import org.junit.Test;
 
@@ -8,6 +11,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ZipTest {
 
@@ -16,7 +20,7 @@ public class ZipTest {
         Observable.zip(Observable.interval(0, 5, TimeUnit.SECONDS)
                 .doOnNext(System.out::println)
                         .doOnDispose(() -> System.out.println("disposed"))
-                , Observable.just("A", "B", "C"), (x, y) -> (x + y))
+                , Observable.just("A", "B", "C").doOnNext(System.out::println), (x, y) -> (x + y))
                 .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
         SystemClock.sleep(200000);
     }
@@ -30,6 +34,15 @@ public class ZipTest {
                         .doOnNext(System.out::println)
                         .doOnDispose(() -> System.out.println("disposed"))
                 , Observable.just("A", "B", "C"), (x, y) -> (x + y))
+                .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
+    }
+
+    @Test
+    public void zip3() {
+        Observable.zip(Observable.range(1, 3)
+                        .doOnNext(System.out::println)
+                        .doOnDispose(() -> System.out.println("disposed"))
+                , Observable.just("A", "B", "C", "D").doOnNext(System.out::println), (x, y) -> (x + y))
                 .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
     }
 
@@ -64,5 +77,26 @@ public class ZipTest {
     public void zipWithIterable2() {
         Observable.just(1, 2, 3, 4).zipWith(Observable.fromIterable(Arrays.asList("A", "B", "C")), (x, y) -> x + y)
                 .subscribe(System.out::println);
+    }
+
+    @Test
+    public void zip_pi() {
+        Observable.zip(Observable.interval(0, 5, TimeUnit.SECONDS), // (1)
+                Observable.just("3.", "1", "4", "1", "5", "9", "2").scan((x, y) -> x + y), // (2)
+                (interval, pi) -> pi) // (3)
+                .subscribe(System.out::println);
+        SystemClock.sleep(200000);
+    }
+
+    @Test
+    public void zip_each() {
+        BookSampleRepository repository = new BookSampleRepository();
+        int regionCode = 111;
+        Observable.zip(repository.getWeatherObservable(regionCode).subscribeOn(Schedulers.io()), // (1)
+                repository.getWeatherDetailObservable(regionCode).subscribeOn(Schedulers.io()), // (2)
+                Pair::new)
+                .subscribe(pair -> System.out.println(pair.first + ", " + pair.second),
+                        System.err::println);
+        SystemClock.sleep(5000);
     }
 }
