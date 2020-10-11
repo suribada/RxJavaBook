@@ -78,24 +78,24 @@ public class MapTest {
     @Test
     public void mapOptional() {
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .mapOptional(value -> {
-                    if (value % 2 == 0) { // (1) 시작
-                        return Optional.of("값=" + value);
+                .mapOptional(v -> {
+                    if (v % 2 == 0) { // (1) 시작
+                        return Optional.of("값=" + v);
                     } // (1) 끝
                     return Optional.empty(); // (2)
                 })
                 .subscribe(System.out::println);
 
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .mapOptional(value -> (value % 2 == 0) ? Optional.of("값=" + value) : Optional.empty())
+                .mapOptional(v -> (v % 2 == 0) ? Optional.of("값=" + v) : Optional.empty())
                 .subscribe(System.out::println);
     }
 
     @Test
     public void mapOptionalAlternative() {
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .filter(value -> value % 2 == 0)
-                .map(value -> "값=" + value)
+                .filter(v -> v % 2 == 0)
+                .map(v -> "값=" + v)
                 .subscribe(System.out::println);
     }
 

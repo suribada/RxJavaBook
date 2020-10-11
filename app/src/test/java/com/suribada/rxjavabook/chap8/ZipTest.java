@@ -17,19 +17,46 @@ public class ZipTest {
 
     @Test
     public void zip() {
-        Observable.zip(Observable.interval(0, 5, TimeUnit.SECONDS)
-                .doOnNext(System.out::println)
-                        .doOnDispose(() -> System.out.println("disposed"))
-                , Observable.just("A", "B", "C").doOnNext(System.out::println), (x, y) -> (x + y))
+        Observable.zip(Observable.interval(0, 5, TimeUnit.SECONDS) // (1)
+                .doOnDispose(() -> System.out.println("disposed")), // (2)
+                Observable.just("A", "B", "C"), // (3)
+                (x, y) -> (x + y)) // (4)
                 .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
-        SystemClock.sleep(200000);
+        SystemClock.sleep(30000);
+    }
+
+    @Test
+    public void zip2() {
+        Observable.zip(Observable.interval(0, 5, TimeUnit.SECONDS) // (1)
+                        .doOnDispose(() -> System.out.println("disposed")), // (2)
+                Observable.interval(6, TimeUnit.SECONDS).take(3), // (3)
+                (x, y) -> "first=" + x + ", second=" + y) // (4)
+                .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
+        SystemClock.sleep(30000);
+    }
+
+    /**
+     * onComplete 이벤트를 보내지 않는 경우
+     */
+    @Test
+    public void zip_abnormal() {
+        Observable.zip(Observable.interval(0, 5, TimeUnit.SECONDS)
+                .doOnDispose(() -> System.out.println("disposed")),
+                Observable.<String>create(emitter -> { // (1) 끝
+                    emitter.onNext("A");
+                    emitter.onNext("B");
+                    emitter.onNext("AC");
+                }), // (1) 끝
+                (x, y) -> (x + y))
+                .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
+        SystemClock.sleep(30000);
     }
 
     /**
      * 여기서 disposed가 출력 안 되는 이유는 메인 스레드에서 1~4까지 이미 소비했기 때문이다.
      */
     @Test
-    public void zip2() {
+    public void zip3() {
         Observable.zip(Observable.range(1, 4)
                         .doOnNext(System.out::println)
                         .doOnDispose(() -> System.out.println("disposed"))
@@ -38,7 +65,7 @@ public class ZipTest {
     }
 
     @Test
-    public void zip3() {
+    public void zip4() {
         Observable.zip(Observable.range(1, 3)
                         .doOnNext(System.out::println)
                         .doOnDispose(() -> System.out.println("disposed"))
@@ -88,13 +115,29 @@ public class ZipTest {
         SystemClock.sleep(200000);
     }
 
+    /**
+     * delay 연산자와 헷갈릴 수 있음. 동작 다르다.
+     */
+    @Test
+    public void zip_pi_not_equivalent() {
+        Observable.just("3.", "1", "4", "1", "5", "9", "2").scan((x, y) -> x + y)
+                .delay(v -> {
+                    if (v.length() < 2) {
+                        return Observable.empty();
+                    }
+                    return Observable.timer(5, TimeUnit.SECONDS);
+                })
+                .subscribe(System.out::println);
+            SystemClock.sleep(200000);
+    }
+
     @Test
     public void zip_each() {
         BookSampleRepository repository = new BookSampleRepository();
         int regionCode = 111;
         Observable.zip(repository.getWeatherObservable(regionCode).subscribeOn(Schedulers.io()), // (1)
                 repository.getWeatherDetailObservable(regionCode).subscribeOn(Schedulers.io()), // (2)
-                Pair::new)
+                Pair::new) // (3)
                 .subscribe(pair -> System.out.println(pair.first + ", " + pair.second),
                         System.err::println);
         SystemClock.sleep(5000);
