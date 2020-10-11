@@ -45,7 +45,7 @@ public class ZipTest {
                 Observable.<String>create(emitter -> { // (1) 끝
                     emitter.onNext("A");
                     emitter.onNext("B");
-                    emitter.onNext("AC");
+                    emitter.onNext("C");
                 }), // (1) 끝
                 (x, y) -> (x + y))
                 .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
@@ -69,7 +69,8 @@ public class ZipTest {
         Observable.zip(Observable.range(1, 3)
                         .doOnNext(System.out::println)
                         .doOnDispose(() -> System.out.println("disposed"))
-                , Observable.just("A", "B", "C", "D").doOnNext(System.out::println), (x, y) -> (x + y))
+                , Observable.just("A", "B", "C", "D").doOnDispose(() -> System.out.println("disposed2") ),
+                (x, y) -> (x + y))
                 .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
     }
 

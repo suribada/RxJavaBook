@@ -51,11 +51,13 @@ public class CarInformationRevised {
     }
 
     public void checkGasStationRxJava() {
-        Observable filteredVelocity = getVelocityObservable()
-                .filter(velocity -> velocity >= 5 && velocity <= 10);
-        Observable filteredFuelPercent = getFuelPercentObservable()
-                .filter(fuelPercent -> fuelPercent <= 5.0f);
-        Observable.combineLatest(filteredVelocity, filteredFuelPercent, Pair::new)
+        Observable filteredVelocity = getVelocityObservable() // (1) 시작
+                .filter(velocity -> velocity >= 5 && velocity <= 10)
+                .distinctUntilChanged(); // (1) 끝
+        Observable filteredFuelPercent = getFuelPercentObservable() // (2) 시작
+                .filter(fuelPercent -> fuelPercent <= 5.0f)
+                .distinctUntilChanged(); // (2) 끝
+        Observable.combineLatest(filteredVelocity, filteredFuelPercent, Pair::create) // (3)
                 .subscribe(pair -> {
                     // 주유 메시지
                 });
