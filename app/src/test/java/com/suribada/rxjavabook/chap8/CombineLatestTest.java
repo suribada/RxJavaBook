@@ -5,6 +5,7 @@ import com.suribada.rxjavabook.SystemClock;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -43,4 +44,29 @@ public class CombineLatestTest {
                 (objects -> objects[0].toString() + "/" + objects[1].toString()))
                 .subscribe(System.out::println);
     }
+
+    @Test
+    public void combineLatestDelayError() {
+        Observable.combineLatestArrayDelayError(new Observable[] {
+                        Observable.interval(2, TimeUnit.SECONDS).map(x -> 10 / (3 - x)), // (1)
+                        Observable.interval(3, TimeUnit.SECONDS) // (2) 시작
+                                .zipWith(Arrays.asList("A", "B", "C", "D", "E"), (x, y) -> y) // (2) 끝
+                },
+                (objects) -> objects[0].toString() + objects[1].toString()) // (3)
+                .subscribe(System.out::println, System.err::println);
+        SystemClock.sleep(20000);
+    }
+
+    @Test
+    public void combineLatest_notDelayError() {
+        Observable.combineLatestArray(new Observable[] {
+                        Observable.interval(2, TimeUnit.SECONDS).map(x -> 10 / (3 - x)), // (1)
+                        Observable.interval(3, TimeUnit.SECONDS) // (2) 시작
+                                .zipWith(Arrays.asList("A", "B", "C", "D", "E"), (x, y) -> y)
+                },
+                (objects) -> objects[0].toString() + objects[1].toString())
+                .subscribe(System.out::println, System.err::println);
+        SystemClock.sleep(20000);
+    }
+
 }
