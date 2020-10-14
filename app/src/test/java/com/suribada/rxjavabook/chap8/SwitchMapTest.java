@@ -1,12 +1,16 @@
 package com.suribada.rxjavabook.chap8;
 
 import com.suribada.rxjavabook.SystemClock;
+import com.suribada.rxjavabook.chap5.SearchResult;
 
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.Subject;
 
 public class SwitchMapTest {
 
@@ -22,5 +26,41 @@ public class SwitchMapTest {
                 .subscribe(System.out::println);
         SystemClock.sleep(3000);
     }
+
+    @Test
+    public void search_flatMap() {
+        getKeywordObservable()
+                .flatMap(keyword -> searchApi(keyword) // (1)
+                        .subscribeOn(Schedulers.io()))
+                .subscribe(System.out::println);
+        searchSubject.onNext("안드로이드");
+        searchSubject.onNext("코틀린");
+        SystemClock.sleep(5000);
+    }
+
+    @Test
+    public void search_switchMap() {
+        getKeywordObservable()
+                .switchMap(keyword -> searchApi(keyword)
+                        .subscribeOn(Schedulers.io()))
+                .subscribe(System.out::println);
+        searchSubject.onNext("안드로이드");
+        searchSubject.onNext("코틀린");
+        SystemClock.sleep(5000);
+    }
+
+    private Subject<String> searchSubject = PublishSubject.create();
+
+    private Observable<String> getKeywordObservable() {
+        return searchSubject;
+    }
+
+    private Observable<SearchResult> searchApi(String keyword) {
+        return Observable.create(emitter -> {
+            SystemClock.sleep(1000);
+            emitter.onNext(new SearchResult(keyword));
+        });
+    }
+
 
 }
