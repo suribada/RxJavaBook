@@ -18,9 +18,22 @@ public class CombineLatestTest {
         Observable.combineLatest(Observable.interval(0L,1, TimeUnit.SECONDS), // (1)
                 Observable.just("A", "B", "C"), // (2)
                 (x, y) -> x + y) // (3)
-                .subscribe(System.out::println);
+                .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
         SystemClock.sleep(5000);
     }
+
+    /**
+     * 종료 이벤트 시점 확인
+     */
+    @Test
+    public void combineLatest_simple_onComplete() {
+        Observable.combineLatest(Observable.interval(0L,1, TimeUnit.SECONDS).take(4), // (1)
+                Observable.just("A", "B", "C"), // (2)
+                (x, y) -> x + y) // (3)
+                .subscribe(System.out::println, System.err::println, () -> System.out.println("onComplete"));
+        SystemClock.sleep(10000);
+    }
+
     @Test
     public void combineLatest() {
         Observable.combineLatestArray(new Observable[] {Observable.just("A", "B"), Observable.just(1, 2)},
