@@ -1,5 +1,7 @@
 package com.suribada.rxjavabook.chap8;
 
+import androidx.core.util.Pair;
+
 import com.suribada.rxjavabook.SystemClock;
 import com.suribada.rxjavabook.chap5.SearchResult;
 
@@ -107,16 +109,21 @@ public class SwitchMapTest {
     @Test
     public void switchOnNext_valid() {
         Observable.switchOnNext(
-                Observable.fromArray( // (1) 끝
-                        Observable.interval(2, TimeUnit.SECONDS).map(v -> "2초:" + v)
-                            .delaySubscription(10, TimeUnit.MILLISECONDS),
-                        Observable.interval(3, TimeUnit.SECONDS).map(v -> "3초:" + v)
-                            .delaySubscription(20, TimeUnit.MILLISECONDS),
-                        Observable.interval(4, TimeUnit.SECONDS).map(v -> "4초:" + v)
-                            .delaySubscription(30, TimeUnit.MILLISECONDS)
-                )) // (1) 끝
+                Observable.interval(150, TimeUnit.MILLISECONDS) // (1)
+                        .map(v -> Observable.interval(50, TimeUnit.MILLISECONDS) // (2) 시작
+                                .map(inner -> Pair.create(v, inner))
+                        ) // (2) 끝
+                ).subscribe(System.out::println);
+        SystemClock.sleep(3000);
+    }
+
+    @Test
+    public void switchOnNext_valid_equivalent() {
+        Observable.interval(150, TimeUnit.MILLISECONDS)
+                .switchMap(v -> Observable.interval(50, TimeUnit.MILLISECONDS)
+                        .map(inner -> Pair.create(v, inner)))
                 .subscribe(System.out::println);
-        SystemClock.sleep(30000);
+        SystemClock.sleep(3000);
     }
 
 
