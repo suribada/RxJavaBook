@@ -516,6 +516,12 @@
                 <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+        <activity android:name=".chap8.StartWithActivity" android:label="chap8/StartWithActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.suribada.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
         <activity android:name=".chap10.BackPressureActivity" android:label="chap10/BackPressureActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

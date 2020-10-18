@@ -98,19 +98,20 @@ public class ConcatMapTest {
     }
 
     /**
+     * 1개의 스레드에서는
      * 업스트림에서 에러가 발생하면 tillTheEnd가 true나 false거나 결과가 동일하다.
      */
     @Test
     public void delayError() {
-        getDepartments2()
-                .concatMapDelayError(this::getOutGoings, true, Flowable.bufferSize())
+        getDepartmentsWithError()
+                .concatMapDelayError(this::getOutGoings, false, Flowable.bufferSize())
                 .subscribe(System.out::println, System.err::println);
     }
 
     /**
      * 에러 내보내는 Observable
      */
-    private Observable<Department> getDepartments2() {
+    private Observable<Department> getDepartmentsWithError() {
         return Observable.merge(Observable.just(new Department("안드로이드팀")),
                 Observable.error(new IllegalArgumentException("IllegalArgument")),
                 Observable.just(new Department("FE팀")),
@@ -124,7 +125,7 @@ public class ConcatMapTest {
     public void delayError_tillTheEndFalse() {
         getDepartments()
                 .doOnNext(department -> System.out.println("upstream=" + department.toString()))
-                .concatMapDelayError(department -> getOutGoings3(department)
+                .concatMapDelayError(department -> getOutGoingsWithError(department)
                         .doOnError(e -> System.err.println(e.toString())), false, Flowable.bufferSize())
                 .subscribe(System.out::println, System.err::println);
     }
@@ -136,7 +137,7 @@ public class ConcatMapTest {
     public void delayError_tillTheEndFalse_withThread() {
         getDepartments()
                 .doOnNext(department -> System.out.println("upstream=" + department.toString()))
-                .concatMapDelayError(department -> getOutGoings3(department).subscribeOn(Schedulers.io())
+                .concatMapDelayError(department -> getOutGoingsWithError(department).subscribeOn(Schedulers.io())
                         .doOnError(e -> System.err.println(e.toString())), false, Flowable.bufferSize())
                 .subscribe(System.out::println, System.err::println);
         SystemClock.sleep(2000);
@@ -148,14 +149,14 @@ public class ConcatMapTest {
     @Test
     public void delayError_tillTheEndTrue() {
         getDepartments()
-                .concatMapDelayError(this::getOutGoings3, true, Flowable.bufferSize())
+                .concatMapDelayError(this::getOutGoingsWithError, true, Flowable.bufferSize())
                 .subscribe(System.out::println, System.err::println);
     }
 
     /**
      * 에러를 내보내는 것
      */
-    private Observable<OutGoing> getOutGoings3(Department department) {
+    private Observable<OutGoing> getOutGoingsWithError(Department department) {
         switch (department.getName()) {
             case "안드로이드팀":
                 return Observable.create(emitter -> {
