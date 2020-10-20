@@ -131,6 +131,16 @@ public class ConcatMapTest {
     }
 
     /**
+     * 에러를 미룸
+     */
+    @Test
+    public void delayError_tillTheEndTrue() {
+        getDepartments()
+                .concatMapDelayError(this::getOutGoingsWithError, true, Flowable.bufferSize())
+                .subscribe(System.out::println, System.err::println);
+    }
+
+    /**
      * 별도 스레드에서는 에러가 바로 통지되지 않는다.
      */
     @Test
@@ -141,16 +151,6 @@ public class ConcatMapTest {
                         .doOnError(e -> System.err.println(e.toString())), false, Flowable.bufferSize())
                 .subscribe(System.out::println, System.err::println);
         SystemClock.sleep(2000);
-    }
-
-    /**
-     * 에러를 미룸
-     */
-    @Test
-    public void delayError_tillTheEndTrue() {
-        getDepartments()
-                .concatMapDelayError(this::getOutGoingsWithError, true, Flowable.bufferSize())
-                .subscribe(System.out::println, System.err::println);
     }
 
     /**
@@ -198,7 +198,8 @@ public class ConcatMapTest {
     }
 
     /**
-     * 업스트림 에러. tillTheEnd는 기본값 true
+     * 업스트림 에러. tillTheEnd  == false
+     * 진행중인 것까지만 한다
      */
     @Test
     public void concatMapDelayWithThread_tillTheEndFalse() {

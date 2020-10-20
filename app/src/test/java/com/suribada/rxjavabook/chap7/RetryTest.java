@@ -120,7 +120,7 @@ public class RetryTest {
                 .map(i -> 10 / (5 - i))
                 .doOnSubscribe(disposable -> System.out.println("upstream subscribed"))
                 .doOnDispose(() -> System.out.println("upstream disposed"))
-                .doOnNext(value -> System.out.println("upstream value=" + value))
+                .doOnNext(v -> System.out.println("upstream value=" + v))
                 .retryWhen(errors -> Observable.timer(1, TimeUnit.SECONDS) // (1)
                         .doOnSubscribe(disposable -> System.out.println("handler subscribed")) // (2)
                         .doOnNext(value -> System.out.println("value=" + value))) // (3)
@@ -135,7 +135,7 @@ public class RetryTest {
                 .map(i -> 10 / (5 - i))
                 .doOnSubscribe(disposable -> System.out.println("upstream subscribed"))
                 .doOnDispose(() -> System.out.println("upstream disposed"))
-                .doOnNext(value -> System.out.println("upstream value=" + value))
+                .doOnNext(v -> System.out.println("upstream value=" + v))
                 .retryWhen(errors -> Observable.<Integer>create(emitter -> {
                             Thread.sleep(1000);
                             emitter.onNext(0);

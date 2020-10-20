@@ -4,9 +4,11 @@ import com.suribada.rxjavabook.SystemClock;
 
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.internal.functions.Functions;
 
 public class TakeTest {
 
@@ -77,5 +79,15 @@ public class TakeTest {
         Observable.just(1, 3, 5, 2, 7)
                 .takeWhile(x -> x < 4)
                 .subscribe(System.out::println);
+    }
+
+    @Test
+    public void takeUntil() {
+        Observable.interval(0L, 5, TimeUnit.SECONDS)
+                .takeUntil(Observable.timer(30, TimeUnit.SECONDS)) // (1)
+                .subscribe(ignored -> System.out.println("currentDate=" + new Date()),
+                        Functions.emptyConsumer(),
+                        () -> System.out.println("onComplete"));
+        SystemClock.sleep(32000);
     }
 }

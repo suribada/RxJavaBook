@@ -43,7 +43,11 @@ public class ImageDownloader {
                 .subscribeOn(Schedulers.io())
                 .startWithItem(loadingImage) // (1)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(imageView::setImageBitmap);
+                .subscribe(imageView::setImageBitmap, this::showErrorImage);
+    }
+
+    private void showErrorImage(Throwable e) {
+
     }
 
 }

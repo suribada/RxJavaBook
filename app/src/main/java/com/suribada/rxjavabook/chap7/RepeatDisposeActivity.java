@@ -13,6 +13,7 @@ import com.suribada.rxjavabook.R;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.internal.functions.Functions;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 
@@ -49,7 +50,7 @@ public class RepeatDisposeActivity extends Activity {
                 .takeUntil(destroySubject) // (2)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(next -> title.setText("currentDate2=" + new Date()),
-                        Throwable::printStackTrace,
+                        Functions.emptyConsumer(),
                         () -> Toast.makeText(this, "onComplete2", Toast.LENGTH_LONG).show());
     }
 
