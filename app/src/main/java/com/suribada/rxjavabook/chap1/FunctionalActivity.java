@@ -31,88 +31,15 @@ public class FunctionalActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.four_buttons);
+        setContentView(R.layout.text_and_two_buttons);
     }
 
     public void onClickButton1(View view) {
-        Observable.<Integer>create(emitter -> { // (1)
-            Random random = new Random();
-            for (int i = 0; i < 4; i++) {
-                SystemClock.sleep(1000);
-                emitter.onNext( random.nextInt(10));
-            }
-            emitter.onComplete();
-         })
-        .map(value -> 1000 / value) // (2)
-        .filter(value -> value < 400) // (3)
-        .subscribe(
-                 next -> { // (4)
-                     Log.d(TAG, "onNext=" + next);
-                     Toast.makeText(this, "값=" + next, Toast.LENGTH_LONG).show();
-                 },
-                 e -> { // (5)
-                     Log.d(TAG, "onError", e);
-                     Toast.makeText(this, "에러가 발생했습니다.", Toast.LENGTH_LONG).show();
-                 },
-                () -> { // (6)
-                    Log.d(TAG, "onComplete");
-                    Toast.makeText(this, "완료되었습니다.", Toast.LENGTH_LONG).show();
-                }
-         );
-    }
-
-    public void onClickButton2(View view) {
-        Observable.<Integer>create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                Random random = new Random();
-                for (int i = 0; i < 4; i++) {
-                    SystemClock.sleep(1000);
-                    emitter.onNext(random.nextInt(10));
-                }
-                emitter.onComplete();
-            }
-        })
-        .map(new Function<Integer, Integer>() {
-            @Override
-            public Integer apply(Integer value) throws Exception {
-                return 1000 / value;
-            }
-        })
-        .filter(new Predicate<Integer>() {
-            @Override
-            public boolean test(Integer value) throws Exception {
-                return value < 400;
-            }
-        })
-        .subscribe(new Consumer<Integer>() {
-                       @Override
-                       public void accept(Integer next) throws Exception {
-                           Log.d(TAG, "onNext=" + next);
-                           Toast.makeText(FunctionalActivity.this, "값=" + next, Toast.LENGTH_LONG).show();
-                       }
-                   }, new Consumer<Throwable>() {
-                       @Override
-                       public void accept(Throwable e) throws Exception {
-                           Log.d(TAG, "onError", e);
-                           Toast.makeText(FunctionalActivity.this, "에러가 발생했습니다.", Toast.LENGTH_LONG).show();
-                       }
-                   }, new Action() {
-                       @Override
-                       public void run() throws Exception {
-                           Log.d(TAG, "onComplete");
-                           Toast.makeText(FunctionalActivity.this, "완료되었습니다.", Toast.LENGTH_LONG).show();
-                       }
-                   }
-        );
-    }
-
-    public void onClickButton3(View view) {
         perfLambdaTest(10_000_000);
         perfAnonyousTest(10_000_000);
     }
 
-    public void onClickButton4(View view) {
+    public void onClickButton2(View view) {
         perfLambdaTest(5);
         perfAnonyousTest(5);
     }

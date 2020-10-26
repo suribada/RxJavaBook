@@ -24,11 +24,11 @@ public class CustomTest {
     public void not_compose() {
         getSales()
                 .doOnSubscribe(ignored -> showProgress()) // (1) 시작
-                .doOnTerminate(() -> hideProgress()) // (1) 끝
+                .doFinally(() -> hideProgress()) // (1) 끝
                 .subscribe(System.out::println);
         getStudents()
                 .doOnSubscribe(ignored -> showProgress()) // (2) 시작
-                .doOnTerminate(() -> hideProgress()) // (2) 끝
+                .doFinally(() -> hideProgress()) // (2) 끝
                 .subscribe(System.out::println);
     }
 
@@ -71,7 +71,7 @@ public class CustomTest {
     private <T> ObservableTransformer<T, T> progress() {
         return upstream -> upstream
                 .doOnSubscribe(ignored -> showProgress()) // (1) 시작
-                .doOnTerminate(() -> hideProgress()); // (1) 끝
+                .doFinally(() -> hideProgress()); // (1) 끝
     }
 
     @Test
