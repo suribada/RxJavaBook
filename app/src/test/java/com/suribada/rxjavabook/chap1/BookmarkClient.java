@@ -1,9 +1,13 @@
 package com.suribada.rxjavabook.chap1;
 
-import android.os.SystemClock;
+import com.suribada.rxjavabook.SystemClock;
+
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.suribada.rxjavabook.SystemClock.*;
 
 /**
  * Created by lia on 2018-01-31.
@@ -22,30 +26,33 @@ public class BookmarkClient {
     public void saveBookmark2() {
         BookmarkRepository bookmarkRepository = new BookmarkRepository();
         bookmarkRepository.setTitle("heetak's advocate");
-        SystemClock.sleep(3000);
+        sleep(3000);
         bookmarkRepository.getTitle();
-        SystemClock.sleep(3000);
+        sleep(3000);
         System.out.println(bookmarkRepository.getFetchedTitle());
         bookmarkRepository.setUrl("http://endofhope.com");
-        SystemClock.sleep(3000);
+        sleep(3000);
         bookmarkRepository.getUrl();
-        SystemClock.sleep(3000);
+        sleep(3000);
         System.out.println(bookmarkRepository.getFetchedUrl());
     }
 
+    @Test
     public void saveBookmark3() {
         BookmarkRepository bookmarkRepository = new BookmarkRepository();
         bookmarkRepository.setTitle("heetak's advocate");
         for (int i = 0; i < 3; i++) {
-            SystemClock.sleep(1000);
+            sleep(1000);
             if (bookmarkRepository.savedSuccessful()) {
                 bookmarkRepository.getTitle();
                 for (int j = 0; j < 3; j++) {
-                    SystemClock.sleep(1000);
+                    sleep(1000);
                     if (bookmarkRepository.fetchedTitleSuccessful()) {
                         System.out.println(bookmarkRepository.getFetchedTitle());
+                        break;
                     }
                 }
+                break;
             }
         }
         //...
