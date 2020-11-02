@@ -92,8 +92,12 @@ public class TwoMapActivity extends Activity {
     }
 
     public void onClickReset2(View view) {
-        disposableGpsActivation.dispose(); // (3) 시작
-        disposableZoom.dispose(); // (3) 끝
+        if (disposableGpsActivation != null) { // (3) 시작
+            disposableGpsActivation.dispose();
+        }
+        if (disposableZoom != null) {
+            disposableZoom.dispose();
+        } // (3) 끝
     }
 
 }

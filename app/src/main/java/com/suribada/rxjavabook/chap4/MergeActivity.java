@@ -74,13 +74,7 @@ public class MergeActivity extends Activity {
     }
 
     public Single<List<Book>> getBestSellerBooks() {
-        return Single.create(emitter -> { // (6) 시작
-            try {
-                emitter.onSuccess(loadBooks(BESTSELLER));
-            } catch (Exception e) {
-                emitter.onError(e);
-            }
-        }); // (6) 끝
+        return Single.fromCallable(() -> loadBooks(BESTSELLER)); // (6)
     }
 
     public Single<List<Book>> getRecommendBooks() {
