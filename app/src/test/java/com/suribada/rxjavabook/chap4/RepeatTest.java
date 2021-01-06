@@ -2,7 +2,6 @@ package com.suribada.rxjavabook.chap4;
 
 import android.os.SystemClock;
 
-import com.suribada.rxjavabook.chap1.Bookmark;
 
 import org.junit.Test;
 

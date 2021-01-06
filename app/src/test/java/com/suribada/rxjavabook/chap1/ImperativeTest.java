@@ -14,5 +14,7 @@ public class ImperativeTest {
         System.out.println("sum=" + sum); // (2)
         sum = a + b;
         System.out.println("sum=" + sum); // (3)
+        b = 18;
+        System.out.println("sum=" + (a + b)); // (4)
     }
 }

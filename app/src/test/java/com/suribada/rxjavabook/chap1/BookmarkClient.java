@@ -176,15 +176,22 @@ public class BookmarkClient {
         });
     }
 
+    @Test
     public void declarativeOrImperative() {
         String sql = "SELECT * from bookmark where user_id='suribada'";
         List<Bookmark> bookmarks = new ArrayList<>();
+        bookmarks.add(new Bookmark("suribada", "http://suribada.com", 10));
+        bookmarks.add(new Bookmark("heetak", "http://suribada2.com", 2));
+        bookmarks.add(new Bookmark("ias", "http://suribada3.com", 3));
+        bookmarks.add(new Bookmark("horseriding.king", "http://suribada4.com", 7));
+        bookmarks.add(new Bookmark("suribada", "http://suribada5.com", 6));
         List<Bookmark> userBookmarks = new ArrayList<>();
         for (Bookmark bookmark : bookmarks) {
             if (bookmark.getUserId().equals("suribada")) {
                 userBookmarks.add(bookmark);
             }
         }
+        System.out.println(userBookmarks);
     }
 
 }
