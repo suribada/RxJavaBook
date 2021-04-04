@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import androidx.annotation.Nullable;
 import android.view.View;
+import android.widget.Toast;
 
 import com.suribada.rxjavabook.R;
 import com.suribada.rxjavabook.chap5.SearchResult;
@@ -28,6 +29,7 @@ public class FlatMapActivity extends Activity {
     }
 
     public void onClickButton1(View view) {
+        Toast.makeText(this, "테스트 시작", Toast.LENGTH_LONG).show();
         getMembers().subscribeOn(Schedulers.io()) // (1)
                 .flatMap(member -> getProfile(member).subscribeOn(Schedulers.io())) // (2)
                 .observeOn(AndroidSchedulers.mainThread()) // (3)
@@ -79,7 +81,7 @@ public class FlatMapActivity extends Activity {
     }
 
     private Observable<Member> getMembers() {
-        return Observable.range(1, 10000) // onClickButton1() 에서 OutOfMemoryError가 나게 하려면 count=10000 정도로 크게 하면 된다.
+        return Observable.range(1, 100000) // onClickButton1() 에서 OutOfMemoryError가 나게 하려면 count=100000 정도로 크게 하면 된다.(디바이스마다 다름)
                 .map(value -> new Member("David " + value));
 
     }

@@ -123,21 +123,21 @@ public class GenerateTest {
         .subscribe(System.out::println);
     }
 
-    @Test
-    public void printFactorial() {
-        long currentTime = System.nanoTime();
-        Observable.range(1, 20) // (1)
-            .map(this::factorial) // (2)
-            .subscribe(System.out::println);
-        System.out.println("elapsed=" + (System.nanoTime() - currentTime));
-    }
-
-    private long factorial(int n) { // (3) 시작
+    private long factorial(int n) { // (1) 시작
         if (n == 0) {
             return 1L;
         }
         return n * factorial(n - 1);
-    } // (3) 끝
+    } // (1) 끝
+
+    @Test
+    public void printFactorial() {
+        long currentTime = System.nanoTime();
+        Observable.range(1, 20) // (2)
+            .map(this::factorial) // (3)
+            .subscribe(System.out::println);
+        System.out.println("elapsed=" + (System.nanoTime() - currentTime));
+    }
 
     @Test
     public void factorial() {

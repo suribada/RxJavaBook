@@ -1,0 +1,10 @@
+@startuml
+
+abstract class Scheduler
+
+Scheduler <|-- NewThreadScheduler
+Scheduler <|-- ExecutorScheduler
+Scheduler <|-- TestScheduler
+
+hide members
+@enduml

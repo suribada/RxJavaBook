@@ -25,9 +25,7 @@ public class DateFormatterClient extends Activity {
         //long timeInMillis = 0L;
         formatter.getTimeInMillis(schedule.date).subscribe(timeInMillis -> {
             //... // (1)
-        }, e -> {
-            Toast.makeText(this, "Input Error", Toast.LENGTH_LONG).show(); // (2)
-        });
+        }, Throwable::printStackTrace);
     }
 
     public void saveScheduleRxJavaBlocking(Schedule schedule) {

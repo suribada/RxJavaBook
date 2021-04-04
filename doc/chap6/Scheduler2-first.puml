@@ -1,0 +1,22 @@
+@startuml
+
+abstract class Scheduler
+abstract class Worker
+interface Disposable
+
+Disposable <|.. Worker
+Worker +-- Scheduler
+
+Worker <|-- EventLoopWorker1
+Worker <|-- EventLoopWorker2
+Worker <|-- ScheduledWorker
+Worker <|-- TrampolineWorker
+
+EventLoopWorker1 +-- ComputationScheduler
+EventLoopWorker2 +-- IoScheduler
+ScheduledWorker +-- SingleScheduler
+TrampolineWorker +-- TrampolineScheduler
+
+
+hide members
+@enduml

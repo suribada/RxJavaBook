@@ -27,7 +27,8 @@ public class ObserverTest {
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                System.err.println(e);
+                //e.printStackTrace();
             }
 
             @Override

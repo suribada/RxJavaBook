@@ -58,7 +58,7 @@ public class DeclaritiveTest {
     public List<Comment> getUserComments(String userId) {
         List<Comment> userComments = new ArrayList<>();
         for (Comment comment : getAllComments()) {
-            if (comment.getUserId().equals("suribada")) {
+            if (comment.getUserId().equals(userId)) {
                 userComments.add(comment);
             }
         }
@@ -92,6 +92,15 @@ public class DeclaritiveTest {
     }
 
     @Test
+    public void declaritive3() {
+        List<Comment> popularComments = getAllComments().stream()
+                .filter(comment -> comment.getUserId().equals("suribada"))
+                .filter(comment -> comment.getLike() >= 7)
+                .collect(Collectors.toList());
+        System.out.println(popularComments);
+    }
+
+    @Test
     public void reactive1() {
         Observable.fromIterable(getAllComments())
                 .filter(comment -> comment.getUserId().equals("suribada"))
@@ -102,6 +111,15 @@ public class DeclaritiveTest {
     @Test
     public void reactive2() {
         Observable.fromIterable(getAllComments())
+                .filter(comment -> comment.getLike() >= 7)
+                .toList()
+                .subscribe(System.out::println);
+    }
+
+    @Test
+    public void reactive3() {
+        Observable.fromIterable(getAllComments())
+                .filter(comment -> comment.getUserId().equals("suribada"))
                 .filter(comment -> comment.getLike() >= 7)
                 .toList()
                 .subscribe(System.out::println);

@@ -30,7 +30,7 @@ public class ObservableCreateActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.four_buttons);
+        setContentView(R.layout.five_buttons);
         title = findViewById(R.id.title);
         button = findViewById(R.id.button1);
         try (PrintWriter out = new PrintWriter(openFileOutput("book.txt", Context.MODE_PRIVATE))) {
@@ -102,7 +102,39 @@ public class ObservableCreateActivity extends Activity {
                 }, () -> Toast.makeText(this, "reading file complete", Toast.LENGTH_LONG).show());
     }
 
+    /**
+     * Observer에서 안드로이드 부분 제거
+     */
     public void onClickButton4(View view) {
+        // first option
+        try {
+            fileDisposable = RxStreamReader.lines(openFileInput("book.txt")) // (1)
+                    .scan(new StringBuilder(), (sb, line) ->  sb.append(line + '\n')) // (2)
+                    .map(StringBuilder::toString) // (3)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(System.out::println,
+                        e -> System.err.println("reading file error: " + e.getMessage()),
+                        () -> System.out.println("reading file complete"));
+        } catch (FileNotFoundException e) {
+            System.err.println("File not exits"); // (3)
+        }
+        // second option
+        fileDisposable = Single.fromCallable(() -> openFileInput("book.txt")) // (1)
+                .flatMapObservable(RxStreamReader::linesGenerate) // (2)
+                .scan(new StringBuilder(), (sb, line) ->  sb.append(line + '\n'))
+                .map(StringBuilder::toString)
+                .subscribeOn(Schedulers.io())
+                .subscribe(System.out::println,
+                        e -> {
+                            if (e instanceof FileNotFoundException) { // (3)
+                                System.err.println("File not exits");
+                            } else { // (3) 끝
+                                System.err.println("reading file error: " + e.getMessage());
+                            }},
+                        () -> System.out.println("reading file complete"));
+    }
+
+    public void onClickButton5(View view) {
         if (fileDisposable != null && !fileDisposable.isDisposed()) {
             fileDisposable.dispose();
         }

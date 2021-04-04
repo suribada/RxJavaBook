@@ -1,0 +1,18 @@
+@startuml
+
+abstract class Scheduler
+abstract class Worker
+interface Disposable
+
+Disposable <|.. Worker
+Worker +-- Scheduler
+
+Worker <|-- NewThreadWorker
+Worker <|-- ExecutorWorker
+Worker <|-- TestWorker
+
+ExecutorWorker +-- ExecutorScheduler
+TestWorker +-- TestScheduler
+
+hide members
+@enduml

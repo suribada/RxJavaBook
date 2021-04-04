@@ -20,10 +20,10 @@ public class ObserverActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.text_and_two_buttons);
+        setContentView(R.layout.text_and_button);
     }
 
-    public void onClickButton1(View view) {
+    public void onClickButton(View view) {
         Observable<Integer> source = Observable.just(1, 2, 4, 7, 8, 11, 14); // (1)
 
         Observable<Integer> obs1 = source.filter(x -> x % 2 == 0);
@@ -48,24 +48,6 @@ public class ObserverActivity extends Activity {
                 .filter(x -> x <= 1000) // (4)
                 .map(x -> findNearPrime(x)) // (5)
                 .subscribe(System.out::println);
-    }
-
-    public void onClickButton2(View view) {
-        Observable.just(1, 2, 4, 7, 8, 11, 14)
-                .filter(x -> x % 2 == 0)
-                .map(x -> { // (1) 시작
-                    Log.d(TAG, "value=" + x);
-                    return x * 100;
-                }) // (1) 끝
-                .subscribe(System.out::println);
-
-        Observable.just(1, 2, 4, 7, 8, 11, 14)
-                .filter(x -> x % 2 == 0)
-                .doOnNext(x -> Log.d(TAG, "value=" + x)) // (2)
-                .map(x -> x * 100)  // (3)
-                .subscribe(System.out::println);
-
-
     }
 
     private int findNearPrime(Integer x) {
